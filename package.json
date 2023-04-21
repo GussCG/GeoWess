@@ -1,0 +1,19 @@
+{
+  "name": "geowess",
+  "version": "1.0.0",
+  "main": "genRep.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GussCG/GeoWess.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GussCG/GeoWess/issues"
+  },
+  "homepage": "https://github.com/GussCG/GeoWess#readme",
+  "description": ""
+}
