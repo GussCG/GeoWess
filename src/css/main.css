@@ -196,6 +196,7 @@ nav #btn-login:hover {
 	box-sizing: border-box;
 	width: 75%;
 	height: 85%;
+	max-height: 600px;
 
 	margin: 30px auto;
 
@@ -274,7 +275,7 @@ nav #btn-login:hover {
 	gap: 13px;
 	flex-direction: row;
 	border-radius: 50px;
-	margin: 0 auto;
+	margin: 0 auto 20px auto;
 	transition: transform .2s ease-in-out;
 }
 
@@ -294,9 +295,14 @@ nav #btn-login:hover {
 #index-div-btn img {
 	width: var(--index-icon-width-height);
 	height: var(--index-icon-width-height);
+	mix-blend-mode: color-burn;
 }
 
 
-
+@media (max-width: 1920px) {
+	#index-div {
+		width: 80%;
+	}	
+}
 
 
