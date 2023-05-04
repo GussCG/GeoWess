@@ -296,7 +296,8 @@ nav #btn-login:hover {
 	height: var(--index-icon-width-height);
 }
 
-
-
-
-
+@media (max-width: 1920px) {
+	#index-div {
+		width: 80%;
+	}	
+}
