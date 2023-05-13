@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/login.css">
+
+</head>
+<body>
+
+    <main>
+        <a href="../index.html" id="logo">
+            <img src="./images/logo.png" alt="GeoWess"/>
+        </a>
+
+        <div class="login-container">
+            <div class="login-form">
+                <h1>Iniciar Sesión</h1>
+                <form>     
+                    <div class="login-field">
+                        <input type="text" id="login-email" placeholder="Correo electrónico"><label for="login-email">Correo electrónico</label>
+                    </div>               
+                    <div class="login-field">
+                        <input type="password" id="login-password" placeholder="Contraseña"><label for="login-password">Contraseña</label><img src="../images/close-eye.png" alt="Mostrar contraseña" id="eye">
+                    </div>
+                    <input type="submit" value="Iniciar" id="btn-iniciar">
+                </form>
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <p id="reg-p">No tienes una cuenta aún?<a href="#">Regístrate aquí</a></p>
+            </div>
+
+            <div class="login-linea">
+
+            </div>
+
+            <div class="login-img">
+                <img src="../images/camionsito-login.png" alt="Login">
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="../js/eye.js"></script>
+    
+</body>
+</html>
