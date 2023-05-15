@@ -1,0 +1,190 @@
+main {
+    margin: 20px auto 0 auto;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 32px;
+}
+
+.main-up {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 46px;
+}
+
+main .main-up>div, .Proyectos {
+    background-color: rgba(255, 255, 255, .6);
+    border: 8px solid #fff;
+    border-radius: 50px;
+}
+
+.Tareas {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Tareas h1, .Proyectos h1 {
+    font-size: var(--dashboard-h2-font-size);
+    font-weight: var(--bold);
+    margin: 16px 0 26px 30px;
+}
+
+.tareas-lista {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 50px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--index-register-button-color) transparent;
+}
+
+.tareas-lista a {
+    text-decoration: none;
+    color: var(--p-color);
+    font-size: var(--task-font-size);
+    font-weight: var(--regular);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 0 16px;
+}
+
+.tareas-lista p {
+    font-size: var( --task-limit-font-size);
+    font-weight: var(--regular);
+    color: var(--task-limit-color);
+    margin: 0 0 0 75px;
+}
+
+.tareas-lista img:hover {
+    opacity: .8;
+}
+
+.tareas-lista::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tareas-lista img {
+    width: 26px;
+}
+
+.Mensajes {
+    align-self: flex-start;
+    width: 60%;
+    height: 80%;
+    opacity: 0;
+}
+
+.Proyectos {
+    width: 100%;
+    height: 100%;
+}
+
+.proyecto-fases {
+    margin: 20px 31px 10px 34px;
+    height: 65%;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "h2" "tabla";
+}
+
+.proyecto-fases h2 {
+    margin: 15px 0 19px 45px;
+    font-size: var(--dashboard-h2-font-size);
+    font-weight: var(--bold);
+    grid-area: h2;
+}
+
+.proyecto-fases table {
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    grid-area: tabla;
+}
+
+.proyecto-fases thead tr{
+    height: 10px;
+}
+
+.proyecto-fases thead th {
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    font-size: var(--proyecto-th-font-size);
+    font-weight: var(--semibold);
+    text-align: left;
+    padding-left: 10px;
+}
+
+.proyecto-fases tbody tr {
+    height: 10px;
+}
+
+.proyecto-fases td{
+    font-size: var(--proyecto-td-font-size);
+    font-weight: var(--semibold);
+}
+
+.fase-nombre {    
+    padding-left: 10px;
+}
+
+.fase-nombre a {
+    color: var(--lr-title-color);
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+
+.fase-nombre a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.fec-ini {
+    padding-left: 30px;
+    color: var(--startdate-color);
+}
+
+.fec-fin {
+    padding-left: 30px;
+    color: var(--enddate-color);
+}
+
+.progress-bar-td {
+    display: flex;
+    flex-direction: row;
+}
+
+.progress-bar {
+    height: 20px;
+    width: 100%;
+    background-color: var(--progress-bar-bg-color);
+    border: 3px solid var(--progress-bar-stroke-color);
+    border-radius: 10px;
+    margin: 0 10px;
+    position: relative;
+}
+
+.progress-bar-fill {
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    background-color: var(--progress-bar-color);
+    border-radius: 10px;
+}
+
+
+
+

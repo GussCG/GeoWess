@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+<body>
+
+    <div class="nav-bar" id="nav-bar">
+
+        <div class="user-info">
+            <div class="user-img">
+                <img src="../images/profile.png" alt="user">
+            </div>
+            <div class="info">
+                <div class="user-name"><p>Nombre de usuario</p></div>
+                <div class="user-rol"><p>Rol</p></div>
+            </div>            
+        </div>
+
+        <div class="menu-icons" id="menu-icons">
+            <ul>
+                <li><a href="../pages/dashboard.html"><img src="../images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
+                <li><a href="#"><img src="../images/to-do-list.png" alt="Tareas"></a></li>
+                <li><a href="../pages/proyecto-vista.html"><img src="../images/puesta-en-marcha.png" alt="Proyectos"></a></li>
+                <li><a href="../../index.html"><img src="../images/logout.png" alt="Cerrar Sesión"></a></li>
+            </ul>
+        </div>
+
+        <div class="arrow">
+            <img src="../images/down-arrow.png" alt="arrow" id="arrow">
+        </div>
+
+    </div>
+
+    <main>
+        <div class="main-up">
+            <div class="Tareas">
+                <h1>Lista de Tareas</h1>
+                <div class="tareas-lista">
+                    <a href="#"><img src="../images/cheque.png" alt=""> Tarea 1</a>
+                    <p><b>Límite:</b> dd/mm/aaaa</p>
+                </div>
+                <div class="tareas-lista">
+                    <a href="#"><img src="../images/cheque.png" alt=""> Tarea 1</a>
+                    <p><b>Límite:</b> dd/mm/aaaa</p>
+                </div>
+                <div class="tareas-lista">
+                    <a href="#"><img src="../images/cheque.png" alt=""> Tarea 1</a>
+                    <p><b>Límite:</b> dd/mm/aaaa</p>
+                </div>
+                
+            </div>
+
+            <div class="Mensajes">
+                
+            </div>
+
+        </div>
+
+        
+        <div class="Proyectos">
+            <h1> Proyectos</h1>    
+            <div class="proyecto-fases">    
+                <table>
+                    <thead>
+                        <tr>
+                            <th> Nombre</th>
+                            <th> Fecha Inicio</th>
+                            <th> Fecha Fin</th>
+                            <th> Progreso</th>
+                        </tr>                    
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fase-nombre"><a href="#">Aeropuerto</a></td>
+                            <td class="fec-ini"> dd/mm/yyyy</td>
+                            <td class="fec-fin"> dd/mm/yyyy</td>
+                            <td> 
+                                <div class="progress-bar-td">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" id="progressbar"></div>
+                                    </div>  
+                                    <p>74%</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fase-nombre"><a href="#">Estación de Metro</a></td>
+                            <td class="fec-ini"> dd/mm/yyyy</td>
+                            <td class="fec-fin"> dd/mm/yyyy</td>
+                            <td> 
+                                <div class="progress-bar-td">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" id="progressbar"></div>
+                                    </div>  
+                                    <p>10%</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fase-nombre"><a href="#">Parque de Mascotas</a></td>
+                            <td class="fec-ini"> dd/mm/yyyy</td>
+                            <td class="fec-fin"> dd/mm/yyyy</td>
+                            <td> 
+                                <div class="progress-bar-td">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" id="progressbar"></div>
+                                    </div>  
+                                    <p>90%</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+    
+        </div>
+        <script src="../js/progressbar.js"></script>
+    </main>
+
+
+    <script src="../js/menu.js"></script>
+    
+</body>
+</html>

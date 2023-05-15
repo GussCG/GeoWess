@@ -23,12 +23,15 @@
 
     --task-deco-stroke-color: #ffa5a5;
     --task-urgent-color: #ff3434;
+	--task-limit-color: #777575;
 
     --startdate-color: #85a38a;
     --enddate-color: #ffa5a5;
     --progress-bar-color: #86ff4e;
     --progress-bar-bg-color: #d9d9d9;
     --progress-bar-stroke-color: #a3a3a3;
+
+	--info-bg-color: #d9d9d9;
 
     /**Index*/
     --index-login-button-color: #000000;
@@ -49,6 +52,7 @@
     --placeholder-font-size: 16px;
 
     /**Dashboard*/
+	--dashboard-h1-font-size: 40px;
     --dashboard-h2-font-size: 32px;
 
     --task-font-size: 20px;
@@ -59,8 +63,8 @@
     --msg-chat-role-font-size: 13px;
     --msg-chat-image-width-height: 60px;
 
-	--proyecto-h1-font-size: 24px;
-	--proyecto-font-size: 16px;
+	--proyecto-th-font-size: 24px;
+	--proyecto-td-font-size: 16px;
 
     /**Index*/
     --index-h1-font-size: 64px;
