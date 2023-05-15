@@ -8,6 +8,7 @@ CREATE TABLE USUARIO (
     us_ApPaterno varchar(50),
     us_ApMaterno varchar(50),
     us_FechaNac date,
+    us_FechaHoraCreacion datetime,
     us_Tipo varchar(50), /* Supervisor, Superintendente, Residente, Contratista, Contratante, Representante legal*/
     us_Telefono int(10),
     us_RFC char(13),
@@ -114,6 +115,7 @@ CREATE TABLE PROYECTO (
     pr_FechaInicio date,
     pr_FechaFin date,
     pr_Status boolean, /* 1 = Finalizada || 0 = En proceso */
+    pr_Ubicacion varchar(100),
     pr_Obra int(6),
     
     PRIMARY KEY (pr_ID),

@@ -95,7 +95,7 @@ input::placeholder {
     color: transparent;
 }
 
-#btn-iniciar {
+#btn-registrar {
     width: 160px;
     height: 36px;
     background-color: var(--lr-button-color);
@@ -112,7 +112,7 @@ input::placeholder {
     transition:transform .3s ease-in-out, background-color .3s ease-in-out;; 
 }
 
-#btn-iniciar:hover {
+#btn-registrar:hover {
     background-color: var(--lr-button-hover-color);
     transform: scale(1.1);
 }
@@ -184,6 +184,29 @@ input::placeholder {
     margin-left: -30px;
     cursor: pointer;
     transition: all .3s ease-in-out;
+}
+
+#btn-iniciar {
+    width: 160px;
+    height: 36px;
+    background-color: var(--lr-button-color);
+    border-radius: 50px;
+    border: 0;
+
+    font-family: var(--font-family);
+    font-size: var(--lr-button-font-size);
+    font-weight: var(--bold);
+    font-style: normal;
+    line-height: 23px;
+    padding: 7px;
+
+    transition:transform .3s ease-in-out, background-color .3s ease-in-out;
+    grid-column: 2/3;
+}
+
+#btn-iniciar:hover {
+    background-color: var(--lr-button-hover-color);
+    transform: scale(1.1);
 }
 
 /*Responsiva*/
