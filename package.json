@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "genRep.js",
   "scripts": {
-    "dev": "nodemon src/js/index.js"
+    "dev": "nodemon src"
   },
   "repository": {
     "type": "git",
