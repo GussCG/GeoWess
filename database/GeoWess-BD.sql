@@ -46,7 +46,7 @@ CREATE TABLE RESIDENTE (
     FOREIGN KEY (res_Usuario) REFERENCES USUARIO (us_Email)
 );
 
-/*Tiene que estar obligadamente, no tiene ningun poder de crear proyectos, modificar o generar estimaciones, pero puede ver los reportes, estimaciones, etc. */
+/*Tienen que estar obligadamente, no tiene ningun poder de crear proyectos, modificar o generar estimaciones, pero puede ver los reportes, estimaciones, etc. */
 CREATE TABLE REPRESENTATE_LEGAL (
 	rpl_ID int(6),
     rpl_Usuario varchar(100),
@@ -127,10 +127,10 @@ CREATE TABLE PROYECTO (
     pr_ID int(6),
     pr_Nombre VARCHAR(100),
     pr_FechaInicio date, /*Fecha de inicio que dará el usuario*/
-    pr_FechaFin date, /*Fecah de fin que dará el usuario, esta podra cambiar por retrasos o situaciones de fuerza mayor; el cambio se guardará en la tabla CAMBIO, este podrá cambiar el cálculo de algunas estimaciones*/
+    pr_FechaFin date, /*Fecha de fin que dará el usuario, esta podrá cambiar por retrasos o situaciones de fuerza mayor; el cambio se guardará en la tabla CAMBIO, este podrá cambiar el cálculo de algunas estimaciones*/
     pr_Status boolean, /* 1 = Finalizada || 0 = En proceso */
     pr_CostoTotal float, /*Se calcula con el TOTAL en el catalogo de conceptos*/
-    pr_Ubicacion varchar(255),
+    pr_Ubicacion varchar(500),
     pr_Contratante int(6), /*Es el usuario que creo el proyecto*/
     pr_CatalogoConceptos int(6), /*Es el catalogo de conceptos de todo el proyecto*/
     

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Catálogo de Conceptos</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/catalogo-form.css">
+
+</head>
+<body>
+
+    <div class="nav-bar" id="nav-bar">
+
+        <div class="user-info">
+            <div class="user-img">
+                <img src="../images/profile.png" alt="user">
+            </div>
+            <div class="info">
+                <div class="user-name"><p>Nombre de usuario</p></div>
+                <div class="user-rol"><p>Rol</p></div>
+            </div>            
+        </div>
+
+        <div class="menu-icons" id="menu-icons">
+            <ul>
+                <li><a href="#"><img src="../images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
+                <li><a href="#"><img src="../images/to-do-list.png" alt="Tareas"></a></li>
+                <li><a href="#"><img src="../images/puesta-en-marcha.png" alt="Proyectos"></a></li>
+                <li><a href="#"><img src="../images/chat.png" alt="Mensajes"></a></li>
+                <li><a href="#"><img src="../images/logout.png" alt="Cerrar Sesión"></a></li>
+            </ul>
+        </div>
+
+        <div class="arrow">
+            <img src="../images/down-arrow.png" alt="arrow" id="arrow">
+        </div>
+
+    </div>
+
+    <main>
+        <h1> Crear Catálogo de Conceptos</h1>
+
+        <div class="proyecto-form-data"> 
+            <h2>Crear Partida</h2>
+            <form>
+                <div class="reg-field">
+                    <input type="text" id="registro-Nombre-Partida" placeholder="Nombre de la partida"><label for="registro-Nombre-Partida">Nombre de la partida</label>
+                </div>
+                <input type="submit" value="Crear" id="btn-registrar-partida">
+            </form>
+        </div>
+
+        <div class="catalogo-conceptos-reg">
+            <select>
+                <option value="0">Seleccionar partida</option>
+                <option value="1">Partida 1</option>
+                <option value="2">Partida 2</option>
+            </select>
+
+            <button type="button" id="btn-AgregarCon" onclick="addRow()">Agregar Concepto</button>
+
+            <script>
+
+                const addRow = () => {
+                    document.getElementById('tabla-concepto').insertRow().innerHTML = 
+                    `
+                        <td><input type="text" id="registro-Nombre-Concepto" placeholder="Nombre del concepto"></td>
+                        <td><input type="text" id="registro-Unidad-Concepto" placeholder="Unidad"></td>
+                        <td><input type="number" id="registro-Cantidad-Concepto" placeholder="Cantidad"></td>
+                        <td><input type="text" id="registro-Precio-Concepto" placeholder="Precio Unitario"></td>
+                        <td><button type="button" id="btn-registrar-concepto"  onclick="deleteRow()" class="btn-table">Agregar</button></td>
+                        <td><button type="button" class="btn-table" onclick="deleteRow()">Eliminar</button></td>
+                    `;
+                }
+
+                const deleteRow = () =>{
+                    const tabla = document.getElementById('tabla-concepto');
+                    const rowCount = tabla.rows.length;
+                    if(rowCount <= 1)
+                        alert('No se puede eliminar el encabezado');
+                    else
+                        tabla.deleteRow(rowCount -1);
+                }
+            </script>
+
+            <div class="tabla-conceptos">
+                <table id="tabla-concepto">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Unidad</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Agregar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button id="btn-svPartida" onclick="guardarPartida()">Guardar Partida</button>
+
+    </main>
+    <script src="../js/menu.js"></script>
+    
+    
+</body>
+</html>

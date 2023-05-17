@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Vista Superintendente</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/proyecto.css">
+
+</head>
+<body>
+
+    <div class="nav-bar" id="nav-bar">
+
+        <div class="user-info">
+            <div class="user-img">
+                <img src="../images/profile.png" alt="user">
+            </div>
+            <div class="info">
+                <div class="user-name"><p>Nombre de usuario</p></div>
+                <div class="user-rol"><p>Rol</p></div>
+            </div>            
+        </div>
+
+        <div class="menu-icons" id="menu-icons">
+            <ul>
+                <li><a href="#"><img src="../images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
+                <li><a href="#"><img src="../images/to-do-list.png" alt="Tareas"></a></li>
+                <li><a href="#"><img src="../images/puesta-en-marcha.png" alt="Proyectos"></a></li>
+                <li><a href="#"><img src="../images/chat.png" alt="Mensajes"></a></li>
+                <li><a href="#"><img src="../images/logout.png" alt="Cerrar Sesión"></a></li>
+            </ul>
+        </div>
+
+        <div class="arrow">
+            <img src="../images/down-arrow.png" alt="arrow" id="arrow">
+        </div>
+
+    </div>
+
+    <main>
+        <h1> Proyecto - {Algo} </h1>
+        <a href="./generarEstimacionMensual.html" id="genEstimacion"> Generar Estimación Mensual</a>
+
+        <div class="proyecto-detalles"> 
+            <div class="proyecto-detalles-info">
+                <p><b>Fecha Inicio:</b> dd/mm/yyyy</p>
+                <p><b>Fecha Fin:</b> dd/mm/yyyy</p>
+                <p><b>Costo Total:</b> $ 1 000 000.00</p>
+                <p><b>Estado:</b> En curso</p>       
+            </div>            
+            <div class="proyecto-detalles-ubicacion">
+                <p><b>Ubicación:</b> Muy muy lejano</p>
+                <a href="#"><img src="../images/mapa.png" alt="Buscar en Google Maps" ></a>
+            </div>            
+        </div>
+
+        <div class="proyecto-fases">
+            <h2>Fases de Proyecto-{Algo} <a href="./fase-obra-form.html"><img src="../images/cross.png" alt="Agregar Fase" id="cross"></a></h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th> Nombre</th>
+                        <th> Fecha Inicio</th>
+                        <th> Fecha Fin</th>
+                        <th> Progreso</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fase-nombre"><a href="#">Fase 1</a></td>
+                        <td class="fec-ini"> dd/mm/yyyy</td>
+                        <td class="fec-fin"> dd/mm/yyyy</td>
+                        <td> 
+                            <div class="progress-bar-td">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" id="progressbar"></div>
+                                </div>  
+                                <p>74%</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fase-nombre"><a href="#">Fase 2</a></td>
+                        <td class="fec-ini"> dd/mm/yyyy</td>
+                        <td class="fec-fin"> dd/mm/yyyy</td>
+                        <td> 
+                            <div class="progress-bar-td">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" id="progressbar"></div>
+                                </div>  
+                                <p>10%</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fase-nombre"><a href="#">Fase 3</a></td>
+                        <td class="fec-ini"> dd/mm/yyyy</td>
+                        <td class="fec-fin"> dd/mm/yyyy</td>
+                        <td> 
+                            <div class="progress-bar-td">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" id="progressbar"></div>
+                                </div>  
+                                <p>90%</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fase-nombre"><a href="#">Fase 4</a></td>
+                        <td class="fec-ini"> dd/mm/yyyy</td>
+                        <td class="fec-fin"> dd/mm/yyyy</td>
+                        <td> 
+                            <div class="progress-bar-td">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" id="progressbar"></div>
+                                </div>                                
+                                <p>50%</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+    <script src="../js/progressbar.js"></script>
+
+    <script src="../js/menu.js"></script>
+    
+    
+</body>
+</html>

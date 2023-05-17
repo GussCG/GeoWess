@@ -1,0 +1,36 @@
+body {
+    font-family: var(--font-family);
+}
+
+
+main {
+    margin: 27px 32px;
+    height: 90%;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 27px 0 0 34px;
+}
+
+.proyecto-detalles {
+    margin: 20px 31px 10px 34px;
+    height: 110px;
+    background-color: var(--info-bg-color);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+
+
+
