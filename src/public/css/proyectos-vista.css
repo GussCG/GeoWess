@@ -1,0 +1,84 @@
+
+#proyectos-main {
+    margin: 27px 32px;
+    height: 95%;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+#proyectos-main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 27px 0 0 34px;
+}
+
+.proyectos {
+    margin: 20px 31px 10px 34px;
+    height: 80%;
+    background-color: var(--info-bg-color);
+    border-radius: 10px;
+}
+
+.proyectos table {
+    width: 90%;
+    height: 100%;
+    margin:  auto;
+    border-collapse: collapse;
+}
+
+.proyectos thead tr{
+    height: 10px;
+}
+
+.proyectos thead th {
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    font-size: var(--proyecto-th-font-size);
+    font-weight: var(--semibold);
+    text-align: left;
+    padding-left: 10px;
+}
+
+.proyectos tbody tr {
+    height: 20px;
+}
+
+.proyectos td{
+    font-size: var(--proyecto-td-font-size);
+    font-weight: var(--semibold);
+}
+
+.tabla-proyectos {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.tabla-proyectos .proyecto-nombre {    
+    padding-left: 10px;
+}
+
+.tabla-proyectos .proyecto-nombre a {
+    color: var(--lr-title-color);
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+
+.tabla-proyectos .proyecto-nombre a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.tabla-proyectos .fec-ini {
+    padding-left: 30px;
+    color: var(--startdate-color);
+}
+
+.tabla-proyectos .fec-fin {
+    padding-left: 30px;
+    color: var(--enddate-color);
+}
+
+

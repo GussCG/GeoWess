@@ -1,0 +1,40 @@
+    <main id="proyectos-main">
+        <h1> Proyectos </h1>
+
+        <div class="proyectos">
+            <div class="tabla-proyectos">
+                <table>
+                    <thead>
+                        <tr>
+                            <th> Nombre</th>
+                            <th> Fecha Inicio</th>
+                            <th> Fecha Fin</th>
+                            <th> Estatus</th>
+                            <th> Costo Total</th>
+                        </tr>                    
+                    </thead>
+                    <tbody>
+                        
+                            {{#each proyectos}}
+                            <tr>
+                                <td class="proyecto-nombre"><a href="/proyectos/{{pr_Nombre}}">{{pr_Nombre}}</a></td>
+                                <td class="fec-ini"> {{pr_FechaInicio}}</td>
+                                <td class="fec-fin"> {{pr_FechaFin}}</td>
+                                <td> {{#if pr_Status}}
+                                    Finalizado
+                                    {{else}}
+                                    En Proceso
+                                    {{/if}}
+                                </td>
+                                <td> $ {{pr_CostoTotal}}</td>
+                            </tr>
+                            {{/each}}
+                                               
+                    </tbody>
+                </table>
+            </div>
+           
+
+        </div>
+
+    </main>

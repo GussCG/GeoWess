@@ -1,0 +1,84 @@
+body {
+    font-family: var(--font-family);
+}
+
+main {
+    margin: 27px 32px;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 27px 0 0 34px;
+}
+
+.tareas-container {
+    margin: 20px 31px 10px 34px;
+    height: 550px;
+    background-color: var(--info-bg-color);
+    border-radius: 10px;
+}
+
+.Tareas {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: scroll;
+}
+
+.Tareas h1, .Proyectos h1 {
+    font-size: var(--dashboard-h2-font-size);
+    font-weight: var(--bold);
+    margin: 16px 0 26px 30px;
+}
+
+.tareas-lista {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 50px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--index-register-button-color) transparent;
+}
+
+.tareas-lista a {
+    text-decoration: none;
+    color: var(--p-color);
+    font-size: var(--task-font-size);
+    font-weight: var(--regular);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 0 16px;
+}
+
+.tareas-lista p {
+    font-size: var( --task-limit-font-size);
+    font-weight: var(--regular);
+    color: var(--task-limit-color);
+    margin: 0 0 0 75px;
+}
+
+.tareas-lista img:hover {
+    opacity: .8;
+}
+
+.tareas-lista::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tareas-lista img {
+    width: 26px;
+}
+
+

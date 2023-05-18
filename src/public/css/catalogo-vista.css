@@ -1,0 +1,73 @@
+body {
+    font-family: var(--font-family);
+}
+
+main {
+    margin: 27px 32px;
+    height: 95%;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 27px 0 0 34px;
+}
+
+.catalogo-container {
+    margin: 20px 31px 10px 34px;
+    height: 550px;
+    background-color: var(--info-bg-color);
+    border-radius: 10px;
+}
+
+
+.tabla-partidas {
+    width: 100%;
+    height: 100%;
+    background-color: var(--info-bg-color);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.tabla-partidas::-webkit-scrollbar {
+    width: 10px;
+}
+
+.tabla-partidas table {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.tabla-partidas thead tr{
+    height: 10px;
+}
+
+.tabla-partidas thead th {
+    border: 1px solid rgba(0, 0, 0, .5);
+    font-size: 20px;
+    font-weight: var(--semibold);
+    text-align: center;
+}
+
+.tabla-partidas tbody tr , .tabla-partidas tbody td {
+    height: 10px;
+    border: 1px solid rgba(0, 0, 0, .5);
+    text-align: left;
+    
+}
+
+.tabla-partidas td{
+    font-size: var(--proyecto-td-font-size);
+    font-weight: var(--semibold);
+}
+

@@ -7,39 +7,23 @@
     <title>GeoWess</title>
 
     <!--Estilos-->
-    <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/proyecto.css">
+    <link rel="stylesheet" href="../css/catalogo-form.css">
+    <link rel="stylesheet" href="../css/catalogo-vista.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/proyecto-form.css">
+    <link rel="stylesheet" href="../css/fase-vista.css">
+    <link rel="stylesheet" href="../css/genestimacion.css">
+    <link rel="stylesheet" href="../css/tareas-vista.css">
+    <link rel="stylesheet" href="../css/fase-form.css">
+    <link rel="stylesheet" href="../css/proyectos-vista.css">
 
 </head>
 <body>
 
-    <div class="nav-bar" id="nav-bar">
-
-        <div class="user-info">
-            <div class="user-img">
-                <img src="../images/profile.png" alt="user">
-            </div>
-            <div class="info">
-                <div class="user-name"><p>Nombre de usuario</p></div>
-                <div class="user-rol"><p>Rol</p></div>
-            </div>            
-        </div>
-
-        <div class="menu-icons" id="menu-icons">
-            <ul>
-                <li><a href="#"><img src="../images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
-                <li><a href="#"><img src="../images/to-do-list.png" alt="Tareas"></a></li>
-                <li><a href="#"><img src="../images/puesta-en-marcha.png" alt="Proyectos"></a></li>
-                <li><a href="#"><img src="../images/logout.png" alt="Cerrar Sesión"></a></li>
-            </ul>
-        </div>
-
-        <div class="arrow">
-            <img src="../images/down-arrow.png" alt="arrow" id="arrow">
-        </div>
-
-    </div>
+    {{> navigation}}
 
     {{{body}}}
     

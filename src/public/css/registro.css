@@ -2,7 +2,7 @@
 
 main {
     width: 75%;
-    height: 800px;
+    height: 783px;
     margin: 72px auto;
     display: flex;
     flex-direction: column;
@@ -118,7 +118,7 @@ input::placeholder {
     transform: scale(1.1);
 }
 
-#eye {
+#eye, #eye2 {
     width: 20px;
     height: 20px;
     margin-left: -30px;
@@ -145,7 +145,7 @@ select:focus {
     outline: none;
 }
 
-#eye:hover {
+#eye:hover, #eye2:hover {
     transform: scale(1.1);
 }
 

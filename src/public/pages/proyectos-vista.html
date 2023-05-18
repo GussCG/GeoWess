@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fase Vista</title>
+    <title>Proyectos</title>
 
     <!--Estilos-->
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/menu.css">
-    <link rel="stylesheet" href="../css/fase-vista.css">
+    <link rel="stylesheet" href="../css/proyectos-vista.css">
 
 </head>
 <body>
@@ -42,13 +42,34 @@
 
     </div>
 
-    <main>
-        <h1> Fase - {Algo}</h1>
+    <main id="proyectos-main">
+        <h1> Proyectos </h1>
 
-        <div class="proyecto-detalles"> 
-                <p><b>Fecha Inicio:</b> dd/mm/yyyy</p>
-                <p><b>Fecha Fin:</b> dd/mm/yyyy</p>
-                <p><b>Estado:</b> En curso</p>                         
+        <div class="proyectos">
+            <div class="tabla-proyectos">
+                <table>
+                    <thead>
+                        <tr>
+                            <th> Nombre</th>
+                            <th> Fecha Inicio</th>
+                            <th> Fecha Fin</th>
+                            <th> Estatus</th>
+                            <th> Costo Total</th>
+                        </tr>                    
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="proyecto-nombre"><a href="#">Fase 1</a></td>
+                            <td class="fec-ini"> dd/mm/yyyy</td>
+                            <td class="fec-fin"> dd/mm/yyyy</td>
+                            <td> Status</td>
+                            <td> $ 0.00</td>
+                        </tr>                        
+                    </tbody>
+                </table>
+            </div>
+           
+
         </div>
 
     </main>

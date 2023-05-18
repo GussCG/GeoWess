@@ -121,6 +121,19 @@ CREATE TABLE CAMBIO (
     FOREIGN KEY (cb_Usuario) REFERENCES USUARIO (us_Email)    
 );
 
+/*TAREAS*/
+CREATE TABLE TAREAS (
+    tr_ID int(6),
+    tr_Descripcion varchar(255),
+    tr_FechaInicio date,
+    tr_FechaFin date,
+    tr_Status boolean, /* 1 = Finalizada || 0 = En proceso */
+    tr_Usuario varchar(100),
+
+    PRIMARY KEY (tr_ID),
+    FOREIGN KEY (tr_Usuario) REFERENCES USUARIO (us_Email)
+);
+
 /* TABLAS DE PROYECTO */
 /* JERARQUÍA DE PROYECTO: PROYECTO -> FASE DE PROYECTO -> FRENTE DE OBRA */
 CREATE TABLE PROYECTO (
@@ -135,7 +148,7 @@ CREATE TABLE PROYECTO (
     pr_CatalogoConceptos int(6), /*Es el catalogo de conceptos de todo el proyecto*/
     
     PRIMARY KEY (pr_ID),
-    FOREIGN KEY (pr_Usuario) REFERENCES CONTRATANTE (cte_ID),
+    FOREIGN KEY (pr_Contratante) REFERENCES CONTRATANTE (cte_ID),
     FOREIGN KEY (pr_CatalogoConceptos) REFERENCES CATALOGO_CONCEPTOS (cc_ID) 
 );
 
@@ -224,3 +237,4 @@ CREATE TABLE CONCEPTO (
 /*TRIGGER PARA LOS CAMBIOS DE AUDITORIA CADA QUE SE MODIFIQUE EL PROYECTO*/
 CREATE TRIGGER `trg_cambio_proyecto` AFTER UPDATE ON `PROYECTO` FOR EACH ROW INSERT INTO CAMBIO (cb_Descripcion, cb_Usuario) VALUES ('Se modifico el proyecto con ID: ' + NEW.pr_ID, NEW.pr_Contratante);
 
+SELECT * FROM PROYECTO;
