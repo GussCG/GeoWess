@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoWess</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="/public/css/main.css">
+
+</head>
+<body>
+
+    <nav id="index-nav">
+
+        <a href="/" id="logo">
+            <img src="/images/logo.png" alt="GeoWess"/>
+        </a>
+
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/pages/proyectos-ejemplos">Proyectos</a></li>
+            <li><a href="/pages/nosotros">Nosotros</a></li>            	
+        </ul>
+
+        <a href="/signin" id="btn-login">Iniciar Sesión</a>
+
+    </nav>
+
+    <div id="index-div">
+
+        <div id="index-div-bolitas">
+            <div id="index-div-bolita"></div>
+            <div id="index-div-bolita"></div>
+            <div id="index-div-bolita"></div>
+        </div>
+
+        <div id="index-div-h1">
+            <h1> <code> < </code> <span class="auto-input">Tienes un proyecto en mente? </span><code> /> </code> </h1>
+        </div>
+
+        <div id="index-div-h2">
+            <h2>Te ayudamos a hacerlo realidad</h2>
+        </div>
+
+        <div id="index-div-btn">
+            <img src="/images/cohete.gif" alt="Cohete"></img>
+            <a href="/signup" id="btn-registrar-index">Comenzar</a>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <script>
+        var typed = new Typed(".auto-input", {
+            strings: ["Alguna idea?", "Un sueño?", "Tienes un proyecto en mente?"],
+            typeSpeed: 50,
+            backSpeed: 100,
+            loop: false,
+            smartBackspace: true,
+            showCursor: true,
+            fadeout: true,
+        });
+    </script>
+    
+</body>
+</html>

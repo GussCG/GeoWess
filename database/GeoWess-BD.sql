@@ -11,7 +11,7 @@ CREATE TABLE USUARIO (
     us_FechaNac date,
     us_FechaHoraCreacion timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     us_Tipo int, /* Supervisor, Superintendente, Residente de Servicios, Contratista, Contratante, Representante legal, Supervisante de Servicios, Administrador*/
-    us_Telefono int(10),
+    us_Telefono varchar(10),
     us_RFC char(13),
     us_Email varchar(100),
     us_Password varchar(100),
@@ -158,6 +158,7 @@ CREATE TABLE FASE_PROYECTO (
     fp_FechaInicio date, /*Esta deberá entrar en el periodo de creación del proyecto*/
     fp_FechaFin date, /*No puede ser mayor a la fecha fin del proyecto*/
     fp_Status boolean, /* 1 = Finalizada || 0 = En proceso */
+    fp_PorcentajeAvance float,
     fp_Proyecto int(6), /*Es el proyecto al que pertenence*/
     
     PRIMARY KEY (fp_ID),
@@ -237,4 +238,10 @@ CREATE TABLE CONCEPTO (
 /*TRIGGER PARA LOS CAMBIOS DE AUDITORIA CADA QUE SE MODIFIQUE EL PROYECTO*/
 CREATE TRIGGER `trg_cambio_proyecto` AFTER UPDATE ON `PROYECTO` FOR EACH ROW INSERT INTO CAMBIO (cb_Descripcion, cb_Usuario) VALUES ('Se modifico el proyecto con ID: ' + NEW.pr_ID, NEW.pr_Contratante);
 
+SELECT * FROM CAMBIO;
 SELECT * FROM PROYECTO;
+SELECT * FROM PARTIDA;
+SELECT * FROM CATALOGO_CONCEPTOS;
+SELECT * FROM FASE_PROYECTO;
+SELECT * FROM CONCEPTO;
+SELECT * FROM USUARIO;

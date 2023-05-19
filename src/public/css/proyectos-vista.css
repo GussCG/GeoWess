@@ -36,17 +36,19 @@
     border-bottom: 1px solid rgba(0, 0, 0, .5);
     font-size: var(--proyecto-th-font-size);
     font-weight: var(--semibold);
-    text-align: left;
+    text-align: center;
     padding-left: 10px;
 }
 
 .proyectos tbody tr {
     height: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
 }
 
 .proyectos td{
     font-size: var(--proyecto-td-font-size);
     font-weight: var(--semibold);
+    text-align: center;
 }
 
 .tabla-proyectos {
@@ -54,31 +56,31 @@
     width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
+    display: block;
+    margin: 0 auto;
 }
 
-.tabla-proyectos .proyecto-nombre {    
-    padding-left: 10px;
-}
-
-.tabla-proyectos .proyecto-nombre a {
+.proyecto-nombre a {
     color: var(--lr-title-color);
     text-decoration: none;
     transition: all .3s ease-in-out;
 }
 
-.tabla-proyectos .proyecto-nombre a:hover {
+.proyecto-nombre a:hover {
     opacity: 0.8;
     text-decoration: underline;
 }
 
 .tabla-proyectos .fec-ini {
-    padding-left: 30px;
     color: var(--startdate-color);
 }
 
 .tabla-proyectos .fec-fin {
-    padding-left: 30px;
     color: var(--enddate-color);
 }
 
+.proyectos tbody tr:last-child  {
+    height: 20px;
+    border-bottom: 0px solid rgba(0, 0, 0, .5);
+}
 

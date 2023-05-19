@@ -1,0 +1,34 @@
+<main id="login-main">
+        <a href="/" id="logo">
+            <img src="/images/logo.png" alt="GeoWess"/>
+        </a>
+
+        <div class="login-container">
+            <div class="login-form">
+                <h1>Iniciar Sesión</h1>
+                <form id="login-form" action="/signin" method="post">     
+                    <div class="login-field">
+                        <input type="text" id="login-email" placeholder="Correo electrónico" name="correo_login"><label for="login-email">Correo electrónico</label>
+                    </div>               
+                    <div class="login-field">
+                        <input type="password" id="login-password" placeholder="Contraseña" name="pass_login"><label for="login-password">Contraseña</label><img src="/images/close-eye.png" alt="Mostrar contraseña" id="eye">
+                    </div>
+                    <input type="submit" value="Iniciar" id="btn-iniciar">
+                </form>
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <p id="reg-p">No tienes una cuenta aún?<a href="/signup">Regístrate aquí</a></p>
+            </div>
+
+            <div class="login-linea">
+
+            </div>
+
+            <div class="login-img">
+                <img src="/images/camionsito-login.png" alt="Login">
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="/js/eye.js"></script>

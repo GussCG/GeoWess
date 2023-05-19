@@ -1,0 +1,59 @@
+<main id="proyecto-main">
+    
+        <h1> Proyecto - {{proyecto.pr_Nombre}}</h1>
+
+        <div class="proyecto-detalles"> 
+            <div class="proyecto-detalles-info">
+                <p><b>Fecha Inicio:</b> {{proyecto.pr_FechaInicio}}</p>
+                <p><b>Fecha Fin:</b> {{proyecto.pr_FechaFin}}</p>
+                <p><b>Costo Total:</b>$ {{proyecto.pr_CostoTotal}}</p>
+                <p><b>Estado:</b> {{#if proyecto.pr_Status}}
+                                    Finalizado
+                                    {{else}}
+                                    En Proceso
+                                    {{/if}}</p>    
+                <p><a href="/pages/partidas-vista/{{proyecto.pr_ID}}"><b> Ver Catálogo de Conceptos</b></a></p>    
+            </div>            
+            <div class="proyecto-detalles-ubicacion">
+                <p><b>Ubicación:</b> {{proyecto.pr_Ubicacion}}</p>
+                <a href="https://www.google.com.mx/maps/search/{{proyecto.pr_Ubicacion}}"><img src="/images/mapa.png" alt="Buscar en Google Maps" ></a>
+            </div>            
+        </div>
+
+        <div class="proyecto-fases">
+            <h2>Fases de Proyecto- {{proyecto.pr_Nombre}} <a href="/pages/crear-fase/{{proyecto.pr_ID}}"><img src="/images/cross.png" alt="Agregar Fase" id="cross"></a></h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th> Nombre</th>
+                        <th> Fecha Inicio</th>
+                        <th> Fecha Fin</th>
+                        <th> Progreso</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+
+                    {{#each fases}}
+                    <tr>
+                        <td class="fase-nombre"><a href="pages/fase/{{fp_ID}}">{{fp_Nombre}}</a></td>
+                        <td class="fec-ini"> {{fp_FechaInicio}}</td>
+                        <td class="fec-fin"> {{fp_FechaFin}}</td>
+                        <td> 
+                            <div class="progress-bar-td">
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" id="progressbar"></div>
+                                </div>  
+                                <p>{{fp_PorcentajeAvance}} %</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+    <script src="../js/progressbar.js"></script>

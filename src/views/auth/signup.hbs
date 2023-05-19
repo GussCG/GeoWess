@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    <!--Estilos-->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/registro.css">
+
+</head>
+<body>
+
+    <main id="registro-main">
+        <a href="/" id="logo">
+            <img src="/images/logo.png" alt="GeoWess"/>
+        </a>
+
+        <div class="reg-container">
+            <div class="reg-form">
+                <h1>Registro</h1>
+                <form id="registro-form" action="/signup" method="post">     
+                    <div class="reg-field">
+                        <input type="text" id="registro-Nombre" placeholder="Nombre" name="nombre_registro"><label for="registro-Nombre">Nombre</label>
+                    </div>
+                    <div class="reg-field">
+                        <input type="text" id="registro-ApellidoPat" placeholder="Apellido Paterno" name="apellidopat_registro"><label for="registro-ApellidoPat">Apellido Paterno</label>
+                    </div>
+                    <div class="reg-field">
+                        <input type="text" id="registro-ApellidoMat" placeholder="Apellido Materno" name="apellidomat_registro"><label for="registro-ApellidoMat">Apellido Materno</label>
+                    </div>
+                    <div class="reg-field">
+                        <input type="date" id="registro-FechaNac" placeholder="Fecha de Nacimiento" name="fecnac_registro"><label for="registro-FechaNac">Fecha de Nacimiento</label>                        
+                    </div>
+                    <div class="reg-field">
+                        <input type="text" id="registro-Correo" placeholder="Correo Electrónico" name="correo_registro"><label for="registro-Correo" >Correo Electrónico</label>
+                    </div>
+                    <div class="reg-field">
+                        <input type="text" id="registro-Telefono" placeholder="Teléfono" name="telefono_registro"><label for="registro-Telefono">Teléfono</label>
+                    </div>
+                    <div class="reg-field">
+                        <input type="text" id="registro-RFC" placeholder="RFC" name="rfc_registro"><label for="registro-RFC">RFC</label>
+                    </div>                    
+                    <div class="reg-field">
+                        <input type="password" id="login-password" placeholder="Contraseña" name="pass_registro"><label for="login-password">Contraseña</label><img src="../images/close-eye.png" alt="Mostrar contraseña" id="eye">
+                    </div>
+
+                    <select name="tipoUsr" id="tipoUsuario">
+                        <option value="0">Tipo de Usuario</option>
+                        <option value="1">Supervisor</option>
+                        <option value="2">Superintendente</option>
+                        <option value="3">Residente</option>
+                        <option value="4">Contratista</option>
+                        <option value="5">Contratante</option>
+                        <option value="6">Representante Legal</option>
+                    </select>
+
+                    <input type="submit" value="Registrar" id="btn-registrar">
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="../js/eye.js"></script>
+
+</body>
+</html>

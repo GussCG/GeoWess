@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.send('Index Page'))
+router.get('/', (req, res) => {
+    res.render('../views/pages/index');
+})
 
 module.exports = router;

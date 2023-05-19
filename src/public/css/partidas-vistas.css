@@ -1,0 +1,96 @@
+#partidas-vista-main {
+    margin: 27px 32px;
+    height: 95%;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+#partidas-vista-main  h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 27px 0 0 34px;
+}
+
+#partidas-vista-main .partidas-container {
+    margin: 20px 31px 10px 34px;
+    height: 65%;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "h2" "tabla";
+}
+
+#partidas-vista-main .partidas-container h2 {
+    margin: 15px 0 19px 45px;
+    font-size: var(--dashboard-h2-font-size);
+    font-weight: var(--bold);
+    grid-area: h2;
+}
+
+#partidas-vista-main .partidas-container table {
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    grid-area: tabla;
+}
+
+#partidas-vista-main .partidas-container thead tr{
+    height: 10px;
+}
+
+#partidas-vista-main .partidas-container thead th {
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    font-size: var(--proyecto-th-font-size);
+    font-weight: var(--semibold);
+    text-align: left;
+    padding-left: 10px;
+}
+
+#partidas-vista-main .partidas-container tbody tr {
+    height: 10px;
+}
+
+#partidas-vista-main .partidas-container td{
+    font-size: var(--proyecto-td-font-size);
+    font-weight: var(--semibold);
+}
+
+#partidas-vista-main .partida-nombre {    
+    padding-left: 10px;
+}
+
+#partidas-vista-main .partida-nombre a {
+    color: var(--lr-title-color);
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+
+#partidas-vista-main .partida-nombre a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+#cross {
+    width: 22px;
+    margin-left: 22px;
+    transition: all .3s ease-in-out;
+}
+
+#cross:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+#genEstimacion {
+    width: 22px;
+    text-decoration: none;
+    margin-left: 40px;
+    transition: all .2s ease-in-out;
+}
+
+#genEstimacion:hover {
+    opacity: 0.8;
+}

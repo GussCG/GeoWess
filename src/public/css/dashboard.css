@@ -1,10 +1,11 @@
-main {
+#dashboard-main {
     margin: 20px auto 0 auto;
     width: 90%;
     height: 90%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: transparent;
     gap: 32px;
 }
 
@@ -17,18 +18,19 @@ main {
     gap: 46px;
 }
 
-main .main-up>div, .Proyectos {
+#dashboard-main .main-up>div, .Proyectos {
     background-color: rgba(255, 255, 255, .6);
     border: 8px solid #fff;
     border-radius: 50px;
 }
 
 .Tareas {
-    width: 40%;
+    width: 30%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
 }
 
 .Tareas h1, .Proyectos h1 {
@@ -45,9 +47,6 @@ main .main-up>div, .Proyectos {
     flex-direction: column;
     justify-content: center;
     margin-left: 50px;
-    overflow-y: scroll;
-    scrollbar-width: thin;
-    scrollbar-color: var(--index-register-button-color) transparent;
 }
 
 .tareas-lista a {
@@ -99,6 +98,7 @@ main .main-up>div, .Proyectos {
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-areas: "h2" "tabla";
+    background-color: transparent;
 }
 
 .proyecto-fases h2 {

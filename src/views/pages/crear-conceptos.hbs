@@ -1,0 +1,21 @@
+<main id="catalogo-main">
+        <h1> Crear Conceptos</h1>
+        <div class="catalogo-conceptos-reg">
+            <form action="/pages/crear-conceptos/{{id}}/{{id_pr}}" method="post" id="catalogo-conceptos-form">
+                <div class="reg-field">
+                    <input type="text" id="registro-nombre-concepto" placeholder="Nombre del Catálogo" name="nombre_concepto"><label for="registro-nombre-concepto">Nombre</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-unidad-concepto" placeholder="unidad" name="unidad_concepto"><label for="registro-unidad-Catalogo">Unidad</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-cantidad-concepto" placeholder="cantidad" name="cantidad_concepto"><label for="registro-cantidad-concepto">Cantidad</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-precio-concepto" placeholder="precio" name="precio_concepto"><label for="registro-precio-concepto">Precio Unitario</label>
+                </div>                              
+                <input type="submit" value="Crear" id="registro-crear-concepto">                
+            </form>
+        </div>
+         <a href="/pages/partidas-vista/{{id}}">Regresar</a>
+    </main>

@@ -1,4 +1,4 @@
-<main>
+<main id="dashboard-main">
         <div class="main-up">
             <div class="Tareas">
                 <h1>Lista de Tareas</h1>
@@ -14,11 +14,9 @@
                     <a href="#"><img src="../images/cheque.png" alt=""> Tarea 1</a>
                     <p><b>Límite:</b> dd/mm/aaaa</p>
                 </div>
-                
             </div>
 
             <div class="Mensajes">
-                
             </div>
 
         </div>
@@ -38,43 +36,16 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="fase-nombre"><a href="#">Aeropuerto</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>74%</p>
+                            {{#each proyectos}}
+                            <td><a href="/proyecto/{{id}}">{{nombre}}</a></td>
+                            <td>{{fecha_inicio}}</td>
+                            <td>{{fecha_fin}}</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-bar__value" style="width: {{progreso}}%"></div>
                                 </div>
                             </td>
-                        </tr>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Estación de Metro</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>10%</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Parque de Mascotas</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>90%</p>
-                                </div>
-                            </td>
+                            {{/each}}
                         </tr>
                     </tbody>
                 </table>

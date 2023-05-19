@@ -1,8 +1,4 @@
-body {
-    font-family: var(--font-family);
-}
-
-main {
+#catalogo-vista-main {
     margin: 27px 32px;
     height: 95%;
     overflow: hidden;
@@ -10,16 +6,17 @@ main {
     border-radius: 20px;
 }
 
-main h1 {
+#catalogo-vista-main h1 {
     font-size: var(--dashboard-h1-font-size);
     font-weight: var(--bold);
     color: var(--lr-title-color);
     margin: 27px 0 0 34px;
 }
 
-.catalogo-container {
+#catalogo-vista-main .catalogo-container {
     margin: 20px 31px 10px 34px;
-    height: 550px;
+    width: auto;
+    height: 83%;
     background-color: var(--info-bg-color);
     border-radius: 10px;
 }
@@ -53,7 +50,7 @@ main h1 {
 }
 
 .tabla-partidas thead th {
-    border: 1px solid rgba(0, 0, 0, .5);
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
     font-size: 20px;
     font-weight: var(--semibold);
     text-align: center;
@@ -61,10 +58,9 @@ main h1 {
 
 .tabla-partidas tbody tr , .tabla-partidas tbody td {
     height: 10px;
-    border: 1px solid rgba(0, 0, 0, .5);
-    text-align: left;
-    
+    text-align: center;  
 }
+
 
 .tabla-partidas td{
     font-size: var(--proyecto-td-font-size);

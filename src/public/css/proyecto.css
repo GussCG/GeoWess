@@ -1,8 +1,4 @@
-body {
-    font-family: var(--font-family);
-}
-
-main {
+#proyecto-main {
     margin: 27px 32px;
     height: 95%;
     overflow: hidden;
@@ -10,58 +6,63 @@ main {
     border-radius: 20px;
 }
 
-main h1 {
+#proyecto-main  h1 {
     font-size: var(--dashboard-h1-font-size);
     font-weight: var(--bold);
     color: var(--lr-title-color);
     margin: 27px 0 0 34px;
 }
 
-.proyecto-detalles {
+#proyecto-main .proyecto-detalles {
     margin: 10px 31px 10px 34px;
+    width: auto;
     height: 110px;
     background-color: var(--info-bg-color);
     border-radius: 10px;
     display: grid;
     grid-template-rows: 1fr 1fr;
+    grid-template-areas: "info" "ubicacion";
 }
 
-.proyecto-detalles-info {
+#proyecto-main .proyecto-detalles-info {
     margin: 18px 62px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    grid-area: info;
 }
 
-.proyecto-detalles-info a {
+#proyecto-main .proyecto-detalles-info a {
     color: var(--lr-title-color);
     text-decoration: none;
     transition: all .3s ease-in-out;
 }
 
-.proyecto-detalles-info a:hover {
+#proyecto-main .proyecto-detalles-info a:hover {
     opacity: 0.8;
 }
 
-.proyecto-detalles-ubicacion {
+#proyecto-main .proyecto-detalles-ubicacion {
     margin: auto 62px;
     display: flex;
     flex-direction: row;
     justify-content:baseline;
 }
 
-.proyecto-detalles-ubicacion img {
+#proyecto-main .proyecto-detalles-ubicacion img {
     width: 24px;
     margin-left: 10px;
     transition: all .3s ease-in-out;
 }
 
-.proyecto-detalles-ubicacion img:hover{
+#proyecto-main .proyecto-detalles-ubicacion img:hover{
     transform: scale(1.1);
     opacity: 0.8;
 }
 
-.proyecto-fases {
+#proyecto-main .proyecto-fases {
     margin: 20px 31px 10px 34px;
     height: 65%;
     background-color: var(--info-bg-color);
@@ -71,14 +72,14 @@ main h1 {
     grid-template-areas: "h2" "tabla";
 }
 
-.proyecto-fases h2 {
+#proyecto-main .proyecto-fases h2 {
     margin: 15px 0 19px 45px;
     font-size: var(--dashboard-h2-font-size);
     font-weight: var(--bold);
     grid-area: h2;
 }
 
-.proyecto-fases table {
+#proyecto-main .proyecto-fases table {
     width: 90%;
     height: 90%;
     margin: 0 auto;
@@ -86,11 +87,11 @@ main h1 {
     grid-area: tabla;
 }
 
-.proyecto-fases thead tr{
+#proyecto-main .proyecto-fases thead tr{
     height: 10px;
 }
 
-.proyecto-fases thead th {
+#proyecto-main .proyecto-fases thead th {
     border-bottom: 1px solid rgba(0, 0, 0, .5);
     font-size: var(--proyecto-th-font-size);
     font-weight: var(--semibold);
@@ -98,26 +99,26 @@ main h1 {
     padding-left: 10px;
 }
 
-.proyecto-fases tbody tr {
+#proyecto-main .proyecto-fases tbody tr {
     height: 10px;
 }
 
-.proyecto-fases td{
+#proyecto-main .proyecto-fases td{
     font-size: var(--proyecto-td-font-size);
     font-weight: var(--semibold);
 }
 
-.fase-nombre {    
+#proyecto-main .fase-nombre {    
     padding-left: 10px;
 }
 
-.fase-nombre a {
+#proyecto-main .fase-nombre a {
     color: var(--lr-title-color);
     text-decoration: none;
     transition: all .3s ease-in-out;
 }
 
-.fase-nombre a:hover {
+#proyecto-main .fase-nombre a:hover {
     opacity: 0.8;
     text-decoration: underline;
 }
@@ -132,12 +133,12 @@ main h1 {
     color: var(--enddate-color);
 }
 
-.progress-bar-td {
+#proyecto-main .progress-bar-td {
     display: flex;
     flex-direction: row;
 }
 
-.progress-bar {
+#proyecto-main .progress-bar {
     height: 20px;
     width: 100%;
     background-color: var(--progress-bar-bg-color);
@@ -147,7 +148,7 @@ main h1 {
     position: relative;
 }
 
-.progress-bar-fill {
+#proyecto-main .progress-bar-fill {
     position: absolute;
     height: 100%;
     width: 0%;

@@ -47,9 +47,9 @@
 
         <div class="proyecto-form-data"> 
             <h2>Crear Partida</h2>
-            <form>
+            <form id="partida-form" action="/pages/crear-partida" method="post">
                 <div class="reg-field">
-                    <input type="text" id="registro-Nombre-Partida" placeholder="Nombre de la partida"><label for="registro-Nombre-Partida">Nombre de la partida</label>
+                    <input type="text" id="registro-Nombre-Partida" placeholder="Nombre de la partida" name="partida-nombre"><label for="registro-Nombre-Partida">Nombre de la partida</label>
                 </div>
                 <input type="submit" value="Crear" id="btn-registrar-partida">
             </form>
