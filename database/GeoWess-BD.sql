@@ -91,6 +91,14 @@ CREATE TABLE SUPERVISORA (
     FOREIGN KEY (spa_RepresentanteLegal) REFERENCES REPRESENTANTE_LEGAL (rpl_ID)
 );
 
+CREATE TABLE SUPERINTENDENTE (
+	spi_ID int(6),
+    spi_Usuario varchar(100),
+    
+    PRIMARY KEY (spi_ID),
+    FOREIGN KEY (spi_Usuario) REFERENCES USUARIO (us_Email)
+);
+show tables;
 /* TABLA DE FUNCION DE LOS USUARIOS */
 /* Son los mensajes que recibiran los superintendentes, supervisores y residentes para que capturen y validen sus respectivas estimaciones en los primeros 10 dias de cada mes de la obra */
 /* El Superintendente tiene 5 dias para capturar la estimación */

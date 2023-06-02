@@ -42,7 +42,7 @@ const calcPorcentaje = (fase) => {
 
 //RUTAS
 router.get('/crear-proyecto', (req, res) => {
-    res.render('pages/crear-proyecto');
+    res.render('pages/crear-proyecto', {layout: 'logged-layout'});
 });
 
 //Crear un proyecto
@@ -83,7 +83,7 @@ router.get('/', async (req, res) => {
         proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
     });
 
-    res.render('pages/proyectos', {proyectos});
+    res.render('pages/proyectos', {proyectos, layout: 'logged-layout'});
 });
 
 //Enviar a la vista general de un proyecto
@@ -111,13 +111,13 @@ router.get('/proyecto/:pr_id', async (req, res) => {
         await pool.query('UPDATE FASE_PROYECTO SET fp_PorcentajeAvance = ? WHERE fp_ID = ?', [fase.porcentaje, fase.fp_ID]);
     });
 
-    res.render('pages/proyecto', {proyecto: proyecto[0], fases});
+    res.render('pages/proyecto', {proyecto: proyecto[0], fases, layout: 'logged-layout'});
 });
 
 //Enviar a crear una fase
 router.get('/crear-fase/:pr_id', (req, res) => {
     const {pr_id} = req.params;
-    res.render('pages/crear-fase', {pr_id});
+    res.render('pages/crear-fase', {pr_id, layout: 'logged-layout'});
 });
 
 router.post('/crear-fase/:pr_id', async (req, res) => {
@@ -158,7 +158,7 @@ router.post('/crear-fase/:pr_id', async (req, res) => {
 //Generar estimacion mensual de un proyecto
 router.get('/generar-estimacion/:id', async (req, res) => {
     const {id} = req.params;
-    res.render('pages/generar-estimacion', {id});
+    res.render('pages/generar-estimacion', {id, layout: 'logged-layout'});
 });
 
 // router.post('/generar-estimacion/:id', async (req, res) => {
@@ -175,7 +175,7 @@ router.get('/generar-estimacion/:id', async (req, res) => {
 //Crear Partida
 router.get('/crear-partida/:pr_id', async (req, res) => {
     const {pr_id} = req.params;
-    res.render('pages/crear-partida', {pr_id});
+    res.render('pages/crear-partida', {pr_id, layout: 'logged-layout'});
 });
 
 router.post('/crear-partida/:pr_id', async (req, res) => {
@@ -203,7 +203,7 @@ router.post('/crear-partida/:pr_id', async (req, res) => {
 //Crear Catalogo de Conceptos
 router.get('/crear-conceptos/:pt_id/:pr_id', async (req, res) => {
     const {pt_id,pr_id} = req.params;
-    res.render('pages/crear-conceptos', {pt_id, pr_id});
+    res.render('pages/crear-conceptos', {pt_id, pr_id, layout: 'logged-layout'});
 });
 
 router.post('/crear-conceptos/:pt_id/:pr_id', async (req, res) => {
@@ -249,7 +249,7 @@ router.get('/partidas-vista/:pr_id', async (req, res) => {
     //Obtener partidas
     const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [proyecto[0].pr_CatalogoConceptos]);
     
-    res.render('pages/partidas-vista', {partidas, proyecto: proyecto[0]});
+    res.render('pages/partidas-vista', {partidas, proyecto: proyecto[0], layout: 'logged-layout'});
 });
 
 //Ver Conceptos de una partida
@@ -258,14 +258,15 @@ router.get('/catalogo-conceptos/:pt_id', async (req, res) => {
     const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
     const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
 
-    res.render('pages/catalogo-conceptos', {conceptos, partida: partida[0]});
+    res.render('pages/catalogo-conceptos', {conceptos, partida: partida[0], layout: 'logged-layout'});
 });
 
 //Dashboard
 router.get('/dashboard', async (req, res) => {
     const proyectos = await pool.query('SELECT * FROM PROYECTO');
-    res.render('pages/dashboard', {proyectos});
+    res.render('pages/dashboard', {proyectos, layout: 'logged-layout'});
 });
 
 
 module.exports = router;
+module.exports = genID;

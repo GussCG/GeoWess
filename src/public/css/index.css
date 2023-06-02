@@ -99,7 +99,6 @@ body {
 }
 
 /*Index Div*/
-
 #index-div {
 	box-sizing: border-box;
 	width: 75%;
@@ -210,41 +209,48 @@ body {
 	}	
 }
 
-@media screen and (max-width: 1480px) {
+/*Responsive para laptop*/
+@media (max-width: 1366px) {
+    html{
+        font-size: 14px;
+    }
 
-	body {
-		width: auto;
-		overflow: hidden;
+    body{
+        font-size: 14px;
+    }
+
+	#btn-login{
+		width: 200px;
+		border-radius: 25px;
+		font-size: 14px;
+		padding:0 10px;
 	}
 
 	#index-nav{
-		gap: 50px;
+		gap: 30px;
 	}
 
-	#index-nav #logo {
-		font-size: 4vw;
-	}
-
-	#index-nav ul li a {
-		font-size: 1.5vw;
-	}
-
-	#index-nav #btn-login {
-		width: calc(2vw * 5);
-		font-size: 1.5vw;
-		border-radius: calc(1.5vw * 5);
-	}
-
-	#index-div {
+	#index-div{
 		width: 80%;
 		margin: auto;
 	}
-
-	#index-div-h1 h1 {
-		font-size: 4vw;
+    
+	#index-div-btn {
+		width: 200px;
+		height: 60px;
+		margin-bottom: 20px;
 	}
 
-	#index-div-h2 h2 {
-		font-size: 1.5vw;
+	#index-div-btn a {
+		font-size: 14px;
+	}
+
+	#index-div-btn img{
+		width: 40px;
+		height: 40px;
+	}
+
+	#index-div-h1 h1 {
+		font-size: 48px;
 	}
 }

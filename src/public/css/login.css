@@ -211,7 +211,11 @@ input::placeholder {
 
 /*Responsiva*/
 
-@media  screen and (max-width: 1280px) {
+@media screen and (max-width: 1366px) {
+
+    #login-main {
+        width: 80%;
+    }
 
     .login-container {
         grid-template-columns: repeat(1, minmax(0, 1fr));

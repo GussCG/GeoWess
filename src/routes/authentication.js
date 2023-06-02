@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 
 router.get('/signup', (req, res) => {
-    res.render('auth/signup');
+    res.render('auth/signup', {layout: 'main'}); // src\views\auth\signup.hbs
 });
 
 router.post('/signup', passport.authenticate('local.signup', {
@@ -14,12 +14,12 @@ router.post('/signup', passport.authenticate('local.signup', {
 }));
 
 router.get('/signin', (req, res) => {
-    res.render('auth/signin');
+    res.render('auth/signin', {layout: 'main'});
 });
 
 router.post('/signin', (req, res, next) => {
     passport.authenticate('local.signin', {
-        successRedirect: '/dashboard',
+        successRedirect: '/pages/dashboard',
         failureRedirect: '/signin',
         failureFlash: true
     })(req, res, next);
