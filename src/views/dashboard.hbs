@@ -1,0 +1,35 @@
+
+<main id="dashboard-main">        
+        <div class="Proyectos">
+            <h1> Proyectos</h1>    
+            <div class="proyecto-fases">    
+                <table>
+                    <thead>
+                        <tr>
+                            <th> Nombre</th>
+                            <th> Fecha Inicio</th>
+                            <th> Fecha Fin</th>
+                            <th> Progreso</th>
+                        </tr>                    
+                    </thead>
+                    <tbody>
+                        {{#each proyectos}}
+                        <tr>                            
+                            <td><a href="proyectos/proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
+                            <td>{{pr_FechaInicio}}</td>
+                            <td>{{pr_FechaFin}}</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-bar__value" id="progress_bar_value" style="width: {{fp_PorcentajeAvance}}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+    
+            </div>
+    
+        </div>
+        <script src="../js/progressbar.js"></script>
+    </main>

@@ -1,0 +1,25 @@
+<main id="profile-main">
+    <h1> Editar Usuario</h1>
+    <form action="../usuario/editar-perfil" method="POST">            
+        <div class="reg-field">
+            <input type="text" id="registro-Nombre-Usuario" placeholder="Nombre" name="nombre_user" value="{{usuario.us_Nombre}}" ><label for="registro-Nombre-Usuario">Nombre</label>
+        </div>
+        <div class="reg-field">
+            <input type="text" id="registro-ApPat-Usuario" placeholder="Apellido Paterno" name="apPaterno_user" value="{{usuario.us_ApPaterno}}" ><label for="registro-ApPat-Usuario">Apellido Paterno</label>
+        </div>
+        <div class="reg-field">
+            <input type="text" id="registro-ApMat-Usuario" placeholder="Nombre" name="apMaterno_user" value="{{usuario.us_ApMaterno}}" ><label for="registro-ApMat-Usuario">Apellido Materno</label>
+        </div>        
+        <div class="reg-field">
+            <input type="text" id="registro-Email-Proyecto" placeholder="Email" name="email_user" value="{{usuario.us_Email}}"><label for="registro-Email-Proyecto">Correo Electrónico</label>
+        </div> 
+        <div class="reg-field">
+            <input type="text" id="registro-Telefono-Proyecto" placeholder="Teléfono" name="telefono_user" value="{{usuario.us_Telefono}}"><label for="registro-Telefono-Proyecto">Teléfono</label>
+        </div>
+        <div class="reg-field">
+            <input type="text" id="registro-RFC-Proyecto" placeholder="RFC" name="RFC_user" value="{{usuario.us_RFC}}"><label for="registro-RFC-Proyecto">RFC</label>
+        </div>
+        <input type="submit" value="Guardar Cambios" id="btn-editar-usuario">  
+    </form>
+
+</main>

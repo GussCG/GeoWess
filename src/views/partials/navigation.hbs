@@ -2,20 +2,45 @@
 
         <div class="user-info">
             <div class="user-img">
-                <img src="/images/profile.png" alt="user">
+               <a href="../usuario/editar-perfil"><img src="/images/profile.png" alt="user"></a>
             </div>
             <div class="info">
-                <div class="user-name"><p>Nombre de usuario</p></div>
-                <div class="user-rol"><p>Rol</p></div>
+                <div class="user-name"><p>{{user.us_Nombre}} {{user.us_ApPaterno}}</p></div>
+                <div class="user-rol"><p>
+                    <script>
+                        function getRol(rol){
+                            switch(rol){
+                                case 0:
+                                    return "Administrador";
+                                case 1:
+                                    return "Supervisor";
+                                case 2:
+                                    return "Superintendente";
+                                case 3:
+                                    return "Residente";
+                                case 4:
+                                    return "Contratista";
+                                case 5:
+                                    return "Contratante";
+                                case 6:
+                                    return "Representante Legal";
+                                default:
+                                    return "Usuario";
+                            }
+                        }
+                        document.write(getRol({{user.us_Tipo}}));
+                    </script>
+                </p></div>
             </div>            
         </div>
 
         <div class="menu-icons" id="menu-icons">
             <ul>
-                <li><a href="/pages/dashboard"><img src="/images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
+                <li><a href="/profile"><img src="/images/boton-de-inicio-para-la-interfaz.png" alt="Inicio"></a></li>
                 <li><a href="#"><img src="/images/to-do-list.png" alt="Tareas"></a></li>
-                <li><a href="../pages/"><img src="/images/puesta-en-marcha.png" alt="Proyectos"></a></li>
-                <li><a href="/"><img src="/images/logout.png" alt="Cerrar Sesión"></a></li>
+                <li><a href="/proyectos"><img src="/images/puesta-en-marcha.png" alt="Proyectos"></a></li>
+
+                <li><a href="/logout"><img src="/images/logout.png" alt="Cerrar Sesión"></a></li>
             </ul>
         </div>
 

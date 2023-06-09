@@ -5,6 +5,7 @@ DROP DATABASE GeoWess;
 
 /*Todos son usuarios*/
 CREATE TABLE USUARIO (
+	us_ID int(6) not null,
     us_Nombre varchar(50),
     us_ApPaterno varchar(50),
     us_ApMaterno varchar(50),
@@ -16,43 +17,43 @@ CREATE TABLE USUARIO (
     us_Email varchar(100),
     us_Password varchar(100),
     
-    PRIMARY KEY (us_Email)    
+    PRIMARY KEY (us_ID)    
 );
 
 /*ROLES MENORES*/
 /*SUPERVISANTE DE SERVICIOS*/
 CREATE TABLE SUPERVISANTE (
 	sup_ID int(6),
-    sup_Usuario varchar(100), 
+    sup_Usuario int(6), 
     
     PRIMARY KEY (sup_ID),
-    FOREIGN KEY (sup_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (sup_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 CREATE TABLE SUPERVISOR (
 	sp_ID int(6),
-    sp_Usuario varchar(100),
+    sp_Usuario int(6),
     
     PRIMARY KEY (sp_ID),
-    FOREIGN KEY (sp_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (sp_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 /*RESIDENTE DE SERVICIOS*/
 CREATE TABLE RESIDENTE (
 	res_ID int(6),
-    res_Usuario varchar(100),
+    res_Usuario int(6),
     
     PRIMARY KEY (res_ID),
-    FOREIGN KEY (res_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (res_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 /*Tienen que estar obligadamente, no tiene ningun poder de crear proyectos, modificar o generar estimaciones, pero puede ver los reportes, estimaciones, etc. */
 CREATE TABLE REPRESENTATE_LEGAL (
 	rpl_ID int(6),
-    rpl_Usuario varchar(100),
+    rpl_Usuario int(6),
     
     PRIMARY KEY (rpl_ID),
-    FOREIGN KEY (rpl_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (rpl_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 /*ROLES IMPORTANTES*/
@@ -61,22 +62,22 @@ CREATE TABLE CONTRATISTA (
 	cta_ID int(6),
     cta_RepresentanteLegal int(6),    
     cta_Supervisante int(6),
-    cta_Usuario varchar(100),
+    cta_Usuario int(6),
     
     PRIMARY KEY (cta_ID),
     FOREIGN KEY (cta_RepresentanteLegal) REFERENCES REPRESENTANTE_LEGAL (rpl_ID),
-    FOREIGN KEY (cta_Usuario) REFERENCES USUARIO (us_Email),
+    FOREIGN KEY (cta_Usuario) REFERENCES USUARIO (us_ID),
     FOREIGN KEY (cta_Supervisante) REFERENCES SUPERVISANTE (sup_ID)
 );
 
 /*Es quien puede crear los proyectos, editarlos y eliminarlos*/
 CREATE TABLE CONTRATANTE (
 	cte_ID int(6),
-    cte_Usuario varchar(100),
+    cte_Usuario int(6),
     cte_Residente int(6),
     
     PRIMARY KEY (cte_ID),
-    FOREIGN KEY (cte_Usuario) REFERENCES USUARIO (us_Email),
+    FOREIGN KEY (cte_Usuario) REFERENCES USUARIO (us_ID),
     FOREIGN KEY (cte_Residente) REFERENCES RESIDENTE (res_ID)
 );
 
@@ -93,12 +94,12 @@ CREATE TABLE SUPERVISORA (
 
 CREATE TABLE SUPERINTENDENTE (
 	spi_ID int(6),
-    spi_Usuario varchar(100),
+    spi_Usuario int(6),
     
     PRIMARY KEY (spi_ID),
-    FOREIGN KEY (spi_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (spi_Usuario) REFERENCES USUARIO (us_ID)
 );
-show tables;
+
 /* TABLA DE FUNCION DE LOS USUARIOS */
 /* Son los mensajes que recibiran los superintendentes, supervisores y residentes para que capturen y validen sus respectivas estimaciones en los primeros 10 dias de cada mes de la obra */
 /* El Superintendente tiene 5 dias para capturar la estimación */
@@ -110,10 +111,10 @@ CREATE TABLE NOTIFICACION (
     nt_Descripcion varchar(255),
     nt_Fecha timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     nt_Status boolean, /* 1 = No visto || 0 = Visto */
-    nt_Usuario varchar(100),
+    nt_Usuario int(6),
     
     PRIMARY KEY (nt_ID),
-    FOREIGN KEY (nt_Usuario) REFERENCES USUARIO (us_Email)    
+    FOREIGN KEY (nt_Usuario) REFERENCES USUARIO (us_ID)    
 );
 
 /* CAMPOS DE AUDITORIA */
@@ -123,10 +124,10 @@ CREATE TABLE CAMBIO (
     cb_ID int(6),
     cb_Descripcion varchar(255),
     cb_Fecha timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    cb_Usuario varchar(100),
+    cb_Usuario int(6),
     
     PRIMARY KEY (cb_ID),
-    FOREIGN KEY (cb_Usuario) REFERENCES USUARIO (us_Email)    
+    FOREIGN KEY (cb_Usuario) REFERENCES USUARIO (us_ID)    
 );
 
 /*TAREAS*/
@@ -136,10 +137,10 @@ CREATE TABLE TAREAS (
     tr_FechaInicio date,
     tr_FechaFin date,
     tr_Status boolean, /* 1 = Finalizada || 0 = En proceso */
-    tr_Usuario varchar(100),
+    tr_Usuario int(6),
 
     PRIMARY KEY (tr_ID),
-    FOREIGN KEY (tr_Usuario) REFERENCES USUARIO (us_Email)
+    FOREIGN KEY (tr_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 /* TABLAS DE PROYECTO */
@@ -152,11 +153,12 @@ CREATE TABLE PROYECTO (
     pr_Status boolean, /* 1 = Finalizada || 0 = En proceso */
     pr_CostoTotal float, /*Se calcula con el TOTAL en el catalogo de conceptos*/
     pr_Ubicacion varchar(500),
-    pr_Contratante int(6), /*Es el usuario que creo el proyecto*/
+    pr_Usuario int(6), /*Es el usuario que creo el proyecto*/
+    pr_PorcentajeAvance float,
     pr_CatalogoConceptos int(6), /*Es el catalogo de conceptos de todo el proyecto*/
     
     PRIMARY KEY (pr_ID),
-    FOREIGN KEY (pr_Contratante) REFERENCES CONTRATANTE (cte_ID),
+    FOREIGN KEY (pr_Usuario) REFERENCES USUARIO (us_ID),
     FOREIGN KEY (pr_CatalogoConceptos) REFERENCES CATALOGO_CONCEPTOS (cc_ID) 
 );
 
@@ -191,11 +193,10 @@ CREATE TABLE FRENTE_DE_OBRA (
 CREATE TABLE ESTIMACION (
 	es_ID int(6),
     es_ImporteContrato float, /*Importe del contrato, esta sale del catalago de conceptos, se utilizara para calculos de importes acumulados, de la estimacion actual, del acumulado actual y el saldo por estimar*/
-    es_Anticipo float, /*Es el importe del anticipo, se utilizara para calcular el amortizado acumulado anterior, amortizacion actual, amortizado acumulado actual y el saldo por amortizar*/
     es_NetoARecibir float, /*Es la suma del importe de estimacion, la amortizacion del anticipo, el 16% del IVA, la retencion del 0.5% de la S.F.P. y la retencion por atraso de programa*/
     es_FechaInicio date, /*Fecha de inicio de la estimacion, inicio de mes que se tomo para la estimación*/
     es_FechaFin date, /*Fecha de fin de la estimacion, fin de mes que se tomo para la estimación*/
-    es_Contratista int(6),
+    es_Contratista int(6), /*Rd el que creo el proyecto*/
     es_Superintendente int(6), /*Es quien creo la estimacion*/
     es_Supervisor int(6), /*Es quien debe de validarla*/
     es_EstadoSupervisor boolean, /* 1 = Aprobado || 0 = No aprobado */
@@ -244,7 +245,10 @@ CREATE TABLE CONCEPTO (
 
 /*OPERACIONES CON TRIGGERS PARA EL FUNCIONAMIENTO DE LA BASE*/
 /*TRIGGER PARA LOS CAMBIOS DE AUDITORIA CADA QUE SE MODIFIQUE EL PROYECTO*/
-CREATE TRIGGER `trg_cambio_proyecto` AFTER UPDATE ON `PROYECTO` FOR EACH ROW INSERT INTO CAMBIO (cb_Descripcion, cb_Usuario) VALUES ('Se modifico el proyecto con ID: ' + NEW.pr_ID, NEW.pr_Contratante);
+CREATE TRIGGER `trg_cambio_proyecto` AFTER UPDATE ON `PROYECTO` FOR EACH ROW INSERT INTO CAMBIO (cb_Descripcion, cb_Usuario) VALUES ('Se modifico el proyecto con ID: ' + NEW.pr_ID, NEW.pr_Usuario);
+
+/*TRIGGER CUANDO SE EDITA UN USARIO*/
+CREATE TRIGGER `trg_cambio_usuario` AFTER UPDATE ON `USUARIO` FOR EACH ROW INSERT INTO CAMBIO (cb_Descripcion, cb_Usuario) VALUES ('Se modifico el usuario con email: ' + NEW.us_Email, NEW.us_Email);
 
 SELECT * FROM CAMBIO;
 SELECT * FROM PROYECTO;
@@ -253,3 +257,5 @@ SELECT * FROM CATALOGO_CONCEPTOS;
 SELECT * FROM FASE_PROYECTO;
 SELECT * FROM CONCEPTO;
 SELECT * FROM USUARIO;
+SELECT * FROM SUPERVISOR;
+

@@ -1,7 +1,7 @@
 
 #proyectos-main {
     margin: 27px 32px;
-    height: 95%;
+    height: 100%;
     overflow: hidden;
     background-color: #fff;
     border-radius: 20px;
@@ -16,7 +16,7 @@
 
 .proyectos {
     margin: 20px 31px 10px 34px;
-    height: 80%;
+    height: 72%;
     background-color: var(--info-bg-color);
     border-radius: 10px;
 }
@@ -84,3 +84,34 @@
     border-bottom: 0px solid rgba(0, 0, 0, .5);
 }
 
+#crearP {
+    margin: 0 0 0 34px;
+    width: fit-content;
+    height: 10%;
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    font-weight: var(--bold);
+    color: rgb(82, 79, 255);
+}
+
+#crearP:hover {
+    color: rgb(82, 79, 255, 0.8);
+}
+
+.edit-pr {
+    width: 30px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.delete-pr {
+    width: 30px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.edit-pr:hover, .delete-pr:hover {
+    opacity: 0.8;
+}

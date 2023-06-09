@@ -1,69 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-#registro-main {
-    width: 75%;
-    height: 850px;
-    margin: 30px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: var(--login-register-bg-color);
-    border-radius: 50px;
+body {
+    font-family: var(--font-family);
 }
 
-#registro-main a{
-	font-style: normal;
-	font-weight: 800;
-	font-size: var(--logo-font-size);
-	line-height: 70px;
-	color: var(--index-login-button-color);
-	text-decoration: none;
-    margin: 35px 0 0 35px;
-    transition: opacity .3s ease-in-out;
+#profile-main {
+    height: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+    gap: 0;
+    margin: 0 auto;
 }
 
-#registro-main a:hover{
-	opacity: 0.8;
+#profile-main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 20px 30px;
 }
 
-.reg-container {
-    width: 100%;
-    height: 690px;
-    display: flex;
-}
-
-.reg-form {
+#profile-main form {
     width: 100%;
     height: 85%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-
-}
-
-.reg-form h1{
-    font-weight: var(--semibold);
-    font-size: var(--lr-h1-font-size);
-    font-style: normal;
-    margin: 100px 0 52px 0;
-}
-
-#registro-form {
-    margin-top: 20px;
-    width: 100%;
-    height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-    gap: 20px;
-    justify-items: center;
-    align-items: center;
+    grid-template-rows: 1fr 1fr 1fr;
 }
 
 .reg-field {
+    margin: 10% 30px;
     position: relative;
-    width: 70%;
+    width: 80%;
     height: auto;
 }
 
@@ -95,7 +61,7 @@ input::placeholder {
     color: transparent;
 }
 
-#btn-registrar {
+#btn-editar-usuario {
     width: 160px;
     height: 36px;
     background-color: var(--lr-button-color);
@@ -109,71 +75,35 @@ input::placeholder {
     line-height: 23px;
     padding: 7px;
 
+    margin: auto;
+    grid-area: 3/2;
+
     transition:transform .3s ease-in-out, background-color .3s ease-in-out;
-    grid-column: 2/3;
 }
 
-#btn-registrar:hover {
+#btn-editar-usuario:hover {
     background-color: var(--lr-button-hover-color);
-    transform: scale(1.1);
-}
-
-#eye, #eye2 {
-    width: 20px;
-    height: 20px;
-    margin-left: -30px;
-    cursor: pointer;
-    transition: all .3s ease-in-out;
-}
-
-select {
-    width: 300px;
-    height: 36px;
-    background-color: var(--lr-select-bg-color);
-    border: none;
-    padding-left: 12px;
-    border-radius: 10px;
-
-    font-family: var(--font-family);
-    font-size: var(--lr-select-font-size);
-    font-weight: var(--bold);
-
-    grid-column: 1/4;
-}
-
-select:focus {
-    outline: none;
-}
-
-#eye:hover, #eye2:hover {
     transform: scale(1.1);
 }
 
 
 /*Responsiva*/
 
-@media screen and (max-width: 1238px){
+@media  screen and (max-width: 1280px){
 
-    #registro-main {
+    body {
+        height: 100%;
+    }
+
+    #profile-main {
         width: 80%;
-        height: 820px;
+        height: 90%;
+        margin: 0 auto;
     }
 
-    #registro-main a{
-        font-size: 32px;
-    }
-
-    #registro-main a:hover{
-        opacity: 0.8;
-    }
-
-    .reg-container {
+    #profile-main form{
         width: 100%;
-    }
-
-    .reg-form {
-        width: 100%;
-        height: 85%;
+        height: 75%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -212,30 +142,14 @@ select:focus {
         background-color: white; 
     }
 
-    .reg-form h1{
-        font-weight: var(--semibold);
-        font-size: 20px;
-        font-style: normal;
-        margin: auto 0 20px 0;
-    }
-
-    #registro-form {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-items: center;
-        align-items: center;
-    }
-
     .reg-field {
         position: relative;
         width: 70%;
         height: auto;
+        margin: 20px 0;
     }
 
     .reg-field input {
-        margin-bottom: 20px;
         border: none;
         border-bottom: 1px solid var(--p-color);
         background-color: unset;
@@ -262,12 +176,11 @@ select:focus {
         color: transparent;
     }
 
-    #btn-registrar {
+    #btn-editar-usuario {
         width: 160px;
         height: 36px;
-    }
 
-    select {
-        margin: auto;
+        align-self: center;
+        margin-bottom: 20px;
     }
 }

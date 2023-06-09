@@ -31,6 +31,7 @@ passport.use('local.signup', new localStrategy({
     const {nombre_registro, apellidopat_registro, apellidomat_registro,fecnac_registro, telefono_registro, rfc_registro, tipoUsr} = req.body;
 
     const newUser = {
+        us_ID : genID(),
         us_Nombre: nombre_registro,
         us_ApPaterno: apellidopat_registro,
         us_ApMaterno: apellidomat_registro,
@@ -44,7 +45,7 @@ passport.use('local.signup', new localStrategy({
 
     newUser.us_Password = await helpers.encryptPassword(pass_registro);
 
-    console.log(newUser);
+    //console.log(newUser);
 
     const res = await pool.query('INSERT INTO USUARIO SET ?', [newUser]);
     //crear el tipo de usuario

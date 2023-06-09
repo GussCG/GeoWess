@@ -1,10 +1,6 @@
 let progressbar = document.getElementsByClassName('progress-bar-fill');
+let progress = document.getElementsByClassName('progress_bar-value');
 
-let sizes = [];
-
-sizes.push('74%', '10%', '90%', '50%');
-let i = 0;
-
-sizes.forEach(element => {
-        progressbar[i++].style.width = element;
-});
+for (let i = 0; i < progressbar.length; i++) {
+        progressbar[i].style.width = progress[i].innerHTML;
+}

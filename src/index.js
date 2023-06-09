@@ -41,13 +41,17 @@ app.use(passport.session());
 // Variables globales
 app.use((req, res, next) => {
     app.locals.success = req.flash('success');
+    app.locals.message = req.flash('message');
+    app.locals.user = req.user;
     next();
 });
 
 // Rutas
-app.use(require('./routes/index.js'));
+app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
-app.use('/pages', require('./routes/pages'));
+app.use('/usuario', require('./routes/usuario'));
+// app.use('/proyectos', require('./routes/proyecto'));
+app.use('/proyectos', require('./routes/projects'));
 
 //Public
 app.use(express.static(path.join(__dirname, 'public')));
