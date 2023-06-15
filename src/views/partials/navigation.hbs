@@ -1,8 +1,9 @@
+<div class="navigation-cont">    
     <div class="nav-bar" id="nav-bar">
 
         <div class="user-info">
             <div class="user-img">
-               <a href="../usuario/editar-perfil"><img src="/images/profile.png" alt="user"></a>
+               <a href="../../usuario/editar-perfil"><img src="/images/profile.png" alt="user"></a>
             </div>
             <div class="info">
                 <div class="user-name"><p>{{user.us_Nombre}} {{user.us_ApPaterno}}</p></div>
@@ -47,5 +48,58 @@
         <div class="arrow">
             <img src="/images/down-arrow.png" alt="arrow" id="arrow">
         </div>
-
     </div>
+
+    <div class="datetime-container">
+        <div class="date">
+            <span id="date">
+                <script>
+                    var d = new Date();
+                    var weekday = new Array(7);
+                    weekday[0] = "Domingo";
+                    weekday[1] = "Lunes";
+                    weekday[2] = "Martes";
+                    weekday[3] = "Miércoles";
+                    weekday[4] = "Jueves";
+                    weekday[5] = "Viernes";
+                    weekday[6] = "Sábado";
+
+                    var n = weekday[d.getDay()];
+                    document.getElementById("date").innerHTML = "Hoy es " + n + ", " + d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " a las ";
+                </script>
+            </span>
+        </div>
+        <div class="time">
+            <span id="time">
+                <script>
+                    function startTime() {
+                        var today = new Date();
+                        var h = today.getHours();
+                        var m = today.getMinutes();
+                        var s = today.getSeconds();
+                        var ampm;
+
+                        if (h >= 12){
+                            h = h - 12;
+                            ampm = "PM";
+                        } else {
+                            ampm = "AM";
+                        }
+
+                        // add a zero in front of numbers<10
+                        m = checkTime(m);
+                        s = checkTime(s);
+                        document.getElementById('time').innerHTML =
+                        h + ":" + m + ":" + s + " " + ampm;
+                        var t = setTimeout(startTime, 500);
+                    }
+                    function checkTime(i) {
+                        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                        return i;
+                    }
+                    startTime();
+                </script>
+            </span>
+        </div>
+    </div>
+</div>

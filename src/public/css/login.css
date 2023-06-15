@@ -20,6 +20,7 @@
 	text-decoration: none;
     margin: 35px 0 0 35px;
     transition: opacity .3s ease-in-out;
+    width: fit-content;
 }
 
 #login-main a:hover{

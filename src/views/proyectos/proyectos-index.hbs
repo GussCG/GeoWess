@@ -25,14 +25,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            {{#each proyecto}}
-                            <td class="proyecto-nombre"><a href="#">{{proyecto.pr_Nombre}}</a></td>
-                            <td class="fec-ini"> {{proyecto.pr_FechaInicio}}</td>
-                            <td class="fec-fin"> {{proyecto.pr_FechaFin}}</td>
-                            <td> {{proyecto.pr_Status}}</td>
-                            <td> $ {{proyecto.pr_CostoTotal}}</td>
-                            <td><a href="/editar-proyecto/{{proyecto.pr_ID}}"><img src="../images/editar.png" alt="Editar Proyecto" class="edit-pr"></a></td>
-                            <td><a href=""><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                               
+                            {{#each proyectos}}
+                            <td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
+                            <td class="fec-ini">{{pr_FechaInicio}}</td>
+                            <td class="fec-fin">{{pr_FechaFin}}</td>
+                            <td>{{pr_Status}}</td>
+                            <td>${{pr_CostoTotal}}</td>
+                            <td><a href="/editar-proyecto/{{pr_ID}}"><img src="../images/editar.png" alt="Editar Proyecto" class="edit-pr"></a></td>
+                            <td><a href="/eliminar-proyecto/{{pr_ID}}"><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                               
                             </td>
                             {{/each}}
                         </tr>                        

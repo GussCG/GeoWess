@@ -20,6 +20,7 @@
 	text-decoration: none;
     margin: 35px 0 0 35px;
     transition: opacity .3s ease-in-out;
+    width: fit-content;
 }
 
 #registro-main a:hover{
@@ -182,34 +183,6 @@ select:focus {
         scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
         scrollbar-width: thin;
         scrollbar-gutter: initial;
-    }
-
-    ::-webkit-scrollbar {
-        width: 11px;
-        background-color: white;
-    }
-
-    ::-webkit-scrollbar-button{
-        display: none;
-    }
-
-    ::-webkit-scrollbar:vertical {
-        width: 11px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        border: none;
-        background: rgba(0, 0, 0, 0.4);
-    }
-
-    ::-webkit-scrollbar-thumb:window-inactive{
-        background: rgba(0, 0, 0, 0.0);
-    }
-
-    ::-webkit-scrollbar-track {
-        border-radius: 10px; 
-        background-color: white; 
     }
 
     .reg-form h1{

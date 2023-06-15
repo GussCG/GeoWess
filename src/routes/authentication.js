@@ -48,31 +48,36 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
 
 router.get('/profile',isLoggedIn, async (req, res) => {
     const proyectos = await pool.query('SELECT * FROM PROYECTO WHERE pr_Usuario = ?', [req.user.us_ID]);
-    //Calcular el porcentaje de avance de cada fase    
-    proyectos.forEach(async proyecto => {
+    proyectos.forEach(proyecto => {
         proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
         proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
-        const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
-        fases.forEach(fase => {
-            fase.fp_FechaInicio = dateFormat(fase.fp_FechaInicio);
-            fase.fp_FechaFin = dateFormat(fase.fp_FechaFin);
-        });
-        fases.forEach(fase => {
-            fase.porcentaje = calcPorcentaje(fase);
-            pool.query('UPDATE FASE_PROYECTO SET fp_PorcentajeAvance = ? WHERE fp_ID = ?', [fase.porcentaje, fase.fp_ID]);
-        });
+        proyecto.pr_PorcentajeAvance = 50;
     });
+    // //Calcular el porcentaje de avance de cada fase    
+    // proyectos.forEach(async proyecto => {
+    //     proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
+    //     proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
+    //     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
+    //     fases.forEach(fase => {
+    //         fase.fp_FechaInicio = dateFormat(fase.fp_FechaInicio);
+    //         fase.fp_FechaFin = dateFormat(fase.fp_FechaFin);
+    //     });
+    //     fases.forEach(fase => {
+    //         fase.porcentaje = calcPorcentaje(fase);
+    //         pool.query('UPDATE FASE_PROYECTO SET fp_PorcentajeAvance = ? WHERE fp_ID = ?', [fase.porcentaje, fase.fp_ID]);
+    //     });
+    // });
 
-    //Calcular el porcentaje de avance de cada proyecto
-    proyectos.forEach(async proyecto => {
-        const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
-        let porcentaje = 0;
-        fases.forEach(fase => {
-            porcentaje += fase.fp_PorcentajeAvance;
-        });
-        porcentaje = porcentaje / fases.length;
-        pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [porcentaje, proyecto.pr_ID]);
-    });
+    // //Calcular el porcentaje de avance de cada proyecto
+    // proyectos.forEach(async proyecto => {
+    //     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
+    //     let porcentaje = 0;
+    //     fases.forEach(fase => {
+    //         porcentaje += fase.fp_PorcentajeAvance;
+    //     });
+    //     porcentaje = porcentaje / fases.length;
+    //     pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [porcentaje, proyecto.pr_ID]);
+    // });
     
     res.render('dashboard', {proyectos, layout: 'logged-layout'});
 });

@@ -5,6 +5,15 @@ body {
     font-family: var(--font-family);
 }
 
+.navigation-cont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .nav-bar {
     width: 760px;
     height: 93px;
@@ -129,5 +138,28 @@ body {
     display: none;
 }
 
+.datetime-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin: 7vh 2vw;
+}
 
+.time {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 23px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 4px 2px 0 rgba(70, 16, 145, 0.261);
+}
 
+.date {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 23px;
+    text-align: center;
+    color: #000;
+}

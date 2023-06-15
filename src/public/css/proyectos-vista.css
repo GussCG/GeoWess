@@ -1,7 +1,8 @@
 
 #proyectos-main {
     margin: 27px 32px;
-    height: 100%;
+    height: 90%;
+    min-height: 700px;
     overflow: hidden;
     background-color: #fff;
     border-radius: 20px;
@@ -28,8 +29,12 @@
     border-collapse: collapse;
 }
 
+.proyectos thead{
+    height: 50px;
+}
+
 .proyectos thead tr{
-    height: 10px;
+    height: 20px;
 }
 
 .proyectos thead th {
@@ -37,7 +42,7 @@
     font-size: var(--proyecto-th-font-size);
     font-weight: var(--semibold);
     text-align: center;
-    padding-left: 10px;
+    /* padding-left: 10px; */
 }
 
 .proyectos tbody tr {
@@ -51,13 +56,24 @@
     text-align: center;
 }
 
+.proyectos tbody td {
+    padding: 0;
+    height: 20px;
+}
+
 .tabla-proyectos {
     height: 100%;
     width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
     display: block;
     margin: 0 auto;
+}
+
+.tabla-proyectos tbody {
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
+    scrollbar-gutter: initial;
 }
 
 .proyecto-nombre a {
@@ -73,6 +89,7 @@
 
 .tabla-proyectos .fec-ini {
     color: var(--startdate-color);
+    margin: 0;
 }
 
 .tabla-proyectos .fec-fin {
@@ -93,11 +110,30 @@
 
     text-decoration: none;
     font-weight: var(--bold);
-    color: rgb(82, 79, 255);
+    color: var(--a-logged-color);
+    position: relative;
+}
+
+#crearP::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 20px;
+    left: 0;
+    background-color: var(--a-logged-color);
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out 0s;
+}
+
+#crearP:hover::before {
+    visibility: visible;
+    transform: scaleX(1);
 }
 
 #crearP:hover {
-    color: rgb(82, 79, 255, 0.8);
+    color: var(--a-logged-color);
 }
 
 .edit-pr {

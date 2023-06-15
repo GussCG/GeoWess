@@ -2,7 +2,7 @@
 <main id="dashboard-main">        
         <div class="Proyectos">
             <h1> Proyectos</h1>    
-            <div class="proyecto-fases">    
+            <div class="proyectos-vista">    
                 <table>
                     <thead>
                         <tr>
@@ -15,12 +15,20 @@
                     <tbody>
                         {{#each proyectos}}
                         <tr>                            
-                            <td><a href="proyectos/proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
-                            <td>{{pr_FechaInicio}}</td>
-                            <td>{{pr_FechaFin}}</td>
+                            <td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
+                            <td class="fec-ini">{{pr_FechaInicio}}</td>
+                            <td class="fec-fin">{{pr_FechaFin}}</td>
                             <td>
-                                <div class="progress-bar">
-                                    <div class="progress-bar__value" id="progress_bar_value" style="width: {{fp_PorcentajeAvance}}%"></div>
+                                <div class="progress-bar-td">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" id="progressbar">
+                                            <script>
+                                                var progressbar = document.getElementById("progressbar");
+                                                progressbar.style.width = "{{pr_PorcentajeAvance}}%";
+                                            </script>
+                                        </div>
+                                    </div>  
+                                    <p>{{pr_PorcentajeAvance}}%</p>
                                 </div>
                             </td>
                         </tr>
@@ -31,5 +39,4 @@
             </div>
     
         </div>
-        <script src="../js/progressbar.js"></script>
     </main>

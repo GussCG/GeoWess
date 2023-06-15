@@ -33,6 +33,8 @@
 
 	--info-bg-color: #d9d9d9;
 
+    --a-logged-color: rgb(50, 0, 144);
+
     /**Index*/
     --index-login-button-color: #000000;
     --index-register-button-color: #fafafa;
@@ -119,4 +121,34 @@ html{
 body {
     width: 100%;
     height: 80%;
+    overflow: hidden;
+}
+
+/*Scroll*/
+::-webkit-scrollbar {
+    width: 11px;
+    background-color: white;
+}
+
+::-webkit-scrollbar-button{
+    display: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: none;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb:window-inactive{
+    background: rgba(0, 0, 0, 0.0);
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px; 
+    background-color: white; 
 }

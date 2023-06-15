@@ -91,7 +91,7 @@
     height: 100%;
 }
 
-.proyecto-fases {
+.proyectos-vista {
     margin: 20px 31px 10px 34px;
     height: 65%;
     border-radius: 10px;
@@ -101,14 +101,14 @@
     background-color: transparent;
 }
 
-.proyecto-fases h2 {
+.proyectos-vista h2 {
     margin: 15px 0 19px 45px;
     font-size: var(--dashboard-h2-font-size);
     font-weight: var(--bold);
     grid-area: h2;
 }
 
-.proyecto-fases table {
+.proyectos-vista table {
     width: 90%;
     height: 90%;
     margin: 0 auto;
@@ -116,49 +116,48 @@
     grid-area: tabla;
 }
 
-.proyecto-fases thead tr{
+.proyectos-vista thead tr{
     height: 10px;
 }
 
-.proyecto-fases thead th {
+.proyectos-vista thead th {
     border-bottom: 1px solid rgba(0, 0, 0, .5);
     font-size: var(--proyecto-th-font-size);
     font-weight: var(--semibold);
-    text-align: left;
-    padding-left: 10px;
+    text-align: center;
 }
 
-.proyecto-fases tbody tr {
+.proyectos-vista tbody tr {
     height: 10px;
 }
 
-.proyecto-fases td{
+.proyectos-vista td{
     font-size: var(--proyecto-td-font-size);
     font-weight: var(--semibold);
+    text-align: center;
+    padding: 0;
 }
 
-.fase-nombre {    
+.proyecto-nombre {    
     padding-left: 10px;
 }
 
-.fase-nombre a {
+.proyecto-nombre a {
     color: var(--lr-title-color);
     text-decoration: none;
     transition: all .3s ease-in-out;
 }
 
-.fase-nombre a:hover {
+.proyecto-nombre a:hover {
     opacity: 0.8;
     text-decoration: underline;
 }
 
 .fec-ini {
-    padding-left: 30px;
     color: var(--startdate-color);
 }
 
 .fec-fin {
-    padding-left: 30px;
     color: var(--enddate-color);
 }
 
