@@ -5,7 +5,7 @@ DROP DATABASE GeoWess;
 
 /*Todos son usuarios*/
 CREATE TABLE USUARIO (
-	us_ID int(6) not null,
+	us_ID int(6),
     us_Nombre varchar(50),
     us_ApPaterno varchar(50),
     us_ApMaterno varchar(50),
@@ -258,4 +258,3 @@ SELECT * FROM FASE_PROYECTO;
 SELECT * FROM CONCEPTO;
 SELECT * FROM USUARIO;
 SELECT * FROM SUPERVISOR;
-

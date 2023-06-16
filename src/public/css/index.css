@@ -203,6 +203,64 @@ body {
 	height: var(--index-icon-width-height);
 }
 
+/** Parte de Deigo */
+#not-index-div {
+	box-sizing: border-box;
+	width: 75%;
+	height: 85%;
+
+	margin: 30px auto;
+
+	background-color: rgba(217, 217, 217, 0.6);
+	border: 15px solid var(--index-register-button-color);
+	border-radius: 40px;
+
+	display: flex;
+	grid-template-columns: 1fr 1fr; 
+}
+
+#not-index-div-h1 h1 {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	flex-direction: row;
+	gap: 20px;
+	
+	padding: 1%;
+
+	font-style: normal;
+	font-weight: var(--bold);
+	font-size: var(--index-h1-font-size);
+}
+
+#not-index-div-h2 h2 {
+	font-style: normal;
+	font-weight: var(--light);
+	font-size: var(--index-nav-p-font-size);
+	line-height: 35px;
+	text-align: left;
+	color: var(--p-color);
+
+	padding: 1%;
+}
+
+.Child {
+	flex: 1;
+	margin-top: 10rem;
+}
+
+.sobre{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.Child img{
+	height: 420px;
+}
+/** -------------------------------------------- */
+
 @media (max-width: 1920px) {
 	#index-div {
 		width: 80%;
