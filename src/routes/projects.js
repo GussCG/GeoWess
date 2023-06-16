@@ -135,8 +135,19 @@ router.post('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
     await pool.query(query, [newPartida]);
 
     req.flash('success', "Se ha creado la partida, ahora debes crear las fases");
-
-
 });
+
+//Catalogo de conceptos
+//Renderizar la vista
+router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
+    const {pr_id} = req.params;
+    const catalogo = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].pr_CatalogoConceptos]);
+
+    console.log(partidas);
+    res.render('proyectos/partidas-vista', {catalogo: catalogo[0], partidas, layout: 'logged-layout'});
+});
+    
+    
 
 module.exports = router;

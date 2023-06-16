@@ -51,22 +51,22 @@ passport.use('local.signup', new localStrategy({
     //crear el tipo de usuario
     switch (tipoUsr) {
         case '1': //Supervisor
-            const res2 = await pool.query('INSERT INTO SUPERVISOR (sp_ID, sp_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res2 = await pool.query('INSERT INTO SUPERVISOR (sp_ID, sp_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '2': //Superintendente
-            const res3 = await pool.query('INSERT INTO SUPERINTENDENTE (spi_ID, spi_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res3 = await pool.query('INSERT INTO SUPERINTENDENTE (spi_ID, spi_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '3': //Residente
-            const res4 = await pool.query('INSERT INTO RESIDENTE (res_ID, res_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res4 = await pool.query('INSERT INTO RESIDENTE (res_ID, res_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '4': //Contratista
-            const res5 = await pool.query('INSERT INTO CONTRATISTA (cta_ID, cta_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res5 = await pool.query('INSERT INTO CONTRATISTA (cta_ID, cta_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '5': //Contratante
-            const res6 = await pool.query('INSERT INTO CONTRATANTE (cte_ID, cte_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res6 = await pool.query('INSERT INTO CONTRATANTE (cte_ID, cte_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '6': //Representante legal
-            const res7 = await pool.query('INSERT INTO REPRESENTANTE_LEGAL (rpl_ID, rpl_Usuario) VALUES (?,?)', [genID(), newUser.us_Email]);
+            const res7 = await pool.query('INSERT INTO REPRESENTANTE_LEGAL (rpl_ID, rpl_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         default:
             break;
@@ -76,11 +76,11 @@ passport.use('local.signup', new localStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.us_Email);
+    done(null, user.us_ID);
 });
 
 passport.deserializeUser(async (correo_registro, done) => {
-    const rows = await pool.query('SELECT * FROM USUARIO WHERE us_Email = ?', [correo_registro]);
+    const rows = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [correo_registro]);
     done(null, rows[0]);
 });
 

@@ -148,7 +148,7 @@ body {
 }
 
 .time {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 600;
     line-height: 23px;
     text-align: center;
@@ -157,8 +157,8 @@ body {
 }
 
 .date {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: var(--bold);
     line-height: 23px;
     text-align: center;
     color: #000;

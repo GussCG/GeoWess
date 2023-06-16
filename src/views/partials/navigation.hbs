@@ -64,8 +64,23 @@
                     weekday[5] = "Viernes";
                     weekday[6] = "Sábado";
 
+                    var months = new Array(12);
+                    months[0] = "Enero";
+                    months[1] = "Febrero";
+                    months[2] = "Marzo";
+                    months[3] = "Abril";
+                    months[4] = "Mayo";
+                    months[5] = "Junio";
+                    months[6] = "Julio";
+                    months[7] = "Agosto";
+                    months[8] = "Septiembre";
+                    months[9] = "Octubre";
+                    months[10] = "Noviembre";
+                    months[11] = "Diciembre";
+
                     var n = weekday[d.getDay()];
-                    document.getElementById("date").innerHTML = "Hoy es " + n + ", " + d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " a las ";
+                    var m = months[d.getMonth()];
+                    document.getElementById("date").innerHTML =  n + ", " + d.getDate() + " de " + m;
                 </script>
             </span>
         </div>
@@ -79,7 +94,7 @@
                         var s = today.getSeconds();
                         var ampm;
 
-                        if (h >= 12){
+                        if (h > 12){
                             h = h - 12;
                             ampm = "PM";
                         } else {

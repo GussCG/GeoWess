@@ -1,0 +1,27 @@
+<main id="partidas-vista-main">
+    
+        <h1> Partidas de Proyecto - {{proyecto.pr_Nombre}}<a href="/pages/crear-partida/{{proyecto.pr_ID}}"><img src="/images/cross.png" alt="Agregar Partida" id="cross"></a></h1>
+
+        <div class="partidas-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th> Nombre</th>
+                        <th> Catálogo de Conceptos</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+
+                    {{#each partidas}}
+                    <tr>
+                        <td class="partida-nombre"><a href="/pages/crear-concepto/{{pt_ID}}/{{proyecto.pr_ID}}">{{pt_Nombre}}</a></td>
+                        <td class="fase-nombre"> <a href="../catalogo-conceptos/{{pt_ID}}">Ver Catálogo de Conceptos</a></td>
+                    </tr>
+                    {{/each}}
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
