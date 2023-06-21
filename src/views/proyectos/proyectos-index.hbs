@@ -24,8 +24,9 @@
                         </tr>                    
                     </thead>
                     <tbody>
+                        {{#each proyectos}}
                         <tr>
-                            {{#each proyectos}}
+                            
                             <td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
                             <td class="fec-ini">{{pr_FechaInicio}}</td>
                             <td class="fec-fin">{{pr_FechaFin}}</td>
@@ -34,8 +35,9 @@
                             <td><a href="/editar-proyecto/{{pr_ID}}"><img src="../images/editar.png" alt="Editar Proyecto" class="edit-pr"></a></td>
                             <td><a href="/eliminar-proyecto/{{pr_ID}}"><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                               
                             </td>
-                            {{/each}}
-                        </tr>                        
+                            
+                        </tr>      
+                        {{/each}}                  
                     </tbody>
                 </table>
             </div>

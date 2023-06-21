@@ -1,6 +1,6 @@
 <main id="profile-main">
     <h1> Editar Usuario</h1>
-    <form action="../usuario/editar-perfil" method="POST">            
+    <form action="/usuario/editar-perfil/{{usuario.us_ID}}" method="POST">            
         <div class="reg-field">
             <input type="text" id="registro-Nombre-Usuario" placeholder="Nombre" name="nombre_user" value="{{usuario.us_Nombre}}" ><label for="registro-Nombre-Usuario">Nombre</label>
         </div>

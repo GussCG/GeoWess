@@ -151,3 +151,12 @@
 .edit-pr:hover, .delete-pr:hover {
     opacity: 0.8;
 }
+
+/*Responsive*/
+
+@media screen and (max-width: 1238px){
+
+    .proyectos thead th {
+        font-size: 14px;
+    }
+}

@@ -14,14 +14,16 @@ const dateFormat = (date) => {
 }
 
 //Editar usuario
-router.get('/editar-perfil', isLoggedIn, async (req, res) => {
+router.get('/editar-perfil/:id', isLoggedIn, async (req, res) => {
 
-    const usuario = await pool.query('SELECT * FROM USUARIO WHERE us_Email = ?', [req.user.us_Email]);
+    const id = req.params.id;
+
+    const usuario = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [id]);
 
     res.render('usuario/editar-perfil', {usuario: usuario[0], layout: 'logged-layout'});
 });
 
-router.post('/editar-perfil', isLoggedIn, async (req, res) => {
+router.post('/editar-perfil/:id', isLoggedIn, async (req, res) => {
     let {nombre_user, apPaterno_user, apMaterno_user, telefono_user, email_user, RFC_user } = req.body;
 
     const nuevoUsuario = {
@@ -33,11 +35,16 @@ router.post('/editar-perfil', isLoggedIn, async (req, res) => {
         us_RFC: RFC_user
     };
 
-    const id = req.user.us_ID;
-    await pool.query(`UPDATE USUARIO SET ? WHERE us_ID = '${id}'`, [nuevoUsuario]);
+    const id = req.params.id;
+    const r = pool.query(`UPDATE USUARIO SET us_Nombre = '${nuevoUsuario.us_Nombre}', us_ApPaterno = '${nuevoUsuario.us_ApPaterno}', us_ApMaterno = '${nuevoUsuario.us_ApMaterno}', us_Telefono = '${nuevoUsuario.us_Telefono}', us_Email = '${nuevoUsuario.us_Email}', us_RFC = '${nuevoUsuario.us_RFC}' WHERE us_ID = ${id}`);
 
-    req.flash('success', 'Perfil actualizado correctamente');
-    res.redirect('/profile');    
+    if (r.affectedRows > 0) {
+        req.flash('success', 'Perfil actualizado correctamente');
+        res.redirect('/profile');
+    } else {
+        req.flash('message', 'Ocurrió un error al actualizar el perfil');
+        res.redirect('/profile');
+    }
 });
 
 module.exports = router;

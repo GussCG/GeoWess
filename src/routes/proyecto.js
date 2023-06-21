@@ -116,6 +116,7 @@ router.get('/proyecto/:pr_id', isLoggedIn, async (req, res) => {
     res.render('proyectos/proyecto', {proyecto: proyecto[0], fases, layout: 'logged-layout'});
 });
 
+
 //Enviar a crear una fase
 router.get('/crear-fase/:pr_id', isLoggedIn, (req, res) => {
     const {pr_id} = req.params;
@@ -262,7 +263,6 @@ router.get('/catalogo-conceptos/:pt_id', isLoggedIn, async (req, res) => {
 
     res.render('proyectos/catalogo-conceptos', {conceptos, partida: partida[0], layout: 'logged-layout'});
 });
-
 
 module.exports = router;
 module.exports = genID;

@@ -4,6 +4,11 @@ const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 const { render } = require('timeago.js');
+const { CanvasRenderService } = require('chartjs-node-canvas');
+
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 //FUNCIONES
 //Generar ID random de 6 numeros
@@ -24,22 +29,54 @@ const dateFormat = (date) => {
     return `${dia}/${mes}/${anio}`;
 }
 
+//Colores para las gráficas
+const getDataColors = data => {
+    const colors = [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(216, 184, 255)',
+        'rgb(153, 102, 255)',
+        'rgb(192, 255, 184)',
+        'rgb(255, 153, 153)',
+        'rgb(255, 153, 255)',
+        'rgb(255, 255, 153)',
+        'rgb(110, 94, 78)',
+    ];
+
+    return data.map((_, index) => colors[index]);
+}
+
 //Calcular el porcentaje de avance con el tiempo
 const calcPorcentaje = (fase) => {
-    let inicio = new Date(fase.fp_FechaInicio);
-    let fin = new Date(fase.fp_FechaFin);
-    let actual = new Date();
-    let porcentaje = 0;
+    let inicio = new Date(fase.fp_FechaInicio).getTime();
+    let fin = new Date(fase.fp_FechaFin).getTime();
 
-    if(actual < inicio){
-        porcentaje = 0;
-    }else if(actual > fin){
-        porcentaje = 100;
-    }else{
-        let total = fin.getTime() - inicio.getTime();
-        let actual = actual.getTime() - inicio.getTime();
-        porcentaje = (actual * 100) / total;
+    if (inicio == fin){
+        return 100;
     }
+
+    //console.log("inicio: " + inicio);
+
+    let dia_ms = 1000 * 60 * 60 * 24;
+
+    //Calcular el total de dias que dura la fase
+    let total_ms = fin - inicio;
+    //let total = Math.floor(total_ms / dia_ms);
+    //console.log("total de dias: " +total);
+
+    //Calcular los dias que han pasado desde el inicio de la fase
+    let today = new Date().getTime();
+    let fecha_ms = today - inicio;
+    //let dias = Math.floor(fecha / dia_ms);
+    //console.log("dias que han pasado: " + dias);
+
+    //Calcular el porcentaje
+    let porcentaje = (fecha_ms * 100) / total_ms;
+    //console.log("porcentaje: " + porcentaje);
+
+    return Math.round(porcentaje);
 }
 
 //RUTAS
@@ -53,7 +90,7 @@ router.get('/', async (req, res) => {
         proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
     });
 
-    console.log(proyectos);
+    //console.log(proyectos);
 
     res.render('proyectos/proyectos-index', {proyectos, layout: 'logged-layout'});
 });  
@@ -89,7 +126,7 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) =>{
     await pool.query(query2, [{cc_ID: newProyect.pr_CatalogoConceptos}]);
 
     req.flash('success', "Se ha creado el proyecto");
-    res.redirect('/');
+    res.redirect('ver-proyecto/' + newProyect.pr_ID);
 });
 
 //Ver-Proyecto
@@ -100,12 +137,36 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [pr_id]);
     
     proyecto.forEach(proyecto => {
-        proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
-        proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
+        fases.forEach(fase =>{
+            fase.fp_PorcentajeAvance = calcPorcentaje(fase);
+            //Actualizar el porcentaje de avance de la fase en la base de datos
+            let query = 'UPDATE FASE_PROYECTO SET fp_PorcentajeAvance = ? WHERE fp_ID = ?';
+            pool.query(query, [fase.fp_PorcentajeAvance, fase.fp_ID]);
+            //Si la fase ya termino, cambiar su status a 1
+            if (fase.fp_PorcentajeAvance == 100){
+                let query2 = 'UPDATE FASE_PROYECTO SET fp_Status = 1 WHERE fp_ID = ?';
+                pool.query(query2, [fase.fp_ID]);
+            }
+        }, this);
     });
 
-    console.log(proyecto);
-    console.log(fases);
+    //Dar formato a las fechas
+    proyecto[0].pr_FechaInicio = dateFormat(proyecto[0].pr_FechaInicio);
+    proyecto[0].pr_FechaFin = dateFormat(proyecto[0].pr_FechaFin);
+
+    //Dar formato a las fechas de las fases
+    fases.forEach(fase => {
+        fase.fp_FechaInicio = dateFormat(fase.fp_FechaInicio);
+        fase.fp_FechaFin = dateFormat(fase.fp_FechaFin);
+    });
+
+    //Se crea la gráfica de fases
+    const canvasRenderService = new CanvasRenderService(800, 600, (ChartJS) => {
+        console.log("Creando gráfica de fases");
+    });
+
+    // console.log(proyecto);
+    // console.log(fases);
 
     res.render('proyectos/ver-proyecto', {proyecto:proyecto[0], fases, layout: 'logged-layout'});
 });
@@ -147,7 +208,38 @@ router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
     console.log(partidas);
     res.render('proyectos/partidas-vista', {catalogo: catalogo[0], partidas, layout: 'logged-layout'});
 });
-    
+  
+//Crear fases de proyecto
+//Renderizar la vista
+router.get('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
+    const {pr_id} = req.params;
+
+    res.render('proyectos/crear-fase', {pr_id, layout: 'logged-layout'});
+});
+
+//Crear una fase
+router.post('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
+    const {pr_id} = req.params;
+    //console.log(pr_id);
+
+    const {nombre_fase, fechaInicio_fase, fechaFin_fase} = req.body;
+
+    const newFase = {
+        fp_ID: genID(),
+        fp_Nombre: nombre_fase,
+        fp_FechaInicio: fechaInicio_fase,
+        fp_FechaFin: fechaFin_fase,
+        fp_Status: 0, // 0 -> En proceso, 1 -> Terminado
+        fp_PorcentajeAvance: 0,
+        fp_Proyecto: pr_id
+    }
+
+    let query = 'INSERT INTO FASE_PROYECTO SET ?';
+    await pool.query(query, [newFase]);
+
+    req.flash('success', "Se ha creado la fase");
+    res.redirect('/proyectos/ver-proyecto/' + pr_id);
+});
     
 
 module.exports = router;

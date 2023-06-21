@@ -17,7 +17,7 @@ body {
     margin: 27px 0 0 34px;
 }
 
-.proyecto-form-data {
+.generar-form-data {
     margin: 20px 31px 10px 34px;
     height: 60%;
     background-color: var(--info-bg-color);
@@ -27,13 +27,13 @@ body {
     justify-content: center;
 }
 
-.proyecto-form-data p {
+.generar-form-data p {
     margin: 20px 0 0 34px;
     font-size: var(--lr-p-font-size);
     font-weight: var(--bold);
 }
 
-.proyecto-form-data #generar-estimacion-form {
+.generar-form-data #generar-estimacion-form {
     margin-top: 27px;
     width: 100%;
     height: 100%;

@@ -59,83 +59,96 @@
             </div>            
         </div>
 
-        <div class="proyecto-fases">
-            <h2>Fases de Proyecto-{Algo} <a href="./fase-obra-form.html"><img src="../images/cross.png" alt="Agregar Fase" id="cross"></a></h2>
-
-            <div class="tabla-proyectos">
-                <table>
-                    <thead>
-                        <tr>
-                            <th> Nombre</th>
-                            <th> Fecha Inicio</th>
-                            <th> Fecha Fin</th>
-                            <th> Progreso</th>
-                        </tr>                    
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Fase 1</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>74%</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Fase 2</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>10%</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Fase 3</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>  
-                                    <p>90%</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="fase-nombre"><a href="#">Fase 4</a></td>
-                            <td class="fec-ini"> dd/mm/yyyy</td>
-                            <td class="fec-fin"> dd/mm/yyyy</td>
-                            <td> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar"></div>
-                                    </div>                              
-                                    <p>50%</p>
-                                </div>
-                            </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
+        <div class="proyecto-container">
+            <div class="proyecto-fases">
+                <h2>Fases de Proyecto-{Algo} <a href="./fase-obra-form.html"><img src="../images/cross.png" alt="Agregar Fase" id="cross"></a></h2>
+    
+                <div class="tabla-proyectos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Nombre</th>
+                                <th> Fecha Inicio</th>
+                                <th> Fecha Fin</th>
+                                <th> Progreso</th>
+                            </tr>                    
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fase-nombre"><a href="#">Fase 1</a></td>
+                                <td class="fec-ini"> dd/mm/yyyy</td>
+                                <td class="fec-fin"> dd/mm/yyyy</td>
+                                <td> 
+                                    <div class="progress-bar-td">
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill" id="progressbar"></div>
+                                        </div>  
+                                        <p>74%</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fase-nombre"><a href="#">Fase 2</a></td>
+                                <td class="fec-ini"> dd/mm/yyyy</td>
+                                <td class="fec-fin"> dd/mm/yyyy</td>
+                                <td> 
+                                    <div class="progress-bar-td">
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill" id="progressbar"></div>
+                                        </div>  
+                                        <p>10%</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fase-nombre"><a href="#">Fase 3</a></td>
+                                <td class="fec-ini"> dd/mm/yyyy</td>
+                                <td class="fec-fin"> dd/mm/yyyy</td>
+                                <td> 
+                                    <div class="progress-bar-td">
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill" id="progressbar"></div>
+                                        </div>  
+                                        <p>90%</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fase-nombre"><a href="#">Fase 4</a></td>
+                                <td class="fec-ini"> dd/mm/yyyy</td>
+                                <td class="fec-fin"> dd/mm/yyyy</td>
+                                <td> 
+                                    <div class="progress-bar-td">
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill" id="progressbar"></div>
+                                        </div>                              
+                                        <p>50%</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+               
+    
             </div>
-           
-
+    
+            <div class="grafica-cont">
+                <h2>Gráfica de Avance</h2>
+                <div class="graf">
+                    <canvas id="grafica">
+                    </canvas>
+                </div>
+            </div>
         </div>
+
+        
 
     </main>
     <script src="../js/progressbar.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="../../lib/graphics.js"></script>
     <script src="../js/menu.js"></script>
     
     
