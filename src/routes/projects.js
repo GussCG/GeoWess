@@ -161,9 +161,9 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     });
 
     //Se crea la gráfica de fases
-    const canvasRenderService = new CanvasRenderService(800, 600, (ChartJS) => {
-        console.log("Creando gráfica de fases");
-    });
+    // const canvasRenderService = new CanvasRenderService(800, 600, (ChartJS) => {
+    //     console.log("Creando gráfica de fases");
+    // });
 
     // console.log(proyecto);
     // console.log(fases);
@@ -195,18 +195,32 @@ router.post('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
     let query = 'INSERT INTO PARTIDA SET ?';
     await pool.query(query, [newPartida]);
 
-    req.flash('success', "Se ha creado la partida, ahora debes crear las fases");
+    req.flash('success', "Se ha creado la partida");
+    res.redirect('../catalogo-conceptos/' + pr_id);
 });
 
 //Catalogo de conceptos
 //Renderizar la vista
 router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
     const {pr_id} = req.params;
+    //Obtener el catalogo de conceptos del proyecto
     const catalogo = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+    //Obtener las partidas del catalogo de conceptos
+    console.log(catalogo[0].pr_CatalogoConceptos);
     const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].pr_CatalogoConceptos]);
 
     console.log(partidas);
     res.render('proyectos/partidas-vista', {catalogo: catalogo[0], partidas, layout: 'logged-layout'});
+});
+
+//Ver conceptos de una partida
+//Renderizar la vista
+router.get('/ver-conceptos/:pt_id', isLoggedIn, async (req, res) => {
+    const {pt_id} = req.params;
+    const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
+    const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    res.render('proyectos/ver-conceptos', {conceptos, partida: partida[0], layout: 'logged-layout'});
 });
   
 //Crear fases de proyecto

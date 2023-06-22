@@ -67,22 +67,22 @@
 
 //const pool = require('../database');
 
-const printCharts = () => {
-    renderModelChart();
-}
+// const printCharts = () => {
+//     renderModelChart();
+// }
 
-const renderModelChart = () => {
-    const data ={
-        labels: ['Fase 1', 'Fase 2', 'Fase 3', 'Fase 4'],
-        datasets: [{
-            data: [74, 10, 90, 50],
-        }]
-    }
+// const renderModelChart = () => {
+//     const data ={
+//         labels: ['Fase 1', 'Fase 2', 'Fase 3', 'Fase 4'],
+//         datasets: [{
+//             data: [74, 10, 90, 50],
+//         }]
+//     }
 
-    new Chart('grafica', {type: 'doughnut', data});
-}
+//     new Chart('grafica', {type: 'doughnut', data});
+// }
 
-printCharts();
+// printCharts();
 
-console.log('Se cargó la gráfica');
-printCharts();
+// console.log('Se cargó la gráfica');
+// printCharts();
