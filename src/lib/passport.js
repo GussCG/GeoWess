@@ -28,10 +28,18 @@ passport.use('local.signup', new localStrategy({
     passReqToCallback: true
 }, async (req, correo_registro, pass_registro, done) => {
 
-    const {nombre_registro, apellidopat_registro, apellidomat_registro,fecnac_registro, telefono_registro, rfc_registro, tipoUsr} = req.body;
+    const {
+        nombre_registro,
+        apellidopat_registro,
+        apellidomat_registro,
+        fecnac_registro,
+        telefono_registro,
+        rfc_registro,
+        tipoUsr
+    } = req.body;
 
     const newUser = {
-        us_ID : genID(),
+        us_ID: genID(),
         us_Nombre: nombre_registro,
         us_ApPaterno: apellidopat_registro,
         us_ApMaterno: apellidomat_registro,
@@ -86,7 +94,7 @@ passport.deserializeUser(async (correo_registro, done) => {
 
 let genID = () => {
     let id = '';
-    for(let i = 0; i < 6; i++){
+    for (let i = 0; i < 6; i++) {
         id += Math.floor(Math.random() * 10);
     }
     return id;

@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const pool = require('../database');
-const { isLoggedIn } = require('../lib/auth');
+const {
+    isLoggedIn
+} = require('../lib/auth');
 
 // Formatear fechas
 const dateFormat = (date) => {
@@ -20,11 +22,21 @@ router.get('/editar-perfil/:id', isLoggedIn, async (req, res) => {
 
     const usuario = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [id]);
 
-    res.render('usuario/editar-perfil', {usuario: usuario[0], layout: 'logged-layout'});
+    res.render('usuario/editar-perfil', {
+        usuario: usuario[0],
+        layout: 'logged-layout'
+    });
 });
 
 router.post('/editar-perfil/:id', isLoggedIn, async (req, res) => {
-    let {nombre_user, apPaterno_user, apMaterno_user, telefono_user, email_user, RFC_user } = req.body;
+    let {
+        nombre_user,
+        apPaterno_user,
+        apMaterno_user,
+        telefono_user,
+        email_user,
+        RFC_user
+    } = req.body;
 
     const nuevoUsuario = {
         us_Nombre: nombre_user,

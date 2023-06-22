@@ -1,11 +1,15 @@
 const express = require('express');
 const morgan = require('morgan');
-const {engine} = require('express-handlebars');
+const {
+    engine
+} = require('express-handlebars');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
-const {database} = require('./keys');
+const {
+    database
+} = require('./keys');
 const passport = require('passport');
 
 // Inicializaciones
@@ -32,7 +36,9 @@ app.use(session({
     store: new MySQLStore(database),
 }));
 app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({
+    extended: false
+}));
 app.use(express.json());
 app.use(flash());
 app.use(passport.initialize());

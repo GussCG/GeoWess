@@ -4,7 +4,10 @@ const nodemailer = require('nodemailer');
 const helpers = require('../lib/helpers');
 
 const passport = require('passport');
-const {isLoggedIn, isNotLoggedIn} = require('../lib/auth');
+const {
+    isLoggedIn,
+    isNotLoggedIn
+} = require('../lib/auth');
 
 // Formatear fechas
 let dateFormat = (date) => {
@@ -18,7 +21,7 @@ let dateFormat = (date) => {
 //Generar ID random de 6 numeros
 let genID = () => {
     let id = '';
-    for(let i = 0; i < 6; i++){
+    for (let i = 0; i < 6; i++) {
         id += Math.floor(Math.random() * 10);
     }
     return this.toString(id);
@@ -29,23 +32,23 @@ const calcPorcentajeProyecto = async (proyecto) => {
     //Obtener el total de fases del proyecto
     let totalFases = 0;
     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
-    for await (const fase of fases){
+    for await (const fase of fases) {
         totalFases += 1;
     }
-    
+
 
     //Obtener el total de fases terminadas
     let totalFasesTerminadas = 0;
     const fasesTerminadas = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ? AND fp_Status = 1', [proyecto.pr_ID]);
-    for await (const fase of fasesTerminadas){
+    for await (const fase of fasesTerminadas) {
         totalFasesTerminadas += 1;
     }
     //console.log("total fases terminadas: " + totalFasesTerminadas);
 
-    if (totalFases == 0){
+    if (totalFases == 0) {
         //console.log("no hay fases");
         return 0;
-    } else if (totalFasesTerminadas== 0){
+    } else if (totalFasesTerminadas == 0) {
         //console.log("no hay fases terminadas");
         return 0;
     } else {
@@ -58,7 +61,9 @@ const calcPorcentajeProyecto = async (proyecto) => {
 const pool = require('../database');
 
 router.get('/signup', isNotLoggedIn, (req, res) => {
-    res.render('auth/signup', {layout: 'auth-layout'}); // src\views\auth\signup.hbs
+    res.render('auth/signup', {
+        layout: 'auth-layout'
+    }); // src\views\auth\signup.hbs
 });
 
 router.post('/signup', isNotLoggedIn, passport.authenticate('local.signup', {
@@ -68,7 +73,9 @@ router.post('/signup', isNotLoggedIn, passport.authenticate('local.signup', {
 }));
 
 router.get('/signin', isNotLoggedIn, (req, res) => {
-    res.render('auth/signin', {layout: 'auth-layout'});
+    res.render('auth/signin', {
+        layout: 'auth-layout'
+    });
 });
 
 router.post('/signin', isNotLoggedIn, (req, res, next) => {
@@ -80,27 +87,30 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
 });
 
 //Dashboard
-router.get('/profile',isLoggedIn, async (req, res) => {
+router.get('/profile', isLoggedIn, async (req, res) => {
     const proyectos = await pool.query('SELECT * FROM PROYECTO WHERE pr_Usuario = ?', [req.user.us_ID]);
-    proyectos.forEach(proyecto =>{
+    proyectos.forEach(proyecto => {
         proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
         proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
     });
 
     //Calcular el porcentaje de avance de cada proyecto y editarlo en la base de datos
     proyectos.forEach(async proyecto => {
-            //Calcular el porcentaje de avance de cada proyecto
-            proyecto.pr_PorcentajeAvance = await calcPorcentajeProyecto(proyecto);
-            //Editar el porcentaje de avance en la base de datos
-            pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [proyecto.pr_PorcentajeAvance, proyecto.pr_ID]);
+        //Calcular el porcentaje de avance de cada proyecto
+        proyecto.pr_PorcentajeAvance = await calcPorcentajeProyecto(proyecto);
+        //Editar el porcentaje de avance en la base de datos
+        pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [proyecto.pr_PorcentajeAvance, proyecto.pr_ID]);
     });
-    
-    res.render('dashboard', {proyectos, layout: 'logged-layout'});
+
+    res.render('dashboard', {
+        proyectos,
+        layout: 'logged-layout'
+    });
 });
 
 router.get('/logout', isLoggedIn, (req, res) => {
     req.logOut(req.user, err => {
-        if(err){
+        if (err) {
             console.log(err);
         }
         res.redirect('/');
@@ -110,20 +120,24 @@ router.get('/logout', isLoggedIn, (req, res) => {
 //Recuperar contraseña
 //Vista
 router.get('/recuperar-contrasena', (req, res) => {
-    res.render('auth/recuperarpass', {layout: 'auth-layout'});
+    res.render('auth/recuperarpass', {
+        layout: 'auth-layout'
+    });
 });
 
 //Enviar correo
 router.post('/recuperar-contrasena', async (req, res) => {
     //Obtener el correo
-    const {recuperar_Correo} = req.body;
+    const {
+        recuperar_Correo
+    } = req.body;
 
-    if (!recuperar_Correo){        
+    if (!recuperar_Correo) {
         req.flash('message', 'No se ha recibido ningún dato');
         res.redirect('/recuperar-contrasena');
         return;
-    } 
-    
+    }
+
     var msg = "Revisa tu correo para recuperar tu contraseña";
     let verificationLink;
     let emailStatus = "OK";
@@ -159,7 +173,7 @@ router.post('/recuperar-contrasena', async (req, res) => {
             from: '"Olvido Contraseña 😳" <GeoWess.Contact@gmail.com>',
             to: recuperar_Correo,
             subject: "Recuperar Contraseña",
-            html:`
+            html: `
                <h2>Recuperar Contraseña</h2>
                <p>Para recuperar tu contraseña da click en el siguiente enlace:</p>
                <a href="${verificationLink}">${verificationLink}</a>  
@@ -167,17 +181,23 @@ router.post('/recuperar-contrasena', async (req, res) => {
         });
     } catch (error) {
         emailStatus = error;
-        return res.status(400).send({msg: error.message});
+        return res.status(400).send({
+            msg: error.message
+        });
     }
 
     try {
 
     } catch (error) {
         emailStatus = error;
-        return res.status(400).send({msg: error.message});
+        return res.status(400).send({
+            msg: error.message
+        });
     }
 
-    res.render('auth/recuperarpass', {layout: 'auth-layout'});
+    res.render('auth/recuperarpass', {
+        layout: 'auth-layout'
+    });
 
 });
 
@@ -186,7 +206,7 @@ router.post('/recuperar-contrasena', async (req, res) => {
 router.get('/nueva-contrasena/:token', async (req, res) => {
     const token = req.params.token;
 
-    if (!id){
+    if (!id) {
         req.flash('message', 'No se ha recibido ningún dato');
         res.redirect('/recuperar-contrasena');
         return;
@@ -194,14 +214,19 @@ router.get('/nueva-contrasena/:token', async (req, res) => {
 
     try {
         const user = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [id]);
-        if (!user){
+        if (!user) {
             req.flash('message', 'El usuario no existe');
             res.redirect('/recuperar-contrasena');
             return;
         }
-        res.render('auth/nueva-contrasena', {id,layout: 'auth-layout'});
+        res.render('auth/nueva-contrasena', {
+            id,
+            layout: 'auth-layout'
+        });
     } catch (error) {
-        return res.status(401).send({msg: error.message});
+        return res.status(401).send({
+            msg: error.message
+        });
     }
 });
 
@@ -209,30 +234,34 @@ router.get('/nueva-contrasena/:token', async (req, res) => {
 router.post('/nueva-contrasena/:token', async (req, res) => {
     const token = req.params.token;
 
-    if (!id){
+    if (!id) {
         req.flash('message', 'No se ha recibido ningún dato');
         res.redirect('/recuperar-contrasena');
         return;
     }
 
     //Obtener la nueva contraseña
-    const {nueva_Contrasena} = req.body;
+    const {
+        nueva_Contrasena
+    } = req.body;
 
-    if (!nueva_Contrasena){
+    if (!nueva_Contrasena) {
         req.flash('message', 'No se ha recibido ningún dato');
-        res.redirect('/nueva-contrasena/'+token);
+        res.redirect('/nueva-contrasena/' + token);
         return;
     }
 
     try {
         //Actualizar la contraseña
         //Encriptar la contraseña
-        let contrasena = await helpers.encryptPassword(nueva_Contrasena); 
-        console.log(contrasena);   
+        let contrasena = await helpers.encryptPassword(nueva_Contrasena);
+        console.log(contrasena);
         pool.query('UPDATE USUARIO SET us_Password = ? WHERE us_ID = ?', [contrasena, id]);
         res.redirect('/signin');
     } catch (error) {
-        return res.status(401).send({msg: error.message});
+        return res.status(401).send({
+            msg: error.message
+        });
     }
 });
 
