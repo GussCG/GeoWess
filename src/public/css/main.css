@@ -124,6 +124,13 @@ body {
     overflow: hidden;
 }
 
+#logo img {
+    width: var(--logo-width);
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
 /*Scroll*/
 ::-webkit-scrollbar {
     width: 11px;
