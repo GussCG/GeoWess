@@ -18,7 +18,7 @@ const {
     JSDOM
 } = jsdom;
 
-//FUNCIONES
+//?FUNCIONES
 //Generar ID random de 6 numeros
 let genID = () => {
     let id = '';
@@ -77,6 +77,13 @@ const calcPorcentaje = (fase) => {
     //Calcular los dias que han pasado desde el inicio de la fase
     let today = new Date().getTime();
     let fecha_ms = today - inicio;
+
+    if (fecha_ms < 0) {
+        return 0;
+    } else if (fecha_ms > total_ms) {
+        return 100;
+    }
+
     //let dias = Math.floor(fecha / dia_ms);
     //console.log("dias que han pasado: " + dias);
 
@@ -87,8 +94,18 @@ const calcPorcentaje = (fase) => {
     return Math.round(porcentaje);
 }
 
-//RUTAS
-//Proyectos index
+const genClave = (nombre, id) => {
+    let clave = '';
+    //Primeras dos letras del nombre de la partida
+    clave += nombre[0] + nombre[1];
+    //Juntar el id
+    clave += id;
+
+    return clave;
+}
+
+//?RUTAS
+//!Proyectos index
 router.get('/', async (req, res) => {
     //Obtener los proyectos del usuario
     const proyectos = await pool.query('SELECT * FROM PROYECTO WHERE pr_Usuario = ?', [req.user.us_ID]);
@@ -106,7 +123,7 @@ router.get('/', async (req, res) => {
     });
 });
 
-//Crear-Proyecto
+//!Crear-Proyecto
 //Renderizar la vista
 router.get('/crear-proyecto', isLoggedIn, async (req, res) => {
     res.render('proyectos/crear-proyecto', {
@@ -153,7 +170,7 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) => {
     res.redirect('ver-proyecto/' + newProyect.pr_ID);
 });
 
-//Ver-Proyecto
+//! Ver-Proyecto
 //Renderizar la vista
 router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     const {
@@ -201,7 +218,7 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     });
 });
 
-//Crear-Partida
+//! PARTIDA
 //Renderizar la vista
 router.get('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
     const {
@@ -238,7 +255,7 @@ router.post('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
     res.redirect('../catalogo-conceptos/' + pr_id);
 });
 
-//Catalogo de conceptos
+//! Catalogo de conceptos
 //Renderizar la vista
 router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
     const {
@@ -247,7 +264,7 @@ router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
     //Obtener el catalogo de conceptos del proyecto
     const catalogo = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
     //Obtener las partidas del catalogo de conceptos
-    console.log(catalogo[0].pr_CatalogoConceptos);
+    //console.log(catalogo[0].pr_CatalogoConceptos);
     const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].pr_CatalogoConceptos]);
 
     console.log(partidas);
@@ -267,13 +284,18 @@ router.get('/ver-conceptos/:pt_id', isLoggedIn, async (req, res) => {
     const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
     const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
+    //Obtener el id del proyecto
+    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+
     res.render('proyectos/ver-conceptos', {
+        proyecto: proyecto[0],
         conceptos,
         partida: partida[0],
         layout: 'logged-layout'
     });
 });
 
+//! Fases de proyecto
 //Crear fases de proyecto
 //Renderizar la vista
 router.get('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
@@ -315,6 +337,150 @@ router.post('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
 
     req.flash('success', "Se ha creado la fase");
     res.redirect('/proyectos/ver-proyecto/' + pr_id);
+});
+
+//Editar una fase
+//Renderizar la vista
+router.get('/editar-fase/:fp_id', isLoggedIn, async (req, res) => {
+    const {
+        fp_id
+    } = req.params;
+
+    //Obtener el id del proyecto
+    const proyecto = await pool.query('SELECT fp_Proyecto FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+
+    //Obtener la fase
+    const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+
+    res.render('proyectos/editar-fase', {
+        proyecto: proyecto[0],
+        fase: fase[0],
+        layout: 'logged-layout'
+    });
+});
+
+//Eliminar una fase
+
+//! Conceptos
+//Crear Concepto
+router.post('/crear-concepto/:pt_id', isLoggedIn, async (req, res) => {
+    //Obtener el id de la partida
+    const {
+        pt_id
+    } = req.params;
+
+    const {
+        cp_Nombre,
+        cp_Unidad,
+        cp_Cantidad,
+        cp_PrecioUnitario,
+    } = req.body;
+
+    const newConcepto = {
+        cp_ID: genID(),
+        cp_Clave: '',
+        cp_Nombre,
+        cp_Unidad,
+        cp_Cantidad,
+        cp_PrecioUnitario,
+        cp_Importe: cp_Cantidad * parseFloat(cp_PrecioUnitario),
+        cp_Partida: pt_id
+    }
+
+    //Obtener el nombre de la partida
+    const partida = await pool.query('SELECT pt_Nombre FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    //Generar la clave del concepto
+    newConcepto.cp_Clave = genClave(partida[0].pt_Nombre, newConcepto.cp_ID);
+
+    let query = 'INSERT INTO CONCEPTO SET ?';
+    await pool.query(query, [newConcepto]);
+
+    req.flash('success', "Se ha creado el concepto");
+    res.redirect('/proyectos/ver-conceptos/' + pt_id);
+});
+
+//Editar concepto
+//Renderizar la vista
+router.get('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
+    const {
+        cp_id
+    } = req.params;
+
+    //Obtener el id de la partida
+    const partida_id = await pool.query('SELECT cp_Partida FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+    //Obtener la partida
+    const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [partida_id[0].cp_Partida]);
+
+    //Obtener el catalogo de conceptos del proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+
+    //Obtener los conceptos de la partida
+    const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [partida_id[0].cp_Partida]);
+
+    console.log(proyecto);
+
+    //Con el id del concepto, escribir la informacion del concepto en el formulario de la misma pagina
+    const concepto = await pool.query('SELECT * FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+
+    res.render('proyectos/editar-concepto', {
+        proyecto: proyecto[0],
+        partida: partida[0],
+        concepto: concepto[0],
+        conceptos,
+        layout: 'logged-layout'
+    });
+});
+
+//Editar el concepto
+router.post('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
+    const {
+        cp_id
+    } = req.params;
+    
+    const {
+        cp_Nombre,
+        cp_Unidad,
+        cp_Cantidad,
+        cp_PrecioUnitario,
+    } = req.body;
+
+    //Obtener el id de la partida
+    const partida_id = await pool.query('SELECT * FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+
+    //Nuevo concepto
+    const newConcepto = {
+        cp_Nombre,
+        cp_Unidad,
+        cp_Cantidad,
+        cp_PrecioUnitario,
+        cp_Importe: cp_Cantidad * parseFloat(cp_PrecioUnitario),
+    }
+
+    //Actualizar el concepto
+    let query = 'UPDATE CONCEPTO SET ? WHERE cp_ID = ?';
+    pool.query(query, [newConcepto, cp_id]);
+
+    req.flash('success', "Se ha editado el concepto");
+    res.redirect('/proyectos/ver-conceptos/' + partida_id[0].cp_Partida);
+});
+
+
+//Eliminar concepto
+router.get('/eliminar-concepto/:cp_id', isLoggedIn, async (req, res) => {
+    const {
+        cp_id
+    } = req.params;
+
+    //Obtener el id de la partida
+    const partida = await pool.query('SELECT cp_Partida FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+
+    //Eliminar el concepto
+    let query = 'DELETE FROM CONCEPTO WHERE cp_ID = ?';
+    pool.query(query, [cp_id]);
+
+    req.flash('success', "Se ha eliminado el concepto");
+    res.redirect('/proyectos/ver-conceptos/' + partida[0].cp_Partida);
 });
 
 

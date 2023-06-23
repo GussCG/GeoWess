@@ -1,6 +1,11 @@
 <main id="partidas-vista-main">
     
-        <h1> Partidas de Proyecto - {{catalogo.pr_Nombre}}<a href="../crear-partida/{{catalogo.pr_ID}}"><img src="/images/cross.png" alt="Agregar Partida" id="cross"></a></h1>
+        
+
+        <div class="titulo-back">
+            <a href="../ver-proyecto/{{catalogo.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1> Partidas de Proyecto - {{catalogo.pr_Nombre}}<a href="../crear-partida/{{catalogo.pr_ID}}"><img src="/images/cross.png" alt="Agregar Partida" id="cross"></a></h1>           
+        </div>
 
         <div class="partidas-container">
             <table>
@@ -18,7 +23,7 @@
                     <tr>
                         <td class="partida-nombre">{{pt_Nombre}}</td>
                         {{!-- Agregar conceptos a la partida --}}
-                        <td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}">Ver Conceptos de {{pt_Nombre}}</a></td>
+                        <td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}" id="verC">Ver Conceptos de {{pt_Nombre}}</a></td>
                         <td><a href="../editar-partida/{{pt_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
                         <td><a href="../eliminar-partida/{{pt_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
                     </tr>

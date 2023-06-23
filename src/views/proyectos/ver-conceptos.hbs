@@ -1,28 +1,55 @@
-<main id="partidas-vista-main">
-    
-        <h1> Conceptos de Partida - {{partida.pt_Nombre}}</h1>
+<main id="conceptos-vista-main">
 
-        <div class="partidas-container">
+        <div class="titulo-back">
+            <a href="../catalogo-conceptos/{{proyecto.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1> Conceptos de Partida - {{partida.pt_Nombre}}</h1>            
+        </div>
+        
+
+        <div class="conceptos-container">
             <table>
                 <thead>
                     <tr>
+                        <th>Clave</th>
                         <th>Nombre</th>
-                        <th>Catálogo de Conceptos</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Importe</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>                    
                 </thead>
                 <tbody>
 
-                    {{#each partidas}}
-                    <tr>
-                        <td class="partida-nombre">{{pt_Nombre}}</td>
-                        {{!-- Agregar conceptos a la partida --}}
-                        <td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}">Ver Conceptos de {{pt_Nombre}}</a></td>
-                        <td><a href="../editar-partida/{{pt_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
-                        <td><a href="../eliminar-partida/{{pt_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
-                    </tr>
+                    {{!-- Primero se imprimen los conceptos que estan registrados --}}
+                    {{#each conceptos}}
+                        <tr>
+                            <td>{{cp_Clave}}</td>
+                            <td>{{cp_Nombre}}</td>
+                            <td>{{cp_Unidad}}</td>
+                            <td>{{cp_Cantidad}}</td>
+                            <td>$ {{cp_PrecioUnitario}}</td>
+                            <td>$ {{cp_Importe}}</td>
+                            <td><a href="../editar-concepto/{{cp_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
+                            <td><a href="../eliminar-concepto/{{cp_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
+                        </tr>
                     {{/each}}
+
+                    {{!-- Luego se crean filas para registrar nuevos conceptos --}}
+
+                    <tr class="row-form">
+                        <form action="../crear-concepto/{{partida.pt_ID}}" method="POST">
+                            <td></td>
+                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" required></td>
+                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" required></td>
+                            <td><input type="number" name="cp_Cantidad" placeholder="Cantidad" required></td>
+                            <td><input type="text" name="cp_PrecioUnitario" placeholder="Precio Unitario" required></td>
+                            <td></td>
+                            <td colspan="2"><input type="submit" value="Registrar" id="btnRegistrarConcepto"></td>
+                        </form>
+                    </tr>
+                                        
 
                 </tbody>
             </table>

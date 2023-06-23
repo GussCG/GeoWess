@@ -1,0 +1,86 @@
+#conceptos-vista-main {
+    width: 90%;
+    height: 700px;
+    margin: 0 auto;
+}
+
+#conceptos-vista-main h1 {
+    margin-bottom: 20px;
+}
+
+.conceptos-container {
+    width: 95%;
+    height: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.conceptos-container table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    background-color: #d9d9d9;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.conceptos-container thead{
+    height: 50px;
+}
+
+.conceptos-container thead th {
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    font-size: 17px;
+    font-weight: var(--semibold);
+    text-align: center;
+    /* padding-left: 10px; */
+}
+
+.conceptos-container td{
+    font-size: 15px;
+    font-weight: var(--semibold);
+    text-align: center;
+    height: 40px;
+    padding: 10px;
+}
+
+.conceptos-container tbody {
+    width: 100%;
+    height: 100%;
+    overflow-x: scroll;
+    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
+    scrollbar-gutter: initial;
+}
+
+.conceptos-container table img {
+    width: 20px;
+    transition: all .3s ease-in-out;
+}
+
+.conceptos-container table img:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transform: scale(1.2);
+}
+
+.conceptos-container table input {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(214, 243, 255);
+    font-size: 15px;
+    font-weight: var(--semibold);
+    text-align: center;
+}
+
+#btnRegistrarConcepto, #btnEditarConcepto {
+    background-color: var(--lr-button-color);
+    transition:all .2s ease-in-out;
+}
+
+#btnRegistrarConcepto:hover, #btnEditarConcepto:hover {
+    transform: scale(1.1);
+    opacity: .8;
+}

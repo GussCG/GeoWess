@@ -1,0 +1,59 @@
+<main id="conceptos-vista-main">
+
+        <div class="titulo-back">
+            <a href="../catalogo-conceptos/{{proyecto.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1> Conceptos de Partida - {{partida.pt_Nombre}}</h1>            
+        </div>
+        
+
+        <div class="conceptos-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Clave</th>
+                        <th>Nombre</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Importe</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>                    
+                </thead>
+                <tbody>
+
+                    {{!-- Primero se imprimen los conceptos que estan registrados --}}
+                    {{#each conceptos}}
+                        <tr>
+                            <td>{{cp_Clave}}</td>
+                            <td>{{cp_Nombre}}</td>
+                            <td>{{cp_Unidad}}</td>
+                            <td>{{cp_Cantidad}}</td>
+                            <td>$ {{cp_PrecioUnitario}}</td>
+                            <td>$ {{cp_Importe}}</td>
+                            <td><a href="../editar-concepto/{{cp_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
+                            <td><a href="../eliminar-concepto/{{cp_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
+                        </tr>
+                    {{/each}}
+
+                    {{!-- Luego se crean filas para registrar nuevos conceptos --}}
+
+                    <tr class="row-form">
+                        <form action="../editar-concepto/{{concepto.cp_ID}}" method="POST">
+                            <td>{{concepto.cp_Clave}}</td>
+                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" value="{{concepto.cp_Nombre}}"></td>
+                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" value="{{concepto.cp_Unidad}}"></td>
+                            <td><input type="number" name="cp_Cantidad" placeholder="Cantidad" value="{{concepto.cp_Cantidad}}"></td>
+                            <td><input type="text" name="cp_PrecioUnitario" placeholder="Precio Unitario" value="{{concepto.cp_PrecioUnitario}}"></td>
+                            <td>$ {{concepto.cp_Importe}}</td>
+                            <td colspan="2"><input type="submit" value="Editar" id="btnEditarConcepto"></td>
+                        </form>
+                    </tr>
+                                        
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
