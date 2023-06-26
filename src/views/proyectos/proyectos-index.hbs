@@ -3,9 +3,11 @@
         
         <script>
             //Si es admin, contrantante puede crear proyectos
-            if({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 1){
+            if({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5){
                         document.write('<a href="proyectos/crear-proyecto" id="crearP">Crear Proyecto</a>');
-                    }
+            } else if ({{user.us_Tipo}} == 1 || {{user.us_Tipo}} == 2 || {{user.us_Tipo}} == 3 || {{user.us_Tipo}} == 6 || {{user.us_Tipo}} == 8 ){
+                        document.write('<a href="proyectos/solicitar-acceso" id="crearP">Solicitar Acceso a un proyecto</a>');
+            }
         </script>
         
 
@@ -14,30 +16,31 @@
                 <table>
                     <thead>
                         <tr>
-                            <th> Nombre</th>
-                            <th> Fecha Inicio</th>
-                            <th> Fecha Fin</th>
-                            <th> Estatus</th>
-                            <th> Costo Total</th>
-                            <th> Editar </th>
-                            <th> Eliminar</th>
+                            <th>Nombre</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Estatus</th>
+                            <th>Costo Total</th>
+                            <script>
+                                if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5){
+                                    document.write('<th>Editar </th>');
+                                    document.write('<th>Eliminar</th>');
+                                } else if ({{user.us_Tipo}} == 1 || {{user.us_Tipo}} == 2 || {{user.us_Tipo}} == 3 || {{user.us_Tipo}} == 4 || {{user.us_Tipo}} == 7 || {{user.us_Tipo}} == 6 || {{user.us_Tipo}} == 8 ){
+                                    document.write('<th colspan="2">Salir</th>');
+                                }
+                            </script>
+                            <th>Archivos</th>
                         </tr>                    
                     </thead>
                     <tbody>
-                        {{#each proyectos}}
-                        <tr>
-                            
-                            <td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td>
-                            <td class="fec-ini">{{pr_FechaInicio}}</td>
-                            <td class="fec-fin">{{pr_FechaFin}}</td>
-                            <td>{{pr_Status}}</td>
-                            <td>${{pr_CostoTotal}}</td>
-                            <td><a href="/editar-proyecto/{{pr_ID}}"><img src="../images/editar.png" alt="Editar Proyecto" class="edit-pr"></a></td>
-                            <td><a href="/eliminar-proyecto/{{pr_ID}}"><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                               
-                            </td>
-                            
-                        </tr>      
-                        {{/each}}                  
+                        <script>
+                            if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5){
+                                document.write('{{#each proyectos}}<tr><td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td><td class="fec-ini">{{pr_FechaInicio}}</td> <td class="fec-fin">{{pr_FechaFin}}</td><td>{{pr_Status}}</td><td>${{pr_CostoTotal}}</td>        <td><a href="proyectos/editar-proyecto/{{pr_ID}}"><img src="../images/edit.png" alt="Editar Proyecto" class="edit-pr"></a></td>                           <td><a href="proyectos/eliminar-proyecto/{{pr_ID}}"><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                 <td><a href="docs/project/{{pr_ID}}"><img src="../images/document.png" alt="Archivos" class="docs-pr"></a></td>   </tr>{{/each}}');
+                            } else if ({{user.us_Tipo}} == 1 || {{user.us_Tipo}} == 2 || {{user.us_Tipo}} == 3 || {{user.us_Tipo}} == 6 || {{user.us_Tipo}} == 8 ){
+                                document.write('{{#each proyectos}}<tr><td class="proyecto-nombre"><a href="proyectos/ver-proyecto/{{pr_ID}}">{{pr_Nombre}}</a></td><td class="fec-ini">{{pr_FechaInicio}}</td> <td class="fec-fin">{{pr_FechaFin}}</td><td>{{pr_Status}}</td><td>${{pr_CostoTotal}}</td><td colspan="2"><a href="proyectos/salir-proyecto/{{pr_ID}}"><img src="../images/delete.png" alt="Eliminar Proyecto" class="delete-pr"></a></td>                 <td><a href="docs/project/{{pr_ID}}"><img src="../images/document.png" alt="Archivos" class="docs-pr"></a></td>   </tr>{{/each}}');
+                            }
+                        </script>
+               
                     </tbody>
                 </table>
             </div>

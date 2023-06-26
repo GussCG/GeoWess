@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/message.css">
 
-{{if success}}
-    <div class="msg-container success-msg" id="alert">
+{{#if success}}
+    <div class="msg-container success-msg fade-in-out" id="alert">
         <div class="msg-row">
             {{success}}
             <button type="button" class="close" id="close" data-bs-dismiss="alert" aria-label="Close">
@@ -11,8 +11,8 @@
     </div>
 {{/if}}
 
-{{if message}}
-    <div class="msg-container error-msg" id="alert">
+{{#if message}}
+    <div class="msg-container error-msg fade-in-out" id="alert">
         <div class="msg-row">
             {{message}}
             <button type="button" class="close" id="close" data-bs-dismiss="alert" aria-label="Close">
@@ -22,4 +22,4 @@
     </div>
 {{/if}}
 
-<script src="/js/message.js"></script>
+<script src="/js/alerts-btn.js"></script>

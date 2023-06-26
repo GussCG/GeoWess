@@ -102,7 +102,7 @@
     color: transparent;
 }
 
-#btn-registrar-proyecto {
+#btn-registrar-proyecto, #btn-editar-proyecto {
     width: 160px;
     height: 36px;
     background-color: var(--lr-button-color);
@@ -119,7 +119,7 @@
     transition:transform .3s ease-in-out, background-color .3s ease-in-out;
 }
 
-#btn-registrar-proyecto:hover {
+#btn-registrar-proyecto:hover, #btn-editar-proyecto:hover {
     background-color: var(--lr-button-hover-color);
     transform: scale(1.1);
 }

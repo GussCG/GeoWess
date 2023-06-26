@@ -1,0 +1,110 @@
+
+.titulo {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.titulo .logo {
+    width: var(--logo-width);
+    align-self: left;
+    margin: 20px 0 10px 30px;
+}
+
+.titulo h1 {
+    font-size: 32px;
+    font-weight: bold;
+    align-self: center;
+    margin-bottom: 15px;
+}
+
+.titulo h2 {
+    font-size: 20px;
+    font-weight: medium;
+    align-self: center;
+    margin-bottom: 15px;
+}
+
+.titulo h3 {
+    font-size: 16px; 
+    font-weight: 200;
+    align-self: center;
+    margin-bottom: 30px;
+}
+
+/* Tabla Conceptos */
+.tabla-conceptos {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.tabla-conceptos table {
+    width: 90%;
+    height: fit-content;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.tabla-conceptos thead {
+    width: 100%;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+}
+
+.tabla-conceptos thead tr {
+    width: 100%;
+    height: 100%;
+}
+
+.tabla-conceptos thead tr th {
+    width: fit-content;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tabla-conceptos tbody {
+    width: 100%;
+    height: fit-content;
+    border: 1px solid #000;    
+}
+
+.tabla-conceptos tbody tr {
+    width: 100%;
+    height: 50px;
+}
+
+.tabla-conceptos tbody .partidas {
+    width: 10%;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.tabla-conceptos tbody .partidas:last-child {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+.tabla-conceptos tbody tr td:first-child {
+    border: none
+}
+
+.tabla-conceptos tbody tr td {
+    width: fit-content;
+    font-size: 14px;
+    font-weight: 200;
+    text-align: center;
+    border: 1px solid #000;
+}
+
+

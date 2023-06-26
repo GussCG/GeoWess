@@ -1,5 +1,10 @@
 <main id="fase-form-main">
-        <h1> Editar Fase de Obra - {{fase.fp_Nombre}} </h1>
+
+    <div class="titulo-back">
+            <a href="../ver-proyecto/{{proyecto2.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1 id="editarh1"> Editar Fase de Obra - {{fase.fp_Nombre}} </h1>
+    </div>
+        
 
         <div class="fase-form-data"> 
             <form id="fase-form" action="../editar-fase/{{fase.fp_ID}}" method="post">

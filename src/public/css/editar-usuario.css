@@ -1,13 +1,10 @@
-body {
-    font-family: var(--font-family);
-}
 
 #profile-main {
-    height: 100%;
+    width: 75%;
+    height: 700px;
     overflow: hidden;
     background-color: #fff;
     border-radius: 20px;
-    gap: 0;
     margin: 0 auto;
 }
 
@@ -20,10 +17,31 @@ body {
 
 #profile-main form {
     width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.campos {
+    width: 100%;
     height: 85%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(400px, 1fr)
+    );
+}
+
+.boton {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .reg-field {
@@ -61,7 +79,19 @@ input::placeholder {
     color: transparent;
 }
 
-#btn-editar-usuario {
+#profile-main select{
+    margin-bottom: 52px;
+    border: none;
+    background-color: var(--lr-select-bg-color);
+    outline: none;
+    width: 100%;
+    height: auto;
+    font-family: var(--font-family);
+    font-size: var(--lr-input-font-size);
+    padding: 10px;
+}
+
+.boton #btn-editar-usuario {
     width: 160px;
     height: 36px;
     background-color: var(--lr-button-color);
@@ -75,15 +105,69 @@ input::placeholder {
     line-height: 23px;
     padding: 7px;
 
-    margin: auto;
-    grid-area: 3/2;
-
     transition:transform .3s ease-in-out, background-color .3s ease-in-out;
 }
 
-#btn-editar-usuario:hover {
+.boton #btn-editar-usuario:hover {
     background-color: var(--lr-button-hover-color);
     transform: scale(1.1);
+}
+
+
+#profile-anadir-main {
+    width: 70%;
+    height: fit-content;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+#profile-anadir-main h1 {
+    font-size: var(--dashboard-h1-font-size);
+    font-weight: var(--bold);
+    color: var(--lr-title-color);
+    margin: 20px 30px;
+}
+
+#profile-anadir-main form {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: scroll;
+    margin: 0 auto;
+}
+
+#profile-anadir-main .campos {
+    width: 90%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#profile-anadir-main select {
+    border: none;
+    background-color: var(--lr-select-bg-color);
+    outline: none;
+    width: 100%;
+    height: auto;
+    font-family: var(--font-family);
+    font-size: var(--lr-input-font-size);
+    padding: 10px;
+}
+
+#profile-anadir-main .boton {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 
@@ -91,19 +175,17 @@ input::placeholder {
 
 @media  screen and (max-width: 1280px){
 
-    body {
-        height: 100%;
-    }
-
     #profile-main {
         width: 80%;
-        height: 90%;
+        height: 700px;
+        background-color: #fff;
+        border-radius: 20px;
         margin: 0 auto;
     }
 
     #profile-main form{
         width: 100%;
-        height: 75%;
+        height: 80%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -114,32 +196,18 @@ input::placeholder {
         scrollbar-gutter: initial;
     }
 
-    ::-webkit-scrollbar {
-        width: 11px;
-        background-color: white;
+    #profile-main .campos {
+        width: 100%;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;  
+        gap: 20px;      
     }
 
-    ::-webkit-scrollbar-button{
-        display: none;
-    }
-
-    ::-webkit-scrollbar:vertical {
-        width: 11px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        border: none;
-        background: rgba(0, 0, 0, 0.4);
-    }
-
-    ::-webkit-scrollbar-thumb:window-inactive{
-        background: rgba(0, 0, 0, 0.0);
-    }
-
-    ::-webkit-scrollbar-track {
-        border-radius: 10px; 
-        background-color: white; 
+    #profile-main .boton {
+        margin-top: 700px;
     }
 
     .reg-field {
@@ -176,11 +244,27 @@ input::placeholder {
         color: transparent;
     }
 
-    #btn-editar-usuario {
-        width: 160px;
-        height: 36px;
-
-        align-self: center;
-        margin-bottom: 20px;
+    #profile-anadir-main {
+        width: 80%;
+        height: fit-content;
+        background-color: #fff;
+        border-radius: 20px;
+        margin: 0 auto;
     }
+
+    #profile-anadir-main select{
+        border: none;
+        background-color: var(--lr-select-bg-color);
+        outline: none;
+        width: 100%;
+        height: auto;
+        font-family: var(--font-family);
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    #profile-anadir-main .boton {
+        margin-top: 10px;
+    }
+
 }

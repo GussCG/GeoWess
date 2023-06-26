@@ -1,78 +1,132 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script src="/js/grafica.js"></script>
 <main id="proyecto-main">
-    
-        <h1> Proyecto - {{proyecto.pr_Nombre}}</h1>
 
-        <div class="proyecto-detalles"> 
-            <div class="proyecto-detalles-info">
-                <p><b>Fecha Inicio:</b> {{proyecto.pr_FechaInicio}}</p>
-                <p><b>Fecha Fin:</b> {{proyecto.pr_FechaFin}}</p>
-                <p><b>Costo Total:</b>$ {{proyecto.pr_CostoTotal}}</p>
-                <p><b>Estado:</b> {{#if proyecto.pr_Status}}
-                                    Finalizado
-                                    {{else}}
-                                    En Proceso
-                                    {{/if}}</p>    
-                <p><a href="../catalogo-conceptos/{{proyecto.pr_ID}}"><b> Ver Catálogo de Conceptos</b></a></p>    
-            </div>            
-            <div class="proyecto-detalles-ubicacion">
-                <p><b>Ubicación:</b> {{proyecto.pr_Ubicacion}}</p>
-                <a href="https://www.google.com.mx/maps/search/{{proyecto.pr_Ubicacion}}"><img src="/images/mapa.png" alt="Buscar en Google Maps" ></a>
-            </div>            
+    <h1> Proyecto - {{proyecto.pr_Nombre}}</h1>
+
+    <div class="proyecto-detalles">
+        <div class="proyecto-detalles-info">
+            <p><b>Fecha Inicio:</b> {{proyecto.pr_FechaInicio}}</p>
+            <p><b>Fecha Fin:</b> {{proyecto.pr_FechaFin}}</p>
+            <p><b>Costo Total:</b>$ {{proyecto.pr_CostoTotal}}</p>
+            <p><b>Estado:</b> {{#if proyecto.pr_Status}}
+                Finalizado
+                {{else}}
+                En Proceso
+                {{/if}}</p>
+            {{!-- <p><a href="../catalogo-conceptos/{{proyecto.pr_ID}}"><b> Ver Catálogo de Conceptos</b></a></p>     --}}
+        </div>
+        <div class="proyecto-detalles-ubicacion">
+            <p><b>Ubicación:</b> {{proyecto.pr_Ubicacion}}</p>
+            <a href="https://www.google.com.mx/maps/search/{{proyecto.pr_Ubicacion}}"><img src="/images/mapa.png"
+                    alt="Buscar en Google Maps"></a>
+        </div>
+    </div>
+
+    <div class="proyecto-container">
+        <div class="proyecto-fases">
+            <h2>Fases de Proyecto- {{proyecto.pr_Nombre}}
+                <script>
+                    if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                        document.write('<a href="../crear-fase/{{proyecto.pr_ID}}"><img src="/images/cross.png" alt="Agregar Fase" id="cross"></a>');
+                    }
+                </script>
+            </h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th class="pb">Progreso</th>
+
+                        <script>
+                        if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                            document.write('<th>Editar </th><th>Eliminar </th>');
+                        }
+                        </script>
+                        <th>Catálogo</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <script>
+
+                    if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                        document.write('{{#each fases}}<tr><td class="fase-nombre"><b>{{fp_Nombre}}</b></td><td class="fec-ini"> {{fp_FechaInicio}}</td><td class="fec-fin"> {{fp_FechaFin}}</td><td class="pb">                            <div class="progress-bar-td">                                <div class="progress-bar">                                    <div class="progress-bar-fill" id="progress-bar-fill-{{fp_ID}}"                                        style=" width: {{fp_PorcentajeAvance}}%"></div>                                </div>                                <p>{{fp_PorcentajeAvance}}%</p>                            </div>                        </td>                        <td class="imgs"><a href="../editar-fase/{{fp_ID}}"><img src="/images/edit.png"                                    alt="Editar" /></a></td>                        <td class="imgs"><a href="../eliminar-fase/{{fp_ID}}"><img src="/images/delete.png"                                    alt="Eliminar" /></a></td>                        <td class="cc">                            <a href="../catalogo-conceptos/{{fp_ID}}"><img src="/images/productos.png" alt="Ver" /></a>                        </td>                    </tr>                    {{/each}}');
+                    } else {
+                        document.write('{{#each fases}}<tr><td class="fase-nombre"><b>{{fp_Nombre}}</b></td><td class="fec-ini"> {{fp_FechaInicio}}</td><td class="fec-fin"> {{fp_FechaFin}}</td><td class="pb">                            <div class="progress-bar-td">                                <div class="progress-bar">                                    <div class="progress-bar-fill" id="progress-bar-fill-{{fp_ID}}"                                        style=" width: {{fp_PorcentajeAvance}}%"></div>                                </div>                                <p>{{fp_PorcentajeAvance}}%</p>                            </div>                        </td>                        <td class="cc">                            <a href="../catalogo-conceptos/{{fp_ID}}"><img src="/images/productos.png" alt="Ver" /></a>                        </td>                    </tr>                    {{/each}}');
+                    }
+                </script>
+                </tbody>
+            </table>
         </div>
 
-        <div class="proyecto-container">
-            <div class="proyecto-fases">
-                <h2>Fases de Proyecto- {{proyecto.pr_Nombre}} <a href="../crear-fase/{{proyecto.pr_ID}}"><img src="/images/cross.png" alt="Agregar Fase" id="cross"></a></h2>
+        <div class="grafica-cont">
+            <h2>Gráfica de Avance</h2>
+            <figure class="graf">
+                <canvas id="faseChart">
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th> Nombre</th>
-                            <th> Fecha Inicio</th>
-                            <th> Fecha Fin</th>
-                            <th class="pb"> Progreso</th>
-                            <th> Editar </th>
-                            <th> Eliminar </th>
-                        </tr>                    
-                    </thead>
-                    <tbody>
+                    <script>
+                        let ctx = document.getElementById("faseChart");
+                        let myChart = new Chart(ctx,{
+                            type: 'polarArea',
+                            data: {
+                                datasets:[{
+                                    label:"Fases",	
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.5)',
+                                        'rgba(54, 162, 235, 0.5)',
+                                        'rgba(255, 206, 86, 0.5)',
+                                        'rgba(75, 192, 192, 0.5)',
+                                        'rgba(153, 102, 255, 0.5)',
+                                        'rgba(255, 159, 64, 0.5)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }],
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                        },
+                                        title: {
+                                            display: true,
+                                        }
+                                    }
+                                }
+                            })
 
-                        {{#each fases}}
-                        <tr>
-                            <td class="fase-nombre"><b>{{fp_Nombre}}</b></td>
-                            <td class="fec-ini"> {{fp_FechaInicio}}</td>
-                            <td class="fec-fin"> {{fp_FechaFin}}</td>
-                            <td class="pb"> 
-                                <div class="progress-bar-td">
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progress-bar-fill-{{fp_ID}}" style=" width: {{fp_PorcentajeAvance}}%"></div>
-                                    </div>  
-                                    <p>{{fp_PorcentajeAvance}}%</p>
-                                </div>
-                            </td>
-                            <td class="imgs"><a href="../editar-fase/{{fp_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
-                            <td class="imgs"><a href="../eliminar-fase/{{fp_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
-                        </tr>
-                        {{/each}}
+                            let url = 'http://localhost:3000/json/proyecto{{proyecto.pr_ID}}.json'
 
-                    </tbody>
-                </table>
-            </div>
+                            fetch(url)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data)
+                                    myChart.data.labels = data.map(function(e) {
+                                        return e.fp_Nombre;
+                                    });
+                                    myChart.data.datasets[0].data = data.map(function(e) {
+                                        return e.fp_PorcentajeAvance;
+                                    });
+                                    myChart.update();
+                                }).catch(error => console.log(error));
+                    </script>
 
-            <div class="grafica-cont">
-                <h2>Gráfica de Avance</h2>
-                <div class="graf">
-                    <canvas id="grafica">
-                    </canvas>
-                </div>
-            </div>
+                </canvas>
+            </figure>
         </div>
+    </div>
 
 
 </main>
-    {{!-- <script src="../js/progressbar.js"></script> --}}
-    
-
-    
+{{!-- <script src="../js/progressbar.js"></script> --}}

@@ -1,0 +1,39 @@
+<main id="proyect-form-main">
+    <h1> Editar Proyecto - {{proyecto.pr_Nombre}} </h1>
+    <form action="../editar-proyecto/{{proyecto.pr_ID}}" method="POST">
+        <div class="proyecto-form-data">             
+                <div class="reg-field">
+                    <input type="text" id="registro-Nombre-Proyecto" placeholder="Nombre del Proyecto" name="nombre_proyecto" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required value="{{proyecto.pr_Nombre}}"><label for="registro-Nombre-Proyecto">Nombre del Proyecto</label>
+                </div>
+                <div class="reg-field">
+                    <input type="date" id="registro-FechaIni-Proyecto" placeholder="Fecha de Inicio" name="fechainicio_proyecto" value="{{proyecto.pr_FechaInicio}}"><label for="registro-FechaIni-Proyecto">Fecha de Inicio</label>
+                </div>
+                <div class="reg-field">
+                    <input type="date" id="registro-FechaFin-Proyecto" placeholder="Fecha de Fin" name="fechafin_proyecto" value="{{proyecto.pr_FechaFin}}"><label for="registro-FechaFin-Proyecto">Fecha de Fin</label>
+                </div>          
+        </div>
+
+        <div class="proyecto-form-ubicacion">
+            <h2>Ubicación</h2>
+            <div class="proyecto-form-ubicacion-data">
+                <div class="reg-field">
+                    <input type="text" id="registro-Direccion-Proyecto" placeholder="Dirección" name="direccion_proyecto"  required value="{{ubicacion.direccion}}"><label for="registro-Direccion-Proyecto">Dirección</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-Ciudad-Proyecto" placeholder="Ciudad" name="ciudad_proyecto" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required value="{{ubicacion.ciudad}}"><label for="registro-Ciudad-Proyecto">Ciudad</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-Estado-Proyecto" placeholder="Estado/Provincia" name="estado_proyecto" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required value="{{ubicacion.estado}}"><label for="registro-Estado-Proyecto">Estado/Provincia</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-País-Proyecto" placeholder="País" name="pais_proyecto" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required value="{{ubicacion.pais}}"><label for="registro-País-Proyecto">País</label>
+                </div>
+                <div class="reg-field">
+                    <input type="text" id="registro-CP-Proyecto" placeholder="Código Postal" name="cp_proyecto" pattern="^\d{5}(?:[-s]d{4})?$" required value="{{ubicacion.cp}}"><label for="registro-CP-Proyecto">Código Postal</label>
+                </div>
+                <input type="submit" value="Editar" id="btn-editar-proyecto">  
+            </div>
+        </div>
+    </form>
+
+</main>

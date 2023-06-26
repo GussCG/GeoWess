@@ -1,32 +1,34 @@
 .msg-container {
     position: fixed;
-    width: 50%;
+    width: fit-content;
     height: fit-content;
     z-index: 9999;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 4px solid #000;
+    align-items: flex-end;
     border-radius: 10px;
+    font-family: 'Be Vietnam Pro', sans-serif;	
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    margin: 20px;
+    bottom: 0;
+    right: 0;
+    transition: all 0.2s ease-in-out;
 }
 
 .success-msg {
-    background-color: rgba(85, 149, 57, 0.5);
-    border-color: rgb(39, 80, 21);
-    color: rgb(19, 55, 3);
+    background-color: rgba(203, 255, 180, 1);
+    color: rgb(15, 42, 3);
 }
 
 .error-msg {
-    background-color: rgba(149, 57, 57, 0.5);
-    border-color: rgb(80, 21, 21);
-    color: rgb(55, 3, 3);
+    background-color: rgba(149, 57, 57, 1);
+    color: rgb(255, 188, 188);
 }
 
 .alert-msg {
-    background-color: rgba(194, 179, 67, 0.5);
-    border-color: rgb(126, 102, 28);
-    color: rgb(55, 43, 3);
+    background-color: rgba(194, 179, 67, 1);
+    color: rgb(39, 30, 1);
 }
 
 .msg-row {
@@ -44,10 +46,26 @@
     border:none;
     background: none;
     font-size: 30px;
-    padding-bottom: 6px;
+    margin-left: 30px;
     transition: all 0.2s ease-in-out;
 }
 
 .close:hover {
     transform: scale(1.1);
 }
+
+.fade-in-out {
+    animation: fadeInOut ease-in-out 0.3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+

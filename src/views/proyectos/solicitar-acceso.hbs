@@ -1,0 +1,26 @@
+<main id="solicitar-main">
+        <a href="/profile" id="logo">
+            <img src="/images/GWlogo.png" alt="GeoWess"/>
+        </a>
+
+        <div class="sol-container">
+            <div class="sol-form">
+                <h1>Solicitar Acceso</h1>
+                <form id="solicitar-form" action="solicitar-acceso" method="POST">     
+                    <p>Selecciona el proyecto al que quieres entrar</p>
+
+                    <div class="sol-field">
+                        <select name="proyecto" id="proyecto">
+                            <option value="" disabled selected>Selecciona un proyecto</option>
+                            {{#each proyectos}}
+                                <option value="{{pr_ID}}">{{pr_Nombre}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <input type="submit" value="Enviar " id="btn-solicitar">
+                </form>
+            </div>
+        </div>
+
+</main>

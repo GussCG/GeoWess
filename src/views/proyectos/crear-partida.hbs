@@ -2,13 +2,13 @@
     
 
     <div class="titulo-back">
-            <a href="../catalogo-conceptos/{{pr_id}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <a href="../catalogo-conceptos/{{fp_id}}"><img src="/images/previous.png" alt="Volver"></a> 
             <h1> Crear Catálogo de Conceptos</h1>          
     </div>
 
     <div class="partida-form-data"> 
         <h2>Crear Partida</h2>
-        <form id="partida-form" action=".././crear-partida/{{pr_id}}" method="post">
+        <form id="partida-form" action=".././crear-partida/{{fp_id}}" method="post">
             <div class="reg-field">
                 <input type="text" id="registro-Nombre-Partida" placeholder="Nombre de la partida" name="partida_nombre" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-Nombre-Partida">Nombre de la partida</label>
             </div>

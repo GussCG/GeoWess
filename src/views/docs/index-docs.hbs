@@ -1,0 +1,14 @@
+    <main id="documents-index-main">
+        <h1>Documentos de {{user.us_Nombre}}</h1> 
+        <div class="documents">   
+
+           {{!-- Por cada archivo se crea un div --}}
+
+            {{#each files}}
+                <div class="documents-user">
+                    <a href="{{this.dir}}" download><img src="../images/docs.png" alt="{{this.name}}" /></a>
+                    <label>{{this.name}}</label>
+                </div>  
+            {{/each}}
+        </div>
+    </main>

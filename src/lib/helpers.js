@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const pool = require('../database');
 
 const helpers = {};
 
@@ -14,6 +15,11 @@ helpers.matchPassword = async (password, savedPassword) => {
     } catch (error) {
         console.log(error);
     }
+};
+
+helpers.getFases = async (proyecto) => {
+    const fases = await pool.query('SELECT * FROM fases WHERE proyecto = ?', [proyecto]);
+    return fases;
 };
 
 module.exports = helpers;

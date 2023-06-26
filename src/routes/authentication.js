@@ -88,24 +88,38 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
 
 //Dashboard
 router.get('/profile', isLoggedIn, async (req, res) => {
-    const proyectos = await pool.query('SELECT * FROM PROYECTO WHERE pr_Usuario = ?', [req.user.us_ID]);
-    proyectos.forEach(proyecto => {
-        proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
-        proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
-    });
+    //Obtener los proyectos del usuario
+    const q1 = await pool.query('SELECT * FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ?', [req.user.us_ID]);
 
-    //Calcular el porcentaje de avance de cada proyecto y editarlo en la base de datos
-    proyectos.forEach(async proyecto => {
-        //Calcular el porcentaje de avance de cada proyecto
-        proyecto.pr_PorcentajeAvance = await calcPorcentajeProyecto(proyecto);
-        //Editar el porcentaje de avance en la base de datos
-        pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [proyecto.pr_PorcentajeAvance, proyecto.pr_ID]);
-    });
+    console.log(q1);
+    if (q1.length == 0) {
+        proyectos = [];
+        res.render('dashboard', {
+            proyectos,
+            layout: 'logged-layout'
+        });
+    } else {
 
-    res.render('dashboard', {
-        proyectos,
-        layout: 'logged-layout'
-    });
+        let proyectos = [];
+        for await (const proyecto of q1) {
+            const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto.up_Proyecto]);
+            proyectos.push(q2[0]);
+        }
+        
+        proyectos.forEach(proyecto => {
+            proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
+            proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
+        });
+
+        //console.log(proyectos);
+
+        res.render('dashboard', {
+            proyectos,
+            layout: 'logged-layout'
+        });
+    }
+
+
 });
 
 router.get('/logout', isLoggedIn, (req, res) => {

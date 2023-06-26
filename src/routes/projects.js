@@ -18,6 +18,14 @@ const {
     JSDOM
 } = jsdom;
 
+const fs = require('fs');
+const path = require('path');
+const pdf = require('pdf-creator-node');
+const options = require('../lib/options');
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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");
+
 //?FUNCIONES
 //Generar ID random de 6 numeros
 let genID = () => {
@@ -132,23 +140,205 @@ const formatDateInput = (date) => {
     return `${anio}-${mes}-${dia}`;
 }
 
+//Función que va a revisar si el usuario tiene todos los datos necesarios para poder registrarse, p.ej. si es supervisor, debe tener un superintendente asignado
+const estaRegistradoCompletamente = async (usuario) => {
+    switch (usuario.us_Tipo) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 6:
+        case 8:
+            //No necesita nada
+            return true;
+        case 4:
+            //Es contratista y necesita un representante y supervisante
+            //Obtener el representante y el supervisante
+            const contratista = await pool.query('SELECT * FROM CONTRATISTA WHERE cta_Usuario = ?', [usuario.us_ID]);
+            console.log(contratista);
+            if (contratista[0].cta_RepresentanteLegal == null || contratista[0].cta_Supervisante == null) {
+                return false;
+            }
+            return true;
+        case 5:
+            //Es contratante y necesita un residente
+            //Obtener el residente
+            const contratante = await pool.query('SELECT * FROM CONTRATANTE WHERE cte_Usuario = ?', [usuario.us_ID]);
+            console.log(contratante);
+            if (contratante[0].cte_Residente == null) {
+                return false;
+            }
+            return true;
+        case 7:
+            //Es supervisora y necesita un representante y un supervisor
+            //Obtener el representante y el supervisor
+            const supervisora = await pool.query('SELECT * FROM SUPERVISORA WHERE spa_Usuario = ?', [usuario.us_ID]);
+            console.log(supervisora);
+            if (supervisora[0].spa_RepresentanteLegal == null || supervisora[0].spa_Supervisor == null) {
+                return false;
+            }
+            return true;
+        default:
+            return false;
+        }
+}
+
+//Crear el ApiRest para el proyecto
+const crearApiRest = async (proyecto) => {
+    //Obtener las fases del proyecto
+    const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto]);
+
+    //Obtener las partidas de cada fase
+    for await (const fase of fases) {
+
+        //Obtener las partidas de la fase
+        const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [fase.fp_CatalogoConceptos]);
+
+        //Obtener los conceptos de cada partida
+        for await (const partida of partidas) {
+            const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [partida.pt_ID]);
+            partida.conceptos = conceptos;
+        }
+        fase.partidas = partidas;
+    }
+
+    //Crear el archivo json
+    const data = JSON.stringify(fases);
+    fs.writeFileSync(path.join(__dirname, '../public/json/proyecto' + proyecto + '.json'), data);
+
+}
+
 //?RUTAS
 //!Proyectos index
 router.get('/', async (req, res) => {
+
+    //Revisar si el usuario esta registrado completamente
+    if (! await estaRegistradoCompletamente(req.user)) {
+        req.flash('message', 'Completa tu registro para poder acceder a la plataforma');
+        res.redirect('usuario/anadir-usuario/' + req.user.us_ID);
+    }
     //Obtener los proyectos del usuario
-    const proyectos = await pool.query('SELECT * FROM PROYECTO WHERE pr_Usuario = ?', [req.user.us_ID]);
+    const q1 = await pool.query('SELECT * FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ?', [req.user.us_ID]);
 
-    proyectos.forEach(proyecto => {
-        proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
-        proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
-    });
+    console.log(q1);
+    if (q1.length == 0) {
+        proyectos = [];
+        res.render('proyectos/proyectos-index', {
+            proyectos,
+            layout: 'logged-layout'
+        });
+    } else {
 
-    //console.log(proyectos);
+        let proyectos = [];
+        for await (const proyecto of q1) {
+            const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto.up_Proyecto]);
+            proyectos.push(q2[0]);
+        }
+        
+        proyectos.forEach(proyecto => {
+            proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
+            proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
+        });
 
-    res.render('proyectos/proyectos-index', {
+        //console.log(proyectos);
+
+        res.render('proyectos/proyectos-index', {
+            proyectos,
+            layout: 'logged-layout'
+        });
+    }
+
+});
+
+//Soliciar acceso a un proyecto
+//Renderizar la vista
+router.get('/solicitar-acceso/', isLoggedIn, async (req, res) => {
+    //Obtener todos los proyectos
+    const proyectos = await pool.query('SELECT * FROM PROYECTO');
+
+    req.flash('success', "Se ha enviado la solicitud de acceso al administrador");
+    res.render('proyectos/solicitar-acceso', {
         proyectos,
-        layout: 'logged-layout'
+        layout: 'auth-layout'
     });
+});
+
+//Solicitar acceso a un proyecto
+router.post('/solicitar-acceso/', isLoggedIn, async (req, res) => {
+    const {
+        proyecto
+    } = req.body;
+
+    //Obtener el proyecto
+    const proyectoInfo = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto]);
+
+    //Obtener el administrador del proyecto
+    const admin = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [proyectoInfo[0].pr_Usuario]);
+
+    //Obtener el usuario que solicita el acceso
+    const usuario = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [req.user.us_ID]);
+
+    //Enviar correo al administrador
+    const msg = {
+        to: admin[0].us_Email,
+        from: "geowess.contact@gmail.com",
+        subject: 'Solicitud de acceso a proyecto',
+        text: 'Se ha solicitado acceso al proyecto ' + proyectoInfo[0].pr_Nombre + ' por parte de ' + usuario[0].us_Nombre + ' ' + usuario[0].us_ApPaterno + ' ' + usuario[0].us_ApMaterno + '.',
+        html: '<p>Se ha solicitado acceso al proyecto ' + proyectoInfo[0].pr_Nombre + ' por parte de ' + usuario[0].us_Nombre + ' ' + usuario[0].us_ApPaterno + ' ' + usuario[0].us_ApMaterno + '.</p><p> Para aceptar la solicitud da click en el siguiente enlace: <a href="http://localhost:3000/proyectos/aceptar-solicitud/' + proyectoInfo[0].pr_ID + '/' + usuario[0].us_ID + '">Aceptar solicitud</a></p>',
+    };
+
+    sgMail.send(msg);
+
+    req.flash('success', "Se ha enviado la solicitud de acceso al administrador");
+    res.redirect('/profile');
+});
+
+//Aceptar solicitud de acceso
+router.get('/aceptar-solicitud/:pr_id/:us_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id,
+        us_id
+    } = req.params;
+
+    console.log(pr_id);
+    console.log(us_id);
+
+    const newUHP = {
+        up_ID: genID(),
+        up_Usuario: us_id,
+        up_Proyecto: pr_id
+    }
+
+    //Revisar si el usuario ya esta en el proyecto
+    const q1 = await pool.query('SELECT * FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ? AND up_Proyecto = ?', [us_id, pr_id]);
+    if (q1.length > 0) {
+        req.flash('message', "El usuario ya esta en el proyecto");
+        res.redirect('/profile');
+    } else {
+        //Crear EN USUARIO_HAS_PROJECTS
+        let query = await pool.query('INSERT INTO USUARIO_HAS_PROJECTS SET ?', [newUHP]);
+
+        console.log(query);
+
+        req.flash('success', "Se ha aceptado la solicitud de acceso");
+        res.redirect('/profile');
+    }
+});
+
+//Salir del proyecto
+router.get('/salir-proyecto/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    //Obtener el id del usuario
+    const usuario = req.user.us_ID;
+
+    //Eliminar de la tabla USUARIO_HAS_PROJECTS
+    let query = await pool.query('DELETE FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ? AND up_Proyecto = ?', [usuario, pr_id]);
+
+    req.flash('success', "Se ha salido del proyecto");
+    res.redirect('/profile');
 });
 
 //!Crear-Proyecto
@@ -182,20 +372,136 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) => {
         pr_CostoTotal: 0.0,
         pr_Ubicacion,
         pr_Usuario: req.user.us_ID,
-        pr_CatalogoConceptos: genID(),
     }
 
     let query = 'INSERT INTO PROYECTO SET ?';
     await pool.query(query, [newProyect]);
 
-    //Se crea un catalogo de conceptos para el proyecto
-    let query2 = 'INSERT INTO CATALOGO_CONCEPTOS SET ?';
-    await pool.query(query2, [{
-        cc_ID: newProyect.pr_CatalogoConceptos
-    }]);
+    let newUHP = {
+        up_ID: genID(),
+        up_Usuario: req.user.us_ID,
+        up_Proyecto: newProyect.pr_ID
+    }
+
+    //Crear en la tabla USUARIO_HAS_PROJECT
+    let query2 = 'INSERT INTO USUARIO_HAS_PROJECTS SET ?';
+    await pool.query(query2, [newUHP]);
 
     req.flash('success', "Se ha creado el proyecto");
     res.redirect('ver-proyecto/' + newProyect.pr_ID);
+});
+
+//Editar un proyecto
+//Renderizar la vista
+router.get('/editar-proyecto/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
+    //Formatear las fechas
+    proyecto[0].pr_FechaInicio = formatDateInput(proyecto[0].pr_FechaInicio);
+    proyecto[0].pr_FechaFin = formatDateInput(proyecto[0].pr_FechaFin);
+
+    //Separar la ubicacion
+    let ubicacion = proyecto[0].pr_Ubicacion.split(', ');
+    let direccion = ubicacion[0];
+    let ciudad = ubicacion[1];
+    let estado = ubicacion[2];
+    let pais = ubicacion[3];
+    let cp = ubicacion[4];
+
+    ubicacion = {
+        direccion,
+        ciudad,
+        estado,
+        pais,
+        cp
+    }
+
+    console.log(ubicacion);
+
+    res.render('proyectos/editar-proyecto', {
+        proyecto: proyecto[0],
+        ubicacion: ubicacion,
+        layout: 'logged-layout'
+    });
+});
+
+//Editar el proyecto
+router.post('/editar-proyecto/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    const {
+        nombre_proyecto,
+        fechainicio_proyecto,
+        fechafin_proyecto,
+        direccion_proyecto,
+        ciudad_proyecto,
+        estado_proyecto,
+        pais_proyecto,
+        cp_proyecto
+    } = req.body;
+
+    let pr_Ubicacion = direccion_proyecto + ', ' + ciudad_proyecto + ', ' + estado_proyecto + ', ' + pais_proyecto + ', ' + cp_proyecto;
+
+    const newProyect = {
+        pr_Nombre: nombre_proyecto,
+        pr_FechaInicio: fechainicio_proyecto,
+        pr_FechaFin: fechafin_proyecto,
+        pr_Ubicacion,
+    }
+
+    let query = 'UPDATE PROYECTO SET ? WHERE pr_ID = ?';
+    pool.query(query, [newProyect, pr_id]);
+
+    req.flash('success', "Se ha editado el proyecto");
+    res.redirect('../ver-proyecto/' + pr_id);
+});
+
+//Eliminar un proyecto
+router.get('/eliminar-proyecto/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    //Obtener las fases del proyecto
+    const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [pr_id]);
+
+    //Eliminar las fases del proyecto
+    fases.forEach(async fase => {
+        //Obtener las partidas de la fase
+        const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [fase.fp_CatalogoConceptos]);
+
+        //Eliminar las partidas de la fase
+        partidas.forEach(async partida => {
+            //Eliminar los conceptos de la partida
+            let query3 = 'DELETE FROM CONCEPTO WHERE cp_Partida = ?';
+            await pool.query(query3, [partida.pt_ID]);
+            //Eliminar la partida
+            let query4 = 'DELETE FROM PARTIDA WHERE pt_ID = ?';
+            await pool.query(query4, [partida.pt_ID]);
+        });
+
+        //Eliminar el catalogo de conceptos de la fase
+        let query2 = 'DELETE FROM CATALOGO_CONCEPTOS WHERE cc_ID = ?';
+        pool.query(query2, [fase.fp_CatalogoConceptos]);
+
+        //Eliminar la fase
+        let query = 'DELETE FROM FASE_PROYECTO WHERE fp_ID = ?';
+        pool.query(query, [fase.fp_ID]);
+    });
+
+    //Eliminar el proyecto
+    let query = 'DELETE FROM PROYECTO WHERE pr_ID = ?';
+    pool.query(query, [pr_id]);
+
+    req.flash('success', "Se ha eliminado el proyecto");
+    res.redirect('/proyectos');
 });
 
 //! Ver-Proyecto
@@ -204,6 +510,11 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     const {
         pr_id
     } = req.params;
+
+    //Funcion crearApiRest
+    await crearApiRest(pr_id);
+
+
     const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [pr_id]);
 
@@ -237,7 +548,6 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     // });
 
     // console.log(proyecto);
-    // console.log(fases);
 
     res.render('proyectos/ver-proyecto', {
         proyecto: proyecto[0],
@@ -248,39 +558,39 @@ router.get('/ver-proyecto/:pr_id', isLoggedIn, async (req, res) => {
 
 //! PARTIDA
 //Renderizar la vista
-router.get('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
+router.get('/crear-partida/:fp_id', isLoggedIn, async (req, res) => {
     const {
-        pr_id
+        fp_id
     } = req.params;
     res.render('proyectos/crear-partida', {
-        pr_id,
+        fp_id,
         layout: 'logged-layout'
     });
 });
 
 //Crear una partida
-router.post('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
+router.post('/crear-partida/:fp_id', isLoggedIn, async (req, res) => {
     const {
-        pr_id
+        fp_id
     } = req.params;
     const {
         partida_nombre
     } = req.body;
 
-    //Obtener el catalogo de conceptos del proyecto
-    const catalogo = await pool.query('SELECT pr_CatalogoConceptos FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+    //Obtener el catalogo de conceptos de la fase
+    const catalogo = await pool.query('SELECT fp_CatalogoConceptos FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
 
     const newPartida = {
         pt_ID: genID(),
         pt_Nombre: partida_nombre,
-        pt_CatalogoConceptos: catalogo[0].pr_CatalogoConceptos
+        pt_CatalogoConceptos: catalogo[0].fp_CatalogoConceptos
     }
 
     let query = 'INSERT INTO PARTIDA SET ?';
     await pool.query(query, [newPartida]);
 
     req.flash('success', "Se ha creado la partida");
-    res.redirect('../catalogo-conceptos/' + pr_id);
+    res.redirect('../catalogo-conceptos/' + fp_id);
 });
 
 //Editar una partida
@@ -293,14 +603,14 @@ router.get('/editar-partida/:pt_id', isLoggedIn, async (req, res) => {
     //Obtener el id del catalogo de conceptos
     const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
-    //Obtener el proyecto
-    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+    //Obtener la fase
+    const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
 
     //Obtener la partida
     const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
     res.render('proyectos/editar-partida', {
-        proyecto: proyecto[0],
+        fase: fase[0],
         partida: partida[0],
         layout: 'logged-layout'
     });
@@ -326,11 +636,11 @@ router.post('/editar-partida/:pt_id', isLoggedIn, async (req, res) => {
     //Obtener el id del catalogo de conceptos
     const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
-    //Obtener el id del proyecto
-    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+    //Obtener el id de la fase
+    const fase = await pool.query('SELECT fp_ID FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
 
     req.flash('success', "Se ha editado la partida");
-    res.redirect('../catalogo-conceptos/' + proyecto[0].pr_ID);
+    res.redirect('../catalogo-conceptos/' + fase[0].fp_ID);
 });
 
 //Eliminar una partida
@@ -342,30 +652,37 @@ router.get('/eliminar-partida/:pt_id', isLoggedIn, async (req, res) => {
     //Obtener el id del catalogo de conceptos
     const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
-    //Obtener el id del proyecto
-    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+    //Obtener el id de la fase del proyecto
+    const fase = await pool.query('SELECT fp_ID FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+
+    //Obtener los conceptos de la partida
+    const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
+
+    //Eliminar los conceptos de la partida
+    conceptos.forEach(async concepto => {
+        let query = 'DELETE FROM CONCEPTO WHERE cp_ID = ?';
+        await pool.query(query, [concepto.cp_ID]);
+    });
 
     //Eliminar la partida
     let query = 'DELETE FROM PARTIDA WHERE pt_ID = ?';
     pool.query(query, [pt_id]);
 
     req.flash('success', "Se ha eliminado la partida");
-    res.redirect('../catalogo-conceptos/' + proyecto[0].pr_ID);
+    res.redirect('../catalogo-conceptos/' + fase[0].fp_ID);
 });
 
 //! Catalogo de conceptos
 //Renderizar la vista
-router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
+router.get('/catalogo-conceptos/:fp_id', isLoggedIn, async (req, res) => {
     const {
-        pr_id
+        fp_id
     } = req.params;
-    //Obtener el catalogo de conceptos del proyecto
-    const catalogo = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+    //Obtener el catalogo de conceptos de la fase
+    const catalogo = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
     //Obtener las partidas del catalogo de conceptos
-    //console.log(catalogo[0].pr_CatalogoConceptos);
-    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].pr_CatalogoConceptos]);
+    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].fp_CatalogoConceptos]);
 
-    console.log(partidas);
     res.render('proyectos/partidas-vista', {
         catalogo: catalogo[0],
         partidas,
@@ -382,11 +699,11 @@ router.get('/ver-conceptos/:pt_id', isLoggedIn, async (req, res) => {
     const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
     const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
-    //Obtener el id del proyecto
-    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+    //Obtener el id de la fase
+    const fase = await pool.query('SELECT fp_ID FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
 
     res.render('proyectos/ver-conceptos', {
-        proyecto: proyecto[0],
+        fase: fase[0],
         conceptos,
         partida: partida[0],
         layout: 'logged-layout'
@@ -435,15 +752,18 @@ router.post('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
         fp_FechaFin: fechaFin_fase,
         fp_Status: 0, // 0 -> En proceso, 1 -> Terminado
         fp_PorcentajeAvance: 0,
-        fp_Proyecto: pr_id
+        fp_Proyecto: pr_id,
+        fp_CatalogoConceptos: genID()
     }
-
-    //Formatear las fechas de la fase
-    newFase.fp_FechaInicio = dateFormat(newFase.fp_FechaInicio);
-    newFase.fp_FechaFin = dateFormat(newFase.fp_FechaFin);
 
     let query = 'INSERT INTO FASE_PROYECTO SET ?';
     await pool.query(query, [newFase]);
+
+    //Crear el catalogo de conceptos de la fase
+    let query2 = 'INSERT INTO CATALOGO_CONCEPTOS SET ?';
+    await pool.query(query2, [{
+        cc_ID: newFase.fp_CatalogoConceptos
+        }]);
 
     req.flash('success', "Se ha creado la fase");
     res.redirect('/proyectos/ver-proyecto/' + pr_id);
@@ -513,6 +833,38 @@ router.post('/editar-fase/:fp_id', isLoggedIn, async (req, res) => {
 });
 
 //Eliminar una fase
+router.get('/eliminar-fase/:fp_id', isLoggedIn, async (req, res) => {
+    const {
+        fp_id
+    } = req.params;
+
+    //Obtener el id de la fase
+    const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+
+    //Eliminar la fase
+    let query = 'DELETE FROM FASE_PROYECTO WHERE fp_ID = ?';
+    pool.query(query, [fp_id]);
+
+    //Eliminar el catalogo de conceptos de la fase
+    let query2 = 'DELETE FROM CATALOGO_CONCEPTOS WHERE cc_ID = ?';
+    pool.query(query2, [fase[0].fp_CatalogoConceptos]);
+
+    //Obtener las partidas de la fase
+    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [fase[0].fp_CatalogoConceptos]);
+
+    //Eliminar las partidas de la fase
+    partidas.forEach(async partida => {
+        //Eliminar los conceptos de la partida
+        let query3 = 'DELETE FROM CONCEPTO WHERE cp_Partida = ?';
+        await pool.query(query3, [partida.pt_ID]);
+        //Eliminar la partida
+        let query4 = 'DELETE FROM PARTIDA WHERE pt_ID = ?';
+        await pool.query(query4, [partida.pt_ID]);
+    });
+
+    req.flash('success', "Se ha eliminado la fase");
+    res.redirect('/proyectos/ver-proyecto/' + fase[0].fp_Proyecto);
+});
 
 //! Conceptos
 //Crear Concepto
@@ -537,8 +889,11 @@ router.post('/crear-concepto/:pt_id', isLoggedIn, async (req, res) => {
         cp_Cantidad,
         cp_PrecioUnitario,
         cp_Importe: cp_Cantidad * parseFloat(cp_PrecioUnitario),
-        cp_Partida: pt_id
+        cp_Partida: pt_id,
+        cp_CantidadMax: 0,
     }
+
+    newConcepto.cp_CantidadMax = newConcepto.cp_Cantidad;
 
     //Obtener el nombre de la partida
     const partida = await pool.query('SELECT pt_Nombre FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
@@ -565,19 +920,17 @@ router.get('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     //Obtener la partida
     const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [partida_id[0].cp_Partida]);
 
-    //Obtener el catalogo de conceptos del proyecto
-    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+    //Obtener el catalogo de conceptos de la fase
+    const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [partida_id[0].cp_Partida]);
 
     //Obtener los conceptos de la partida
     const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [partida_id[0].cp_Partida]);
-
-    console.log(proyecto);
 
     //Con el id del concepto, escribir la informacion del concepto en el formulario de la misma pagina
     const concepto = await pool.query('SELECT * FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
 
     res.render('proyectos/editar-concepto', {
-        proyecto: proyecto[0],
+        catalogo: catalogo[0],
         partida: partida[0],
         concepto: concepto[0],
         conceptos,
@@ -618,7 +971,6 @@ router.post('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     res.redirect('/proyectos/ver-conceptos/' + partida_id[0].cp_Partida);
 });
 
-
 //Eliminar concepto
 router.get('/eliminar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     const {
@@ -636,5 +988,84 @@ router.get('/eliminar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     res.redirect('/proyectos/ver-conceptos/' + partida[0].cp_Partida);
 });
 
+//! REPORTES
+//Generar catalogo de conceptos de una fase en PDF
+router.get('/generar-catalogo/:fp_id', isLoggedIn, async (req, res) => {
+    const {
+        fp_id
+    } = req.params;
+
+    const us_ID = req.user.us_ID;
+
+    const template = fs.readFileSync(path.join(__dirname, '../views/layouts/template-catalogo.html'), 'utf8');
+
+    //Obtener el catalogo de conceptos de la fase
+    const catalogo = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [catalogo[0].fp_Proyecto]);
+
+    //Obtener las partidas del catalogo de conceptos
+    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].fp_CatalogoConceptos]);
+
+    //Obtener todos los conceptos de las partidas
+    const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida IN (SELECT pt_ID FROM PARTIDA WHERE pt_CatalogoConceptos = ?)', [catalogo[0].fp_CatalogoConceptos]);
+
+    console.log(conceptos);
+
+    const obj = {
+        proyecto: proyecto[0],
+        catalogo: catalogo[0],
+        partidas,
+        conceptos
+    }
+
+    //Ejemplo de nombre: id_proyecto_id_fase_catalogo.pdf y quitar el espacio del nombre del proyecto
+    const nombrePr = proyecto[0].pr_Nombre.replace(/\s/g, '');
+    const filename = nombrePr + '_' + catalogo[0].fp_Nombre + '_catalogo.pdf';
+    //Renderizar el template y subirlo a documentos del usuario y documentos del proyecto
+    const doc = {
+        html: template,
+        data: {
+            catalogo: obj
+        },
+        path: './src/public/user-docs/' + us_ID + '/' + filename
+    }
+
+    const doc2 = {
+        html: template,
+        data: {
+            catalogo: obj
+        },
+        path: './src/public/project-docs/' + proyecto[0].pr_ID + '/' + filename
+    }
+
+    pdf.create(doc, options)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    pdf.create(doc2, options)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    res.redirect('/docs/project/' + catalogo[0].fp_Proyecto);
+});
+
+//Generar reporte de avance de una fase en PDF
+router.get('/generar-avance/:fp_id', isLoggedIn, async (req, res) => {
+    const {
+        fp_id
+    } = req.params;
+
+    const us_ID = req.user.us_ID;
+
+});
 
 module.exports = router;

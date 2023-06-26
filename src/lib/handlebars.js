@@ -31,31 +31,13 @@ helpers.ifEquals = (arg1, arg2, options) => {
     return (arg1 === arg2) ? options.this : options.inverse(this);
 };
 
-// helpers.ifCond = (v1, operator ,v2, options) => {
-//     switch(operator){
-//         case '==':
-//             return (v1 == v2) ? options.this : options.inverse(this);
-//         case '===':
-//             return (v1 === v2) ? options.this : options.inverse(this);
-//         case '!=':
-//             return (v1 != v2) ? options.this : options.inverse(this);
-//         case '!==':
-//             return (v1 !== v2) ? options.this : options.inverse(this);
-//         case '<':
-//             return (v1 < v2) ? options.this : options.inverse(this);
-//         case '<=':
-//             return (v1 <= v2) ? options.this : options.inverse(this);
-//         case '>':
-//             return (v1 > v2) ? options.this : options.inverse(this);
-//         case '>=':
-//             return (v1 >= v2) ? options.this : options.inverse(this);
-//         case '&&':
-//             return (v1 && v2) ? options.this : options.inverse(this);
-//         case '||':
-//             return (v1 || v2) ? options.this : options.inverse(this);
-//         default:
-//             return options.inverse(this);
-//     }
-// }
+helpers.ifCond = (v1, v2, options) => {
+    if(v1 == v2){
+        return options.fn(this);
+    }
+    return options.inverse(this);
+}
+
+
 
 module.exports = helpers;

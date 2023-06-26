@@ -20,8 +20,17 @@ CREATE TABLE USUARIO (
     us_Email varchar(100),
     us_Password varchar(100),
     
-    
     PRIMARY KEY (us_ID)
+);
+
+CREATE TABLE USUARIO_HAS_PROJECTS (
+	up_ID char(6),
+    up_Usuario char(6),
+    up_Proyecto char(6),
+	
+    PRIMARY KEY (up_ID),
+    FOREIGN KEY (up_Usuario) REFERENCES USUARIO (us_ID),
+    FOREIGN KEY (up_Proyecto) REFERENCES PROYECTO (pr_ID)
 );
 
 ALTER TABLE USUARIO
@@ -55,6 +64,8 @@ CREATE TABLE RESIDENTE (
     PRIMARY KEY (res_ID),
     FOREIGN KEY (res_Usuario) REFERENCES USUARIO (us_ID)
 );
+
+SELECT * FROM RESIDENTE WHERE res_Usuario = 3;
 
 /*Tienen que estar obligadamente, no tiene ningun poder de crear proyectos, modificar o generar estimaciones, pero puede ver los reportes, estimaciones, etc. */
 CREATE TABLE REPRESENTATE_LEGAL (
@@ -95,10 +106,12 @@ CREATE TABLE SUPERVISORA (
 	spa_ID char(6),
     spa_Supervisor char(6),
     spa_RepresentanteLegal char(6),
+    spa_Usuario char(6),
     
     PRIMARY KEY (spa_ID),
     FOREIGN KEY (spa_Supervisor) REFERENCES SUPERVISOR (sup_ID),
-    FOREIGN KEY (spa_RepresentanteLegal) REFERENCES REPRESENTANTE_LEGAL (rpl_ID)
+    FOREIGN KEY (spa_RepresentanteLegal) REFERENCES REPRESENTANTE_LEGAL (rpl_ID),
+    FOREIGN KEY (spa_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 CREATE TABLE SUPERINTENDENTE (
@@ -164,11 +177,9 @@ CREATE TABLE PROYECTO (
     pr_Ubicacion varchar(500),
     pr_Usuario char(6), /*Es el usuario que creo el proyecto*/
     pr_PorcentajeAvance float,
-    pr_CatalogoConceptos int(6), /*Es el catalogo de conceptos de todo el proyecto*/
     
     PRIMARY KEY (pr_ID),
-    FOREIGN KEY (pr_Usuario) REFERENCES USUARIO (us_ID),
-    FOREIGN KEY (pr_CatalogoConceptos) REFERENCES CATALOGO_CONCEPTOS (cc_ID) 
+    FOREIGN KEY (pr_Usuario) REFERENCES USUARIO (us_ID)
 );
 
 CREATE TABLE FASE_PROYECTO (
@@ -178,10 +189,12 @@ CREATE TABLE FASE_PROYECTO (
     fp_FechaFin date, /*No puede ser mayor a la fecha fin del proyecto*/
     fp_Status boolean, /* 1 = Finalizada || 0 = En proceso */
     fp_PorcentajeAvance float,
+    fp_CatalogoConceptos int(6), /*Es el catalogo de conceptos de cada fase*/
     fp_Proyecto char(6), /*Es el proyecto al que pertenence*/
     
     PRIMARY KEY (fp_ID),
-    FOREIGN KEY (fp_Proyecto) REFERENCES PROYECTO (pr_ID)     
+    FOREIGN KEY (fp_Proyecto) REFERENCES PROYECTO (pr_ID),    
+	FOREIGN KEY (fp_CatalogoConceptos) REFERENCES CATALOGO_CONCEPTOS (cc_ID) 
 );
 
 /*Esta tabla funcionará únicamente como fuente de información en la aplicación web*/
@@ -205,7 +218,7 @@ CREATE TABLE ESTIMACION (
     es_NetoARecibir float, /*Es la suma del importe de estimacion, la amortizacion del anticipo, el 16% del IVA, la retencion del 0.5% de la S.F.P. y la retencion por atraso de programa*/
     es_FechaInicio date, /*Fecha de inicio de la estimacion, inicio de mes que se tomo para la estimación*/
     es_FechaFin date, /*Fecha de fin de la estimacion, fin de mes que se tomo para la estimación*/
-    es_Contratista char(6), /*Rd el que creo el proyecto*/
+    es_Contratante char(6), /*Es el que creo el proyecto*/
     es_Superintendente char(6), /*Es quien creo la estimacion*/
     es_Supervisor char(6), /*Es quien debe de validarla*/
     es_EstadoSupervisor boolean, /* 1 = Aprobado || 0 = No aprobado */
@@ -213,7 +226,7 @@ CREATE TABLE ESTIMACION (
     es_Proyecto char(6), /*Es para sacar el catalogo de conceptos y obtener el importe de contrato*/
     
     PRIMARY KEY (es_ID),
-    FOREIGN KEY (es_Contratista) REFERENCES CONTRATISTA (cta_ID),
+    FOREIGN KEY (es_Contratante) REFERENCES CONTRATANTE (cte_ID),
     FOREIGN KEY (es_Superintendente) REFERENCES SUPERINTENDENTE (sup_ID),
     FOREIGN KEY (es_Supervisor) REFERENCES SUPERVISOR (sup_ID),
     FOREIGN KEY (es_Residente) REFERENCES RESIDENTE (res_ID),
@@ -251,6 +264,8 @@ CREATE TABLE CONCEPTO (
     FOREIGN KEY (cp_Partida) REFERENCES PARTIDA (pt_ID)     
 );
 
+ALTER TABLE CONCEPTO
+	ADD cp_CantidadMax int;
 
 /*OPERACIONES CON TRIGGERS PARA EL FUNCIONAMIENTO DE LA BASE*/
 /*TRIGGER PARA LOS CAMBIOS DE AUDITORIA CADA QUE SE MODIFIQUE EL PROYECTO*/
@@ -267,5 +282,27 @@ SELECT * FROM FASE_PROYECTO;
 SELECT * FROM CONCEPTO;
 SELECT * FROM USUARIO ;
 SELECT * FROM SUPERVISOR;
+SELECT * FROM CONTRATANTE;
+SELECT * FROM CONTRATISTA;
+SELECT * FROM SUPERVISORA;
+SELECT * FROM USUARIO_HAS_PROJECTS;
 
-select count(*) as total from FASE_PROYECTO WHERE fp_Proyecto = "457823";
+-- Crear un usuario para cada tipo de usuario
+
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (1,"Gustavo", "Cerda", "Garcia", "2002-09-30", 1, "5527167255", "CEGG020930UX7", "supervisor@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (2,"Gustavo", "Cerda", "Garcia", "2002-09-30",2, "5527167255", "CEGG020930UX7", "superintendente@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (3,"Gustavo", "Cerda", "Garcia", "2002-09-30",3, "5527167255", "CEGG020930UX7", "residente@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (4,"Gustavo", "Cerda", "Garcia", "2002-09-30",4, "5527167255", "CEGG020930UX7", "contratista@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (5,"Gustavo", "Cerda", "Garcia", "2002-09-30",5, "5527167255", "CEGG020930UX7", "contratante@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (6,"Gustavo", "Cerda", "Garcia", "2002-09-30",6, "5527167255", "CEGG020930UX7", "replegal@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (7,"Gustavo", "Cerda", "Garcia", "2002-09-30",7, "5527167255", "CEGG020930UX7", "supervisora@mail.com", "1");
+INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (8,"Gustavo", "Cerda", "Garcia", "2002-09-30",8, "5527167255", "CEGG020930UX7", "supervisante@mail.com", "1");
+
+INSERT INTO SUPERVISOR VALUES (1,1);
+INSERT INTO SUPERINTENDENTE VALUES (1,2);
+INSERT INTO RESIDENTE VALUES (1,3);
+INSERT INTO CONTRATISTA VALUES (1,NULL,NULL,4);
+INSERT INTO CONTRATANTE VALUES (1,5,NULL);
+INSERT INTO REPRESENTATE_LEGAL VALUES (1,6);
+INSERT INTO SUPERVISORA VALUES (1,NULL,NULL,7);
+INSERT INTO SUPERVISANTE VALUES (1,8);

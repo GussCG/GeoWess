@@ -228,22 +228,16 @@
     font-size: var(--dashboard-h2-font-size);
     font-weight: var(--bold);
     text-align: center;
-    margin: 15px 0 19px 0
+    margin-top: 15px;
 }
 
 .graf {
-    width: 100%;
-    max-width: 300px;
+    width: 350px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-}
-
-#grafica  {
-    width: 100%;
-    margin: 0 auto;
 }
 
 .proyecto-container .imgs {
@@ -252,6 +246,7 @@
 
 .proyecto-container img {
     width: 30px;
+    margin-left: 10px;
     object-fit: cover;
     transition: all .3s ease-in-out;
 }
@@ -261,14 +256,25 @@
     opacity: 0.8;
 }
 
+.proyecto-container .cc {
+    width: 30px;
+    margin-left: 10px;
+    transition: all .3s ease-in-out;
+}
+
+.proyecto-container .cc:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
 /*Responsive*/
 
 @media screen and (max-width: 1238px){
 
     #proyecto-main {
+        width: 90%;
         margin: 27px 32px;
         height: 90%;
-        min-height: 700px;
         background-color: #fff;
         border-radius: 20px;
     }
@@ -285,11 +291,20 @@
         font-size: 1.2rem;
     }
 
-    #proyecto-main .proyecto-fases table{
-        width: 80%;
+    #proyecto-main .proyecto-fases {
+        width: 100%;
+        height: 450px;
+    }
+
+    #proyecto-main .proyecto-fases tbody tr {
+        height: 20px;
     }
 
     #proyecto-main .pb {
+        display: none;
+    }
+
+    .grafica-cont{
         display: none;
     }
 }

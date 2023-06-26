@@ -37,7 +37,7 @@ app.use(session({
 }));
 app.use(morgan('dev'));
 app.use(express.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(express.json());
 app.use(flash());
@@ -58,6 +58,7 @@ app.use(require('./routes/authentication'));
 app.use('/usuario', require('./routes/usuario'));
 // app.use('/proyectos', require('./routes/proyecto'));
 app.use('/proyectos', require('./routes/projects'));
+app.use('/docs', require('./routes/docs'));
 
 //Public
 app.use(express.static(path.join(__dirname, 'public')));

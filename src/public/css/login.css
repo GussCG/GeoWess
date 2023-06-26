@@ -172,6 +172,7 @@ input::placeholder {
     grid-area: login-img;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 #login-main .login-img img {

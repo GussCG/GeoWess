@@ -1,10 +1,15 @@
-<main id="partidas-vista-main">
-    
-        
-
+<main id="partidas-vista-main">  
         <div class="titulo-back">
-            <a href="../ver-proyecto/{{catalogo.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
-            <h1> Partidas de Proyecto - {{catalogo.pr_Nombre}}<a href="../crear-partida/{{catalogo.pr_ID}}"><img src="/images/cross.png" alt="Agregar Partida" id="cross"></a></h1>           
+            <a href="../ver-proyecto/{{catalogo.fp_Proyecto}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1> Partidas de Fase - {{catalogo.fp_Nombre}}            
+                <script>
+                    if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                        document.write('<a href="../crear-partida/{{catalogo.fp_ID}}"><img src="/images/cross.png" alt="Agregar Partida" id="cross"></a>');
+                    }
+                </script> 
+            </h1>
+                
+            <p><a href="../generar-catalogo/{{catalogo.fp_ID}}" id="genCC"><b>Generar el catalogo en pdf</b></a></p>    
         </div>
 
         <div class="partidas-container">
@@ -12,23 +17,36 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Catálogo de Conceptos</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
+                        <th>Catálogo de Conceptos</th>                        
+                        <script>
+                            if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                                document.write('<th>Editar</th>');
+                                document.write('<th>Eliminar</th>');
+                            }
+                        </script>
                     </tr>                    
                 </thead>
                 <tbody>
-
-                    {{#each partidas}}
-                    <tr>
-                        <td class="partida-nombre">{{pt_Nombre}}</td>
-                        {{!-- Agregar conceptos a la partida --}}
-                        <td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}" id="verC">Ver Conceptos de {{pt_Nombre}}</a></td>
-                        <td><a href="../editar-partida/{{pt_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
-                        <td><a href="../eliminar-partida/{{pt_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
-                    </tr>
-                    {{/each}}
-
+                    
+                    <script>
+                        if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
+                            document.write('{{#each partidas}}');
+                            document.write('<tr>');
+                            document.write('<td class="partida-nombre">{{pt_Nombre}}</td>');
+                            document.write('<td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}" id="verC">Ver Conceptos de {{pt_Nombre}}</a></td>');
+                            document.write('<td><a href="../editar-partida/{{pt_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>');
+                            document.write('<td><a href="../eliminar-partida/{{pt_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>');
+                            document.write('</tr>');
+                            document.write('{{/each}}');
+                        } else {
+                            document.write('{{#each partidas}}');
+                            document.write('<tr>');
+                            document.write('<td class="partida-nombre">{{pt_Nombre}}</td>');
+                            document.write('<td class="fase-nombre"> <a href="../ver-conceptos/{{pt_ID}}" id="verC">Ver Conceptos de {{pt_Nombre}}</a></td>');
+                            document.write('</tr>');
+                            document.write('{{/each}}');
+                        }
+                    </script>
                 </tbody>
             </table>
 

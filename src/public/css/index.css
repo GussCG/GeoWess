@@ -203,20 +203,31 @@ body {
 	height: var(--index-icon-width-height);
 }
 
-/** Parte de Deigo */
+/** Proyectos Ejemplos */
 #not-index-div {
 	box-sizing: border-box;
 	width: 75%;
-	height: 85%;
+	height: 100%;
 
 	margin: 30px auto;
 
 	background-color: rgba(217, 217, 217, 0.6);
 	border: 15px solid var(--index-register-button-color);
 	border-radius: 40px;
-
 	display: flex;
-	grid-template-columns: 1fr 1fr; 
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.main-cont {
+	width: 90%;
+	height: 500px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 50px;
 }
 
 #not-index-div-h1 h1 {
@@ -246,20 +257,61 @@ body {
 }
 
 .Child {
-	flex: 1;
-	margin-top: 10rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: left;
 }
 
-.sobre{
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.numbertext {
+	width: 100%;
+	font-style: normal;
+	font-weight: var(--bold);
+	font-size: var(--index-h1-font-size);
+	line-height: 35px;
 }
 
 .Child img{
-	height: 420px;
+	width: 500px;
+	border-radius: 10px;
 }
-/** -------------------------------------------- */
+
+/* Nosotros */
+
+.Child-nos {
+	width: 90%;
+	height: 90%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 auto;
+}
+
+.texto-nosotros {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: left;
+	text-align: justify;
+	gap: 50px;
+}
+
+.img-nosotros {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: left;
+}
+
+.img-nosotros img{
+	width: 500px;
+}
+
 
 @media (max-width: 1920px) {
 	#index-div {
@@ -310,6 +362,35 @@ body {
 
 	#index-div-h1 h1 {
 		font-size: 48px;
+	}
+
+	#not-index-div {
+		width: 80%;
+		margin: auto;
+	}
+
+	#not-index-div-h1 h1 {
+		font-size: 48px;
+	}
+
+	#not-index-div-h2 h2 {
+		font-size: 24px;
+	}
+
+	.main-cont{
+		flex-direction: column;
+		height: 600px;
+	}
+
+	.Child:first-child{
+		width: 100%;
+		margin-bottom: 20px;
+		height: 300px;
+		display: block;
+	}
+
+	.img-nosotros{
+		display: none;
 	}
 }
 

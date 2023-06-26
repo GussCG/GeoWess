@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Catalogo de Conceptos</title>
+    <!-- 
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/template-catalogo.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/main.css"> -->
+
+</head>
+
+<body style="
+            font-family: Be Vietnam Pro, sans-serif;
+            width: 100%;
+            height: 80%;
+            overflow: hidden;">
+
+    <div class="titulo" style="
+                                width: 100%;
+                                height: fit-content;
+                                display: flex;
+                                flex-direction: column;">
+        <img src="http://localhost:3000/images/GWlogo.png" style=" 
+            width: 210px;
+            align-self: left;
+            margin: 20px 0 10px 30px;
+            " alt="Logo" class="logo" />
+        <h1 style=" font-size: 32px;
+                    font-weight: 600;
+                    font-style: normal;
+                    text-align: center;
+                    margin-bottom: 5px;">
+            {{catalogo.proyecto.pr_Nombre}}
+        </h1>
+        <h2 style=" font-size: 20px;
+                    font-weight: medium;
+                    text-align: center;
+                    margin-bottom: 15px;">
+            {{catalogo.catalogo.fp_Nombre}}
+        </h2>
+        <h3 style=" font-size: 16px; 
+                    font-weight: 200;
+                    text-align: center;
+                    margin-bottom: 30px;
+        ">
+            Catálogo de Conceptos
+        </h3>
+    </div>
+
+
+    <!-- Por cada   -->
+    <div class="tabla-conceptos" style="    
+            width: 100%;
+            height: 100%;
+            background-color: #fff;">
+        <table style="
+                    width: 90%;
+                    height: fit-content;
+                    margin: 0 auto;
+                    border-collapse: collapse;">
+            <thead style="
+                        width: 100%;
+                        background-color: #000;
+                        color: #fff;
+                        border: 1px solid #000;">
+                <tr style="
+                        width: 100%;
+                        height: 50px;">
+                    <th style="
+                            width: fit-content;
+                            text-align: center;
+                            font-size: 14px;
+                            font-weight: bold;
+                            text-align: center;">
+                        Partida
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Clave
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Nombre
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Unidad
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Cantidad
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Precio Unitario
+                    </th>
+                    <th style="
+                        width: fit-content;
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        text-align: center;">
+                        Importe
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="
+                width: 100%;
+                height: fit-content;">
+                {{#each catalogo.conceptos}}
+                <tr style="
+                        width: 100%;
+                        height: 50px;">
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            {{this.cp_Partida}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            font-style: italic;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            {{this.cp_Clave}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            {{this.cp_Nombre}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            {{this.cp_Unidad}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            {{this.cp_Cantidad}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            $ {{this.cp_PrecioUnitario}}</td>
+                    <td style="
+                            width: fit-content;
+                            font-size: 14px;
+                            font-weight: 200;
+                            text-align: center;
+                            border: 1px solid #000;">
+                            $ {{this.cp_Importe}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<main id="profile-anadir-main">
+    <h1>Añadir usuarios</h1>
+    <form action="/usuario/anadir-usuario/{{usuario.us_ID}}" method="POST"> 
+        <div class="campos">
+            <script>            
+                console.log({{usuario.us_Tipo}});
+                switch({{usuario.us_Tipo}}) {
+                    case 4://Si el usuario es contratista, debe seleccionar un representante legal y un supervisor
+                        document.write('<div class="reg-field"><select name="rep_legal" id="rep_legal" ><option value="0">Representante Legal</option>');
+                        {{#each representantes}}
+                        //Si ya tiene un representante legal, lo selecciona por defecto
+                        document.write('<option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>');
+                        {{/each}}
+                        document.write('</select></div>');
+                        document.write('<div class="reg-field"><select name="supervisante" id="supervisante"><option value="0">Supervisante</option>');
+                        {{#each supervisantes}}
+                        document.write('<option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>');
+                        {{/each}}
+                        document.write('</select></div>');
+                        break;
+                    case 5://Si el usuario es contratante, debe seleccionar un residente
+                        document.write('<div class="reg-field"><select name="residente" id="residente"><option value="0">Residente</option>');
+                        {{#each residentes}}
+                        document.write('<option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>');
+                        {{/each}}
+                        document.write('</select></div>');
+                        break;
+                    case 7://Si el usuario es supervisora, debe seleccionar un supervisor y un representante legal
+                        document.write('<div class="reg-field"><select name="supervisor" id="supervisor"><option value="0">Supervisor</option>');
+                        {{#each supervisores}}
+                        document.write('<option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>');
+                        {{/each}}
+                        document.write('</select></div>');
+                        document.write('<div class="reg-field"><select name="rep_legal" id="rep_legal"><option value="0">Representante Legal</option>');
+                        {{#each representantes}}
+                        document.write('<option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>');
+                        {{/each}}
+                        document.write('</select></div>');
+                        break;
+                } 
+            </script>
+        </div> 
+        <div class="boton">
+            <input type="submit" value="Guardar Cambios" id="btn-editar-usuario">
+        </div>          
+          
+    </form>
+
+</main>

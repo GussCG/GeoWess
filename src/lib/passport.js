@@ -68,14 +68,19 @@ passport.use('local.signup', new localStrategy({
             const res4 = await pool.query('INSERT INTO RESIDENTE (res_ID, res_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
         case '4': //Contratista
-            const res5 = await pool.query('INSERT INTO CONTRATISTA (cta_ID, cta_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
+            const res5 = await pool.query('INSERT INTO CONTRATISTA (cta_ID, cta_RepresentanteLegal, cta_Supervisante, cta_Usuario) VALUES (?,?,?,?)', [genID(), null, null, newUser.us_ID]);
             break;
         case '5': //Contratante
-            const res6 = await pool.query('INSERT INTO CONTRATANTE (cte_ID, cte_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
+            const res6 = await pool.query('INSERT INTO CONTRATANTE (cte_ID, cte_Usuario,cte_Residente) VALUES (?,?,?)', [genID(), newUser.us_ID, null]);
             break;
         case '6': //Representante legal
             const res7 = await pool.query('INSERT INTO REPRESENTANTE_LEGAL (rpl_ID, rpl_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
             break;
+        case '7': //Supervisora
+            const res8 = await pool.query('INSERT INTO SUPERVISORA (spa_ID, spa_Supervisor, spa_RepresentanteLegal, spa_Usuario) VALUES (?,?,?,?)', [genID(), null, null, newUser.us_ID]);
+            break;
+        case '8': //Supervisante
+            const res9 = await pool.query('INSERT INTO SUPERVISANTE (sup_ID, sup_Usuario) VALUES (?,?)', [genID(), newUser.us_ID]);
         default:
             break;
     }
