@@ -206,21 +206,21 @@ router.post('/recuperar-contrasena', async (req, res) => {
 router.get('/nueva-contrasena/:token', async (req, res) => {
     const token = req.params.token;
 
-    if (!id) {
+    if (!token) {
         req.flash('message', 'No se ha recibido ningún dato');
         res.redirect('/recuperar-contrasena');
         return;
     }
 
     try {
-        const user = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [id]);
+        const user = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [token]);
         if (!user) {
             req.flash('message', 'El usuario no existe');
             res.redirect('/recuperar-contrasena');
             return;
         }
         res.render('auth/nueva-contrasena', {
-            id,
+            token,
             layout: 'auth-layout'
         });
     } catch (error) {
@@ -234,7 +234,7 @@ router.get('/nueva-contrasena/:token', async (req, res) => {
 router.post('/nueva-contrasena/:token', async (req, res) => {
     const token = req.params.token;
 
-    if (!id) {
+    if (!token) {
         req.flash('message', 'No se ha recibido ningún dato');
         res.redirect('/recuperar-contrasena');
         return;
@@ -245,18 +245,12 @@ router.post('/nueva-contrasena/:token', async (req, res) => {
         nueva_Contrasena
     } = req.body;
 
-    if (!nueva_Contrasena) {
-        req.flash('message', 'No se ha recibido ningún dato');
-        res.redirect('/nueva-contrasena/' + token);
-        return;
-    }
-
     try {
         //Actualizar la contraseña
         //Encriptar la contraseña
         let contrasena = await helpers.encryptPassword(nueva_Contrasena);
         console.log(contrasena);
-        pool.query('UPDATE USUARIO SET us_Password = ? WHERE us_ID = ?', [contrasena, id]);
+        pool.query('UPDATE USUARIO SET us_Password = ? WHERE us_ID = ?', [contrasena, token]);
         res.redirect('/signin');
     } catch (error) {
         return res.status(401).send({

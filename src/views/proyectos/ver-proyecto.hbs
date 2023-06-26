@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="/js/grafica.js"></script>
 <main id="proyecto-main">
     
         <h1> Proyecto - {{proyecto.pr_Nombre}}</h1>
@@ -30,29 +32,28 @@
                             <th> Nombre</th>
                             <th> Fecha Inicio</th>
                             <th> Fecha Fin</th>
-                            <th> Progreso</th>
+                            <th class="pb"> Progreso</th>
+                            <th> Editar </th>
+                            <th> Eliminar </th>
                         </tr>                    
                     </thead>
                     <tbody>
 
                         {{#each fases}}
                         <tr>
-                            <td class="fase-nombre"><a href="pages/fase/{{fp_ID}}">{{fp_Nombre}}</a></td>
+                            <td class="fase-nombre"><b>{{fp_Nombre}}</b></td>
                             <td class="fec-ini"> {{fp_FechaInicio}}</td>
                             <td class="fec-fin"> {{fp_FechaFin}}</td>
-                            <td> 
+                            <td class="pb"> 
                                 <div class="progress-bar-td">
                                     <div class="progress-bar">
-                                        <div class="progress-bar-fill" id="progressbar">
-                                            <script>
-                                                var progressbar = document.getElementById("progressbar");
-                                                progressbar.style.width = "{{pr_PorcentajeAvance}}%";
-                                            </script>
-                                        </div>
+                                        <div class="progress-bar-fill" id="progress-bar-fill-{{fp_ID}}" style=" width: {{fp_PorcentajeAvance}}%"></div>
                                     </div>  
                                     <p>{{fp_PorcentajeAvance}}%</p>
                                 </div>
                             </td>
+                            <td class="imgs"><a href="../editar-fase/{{fp_ID}}"><img src="/images/edit.png" alt="Editar"/></a></td>
+                            <td class="imgs"><a href="../eliminar-fase/{{fp_ID}}"><img src="/images/delete.png" alt="Eliminar"/></a></td>
                         </tr>
                         {{/each}}
 
@@ -70,8 +71,8 @@
         </div>
 
 
-    </main>
-    <script src="../js/progressbar.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-    {{!-- <script src="../js/grafica.js"></script> --}}
+</main>
+    {{!-- <script src="../js/progressbar.js"></script> --}}
+    
+
     

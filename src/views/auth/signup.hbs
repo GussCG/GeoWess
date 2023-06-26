@@ -23,28 +23,28 @@
                 <h1>Registro</h1>
                 <form id="registro-form" action="/signup" method="post">     
                     <div class="reg-field">
-                        <input type="text" id="registro-Nombre" placeholder="Nombre" name="nombre_registro"><label for="registro-Nombre">Nombre</label>
+                        <input type="text" id="registro-Nombre" placeholder="Nombre" name="nombre_registro" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-Nombre">Nombre</label>
                     </div>
                     <div class="reg-field">
-                        <input type="text" id="registro-ApellidoPat" placeholder="Apellido Paterno" name="apellidopat_registro"><label for="registro-ApellidoPat">Apellido Paterno</label>
+                        <input type="text" id="registro-ApellidoPat" placeholder="Apellido Paterno" name="apellidopat_registro" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-ApellidoPat">Apellido Paterno</label>
                     </div>
                     <div class="reg-field">
-                        <input type="text" id="registro-ApellidoMat" placeholder="Apellido Materno" name="apellidomat_registro"><label for="registro-ApellidoMat">Apellido Materno</label>
+                        <input type="text" id="registro-ApellidoMat" placeholder="Apellido Materno" name="apellidomat_registro" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-ApellidoMat">Apellido Materno</label>
                     </div>
                     <div class="reg-field">
-                        <input type="date" id="registro-FechaNac" placeholder="Fecha de Nacimiento" name="fecnac_registro"><label for="registro-FechaNac">Fecha de Nacimiento</label>                        
+                        <input type="date" id="registro-FechaNac" placeholder="Fecha de Nacimiento" name="fecnac_registro" required><label for="registro-FechaNac">Fecha de Nacimiento</label>                        
                     </div>
                     <div class="reg-field">
-                        <input type="text" id="registro-Correo" placeholder="Correo Electrónico" name="correo_registro"><label for="registro-Correo" >Correo Electrónico</label>
+                        <input type="text" id="registro-Correo" placeholder="Correo Electrónico" name="correo_registro" pattern="/[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm" required><label for="registro-Correo" >Correo Electrónico</label>
                     </div>
                     <div class="reg-field">
-                        <input type="text" id="registro-Telefono" placeholder="Teléfono" name="telefono_registro"><label for="registro-Telefono">Teléfono</label>
+                        <input type="text" id="registro-Telefono" placeholder="Teléfono" name="telefono_registro" pattern="^\d{10}$" required><label for="registro-Telefono">Teléfono</label>
                     </div>
                     <div class="reg-field">
-                        <input type="text" id="registro-RFC" placeholder="RFC" name="rfc_registro"><label for="registro-RFC">RFC</label>
+                        <input type="text" id="registro-RFC" placeholder="RFC" name="rfc_registro" pattern="^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})" required><label for="registro-RFC">RFC</label>
                     </div>                    
                     <div class="reg-field">
-                        <input type="password" id="login-password" placeholder="Contraseña" name="pass_registro"><label for="login-password">Contraseña</label><img src="../images/close-eye.png" alt="Mostrar contraseña" id="eye">
+                        <input type="password" id="login-password" placeholder="Contraseña" name="pass_registro" ><label for="login-password">Contraseña</label><img src="../images/close-eye.png" alt="Mostrar contraseña" id="eye">
                     </div>
 
                     <select name="tipoUsr" id="tipoUsuario">

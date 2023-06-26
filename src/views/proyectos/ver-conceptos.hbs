@@ -41,8 +41,8 @@
                     <tr class="row-form">
                         <form action="../crear-concepto/{{partida.pt_ID}}" method="POST">
                             <td></td>
-                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" required></td>
-                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" required></td>
+                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required></td>
+                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-^]{2,48}$" required></td>
                             <td><input type="number" name="cp_Cantidad" placeholder="Cantidad" required></td>
                             <td><input type="text" name="cp_PrecioUnitario" placeholder="Precio Unitario" required></td>
                             <td></td>

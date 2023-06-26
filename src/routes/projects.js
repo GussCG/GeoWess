@@ -34,6 +34,15 @@ const dateFormat = (date) => {
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
     let anio = fecha.getFullYear();
+
+    if (mes < 10) {
+        mes = '0' + mes;
+    }
+
+    if (dia < 10) {
+        dia = '0' + dia;
+    }
+
     return `${dia}/${mes}/${anio}`;
 }
 
@@ -94,6 +103,7 @@ const calcPorcentaje = (fase) => {
     return Math.round(porcentaje);
 }
 
+//Generar la clave del concepto
 const genClave = (nombre, id) => {
     let clave = '';
     //Primeras dos letras del nombre de la partida
@@ -102,6 +112,24 @@ const genClave = (nombre, id) => {
     clave += id;
 
     return clave;
+}
+
+//Formatear Fecha para inputs {yyyy-mm-dd}
+const formatDateInput = (date) => {
+    let fecha = new Date(date);
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1;
+
+    if (mes < 10) {
+        mes = '0' + mes;
+    }
+
+    if (dia < 10) {
+        dia = '0' + dia;
+    }
+
+    let anio = fecha.getFullYear();
+    return `${anio}-${mes}-${dia}`;
 }
 
 //?RUTAS
@@ -255,6 +283,76 @@ router.post('/crear-partida/:pr_id', isLoggedIn, async (req, res) => {
     res.redirect('../catalogo-conceptos/' + pr_id);
 });
 
+//Editar una partida
+//Renderizar la vista
+router.get('/editar-partida/:pt_id', isLoggedIn, async (req, res) => {
+    const {
+        pt_id
+    } = req.params;
+
+    //Obtener el id del catalogo de conceptos
+    const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+
+    //Obtener la partida
+    const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    res.render('proyectos/editar-partida', {
+        proyecto: proyecto[0],
+        partida: partida[0],
+        layout: 'logged-layout'
+    });
+});
+
+//Editar la partida
+router.post('/editar-partida/:pt_id', isLoggedIn, async (req, res) => {
+    const {
+        pt_id
+    } = req.params;
+
+    const {
+        pt_Nombre
+    } = req.body;
+
+    const newPartida = {
+        pt_Nombre
+    }
+
+    let query = 'UPDATE PARTIDA SET ? WHERE pt_ID = ?';
+    pool.query(query, [newPartida, pt_id]);
+
+    //Obtener el id del catalogo de conceptos
+    const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    //Obtener el id del proyecto
+    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+
+    req.flash('success', "Se ha editado la partida");
+    res.redirect('../catalogo-conceptos/' + proyecto[0].pr_ID);
+});
+
+//Eliminar una partida
+router.get('/eliminar-partida/:pt_id', isLoggedIn, async (req, res) => {
+    const {
+        pt_id
+    } = req.params;
+
+    //Obtener el id del catalogo de conceptos
+    const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+
+    //Obtener el id del proyecto
+    const proyecto = await pool.query('SELECT pr_ID FROM PROYECTO WHERE pr_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+
+    //Eliminar la partida
+    let query = 'DELETE FROM PARTIDA WHERE pt_ID = ?';
+    pool.query(query, [pt_id]);
+
+    req.flash('success', "Se ha eliminado la partida");
+    res.redirect('../catalogo-conceptos/' + proyecto[0].pr_ID);
+});
+
 //! Catalogo de conceptos
 //Renderizar la vista
 router.get('/catalogo-conceptos/:pr_id', isLoggedIn, async (req, res) => {
@@ -303,8 +401,16 @@ router.get('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
         pr_id
     } = req.params;
 
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
+    //Formatear las fechas del proyecto
+    proyecto[0].pr_FechaInicio = formatDateInput(proyecto[0].pr_FechaInicio);
+    proyecto[0].pr_FechaFin = formatDateInput(proyecto[0].pr_FechaFin);
+
     res.render('proyectos/crear-fase', {
         pr_id,
+        proyecto: proyecto[0],
         layout: 'logged-layout'
     });
 });
@@ -332,6 +438,10 @@ router.post('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
         fp_Proyecto: pr_id
     }
 
+    //Formatear las fechas de la fase
+    newFase.fp_FechaInicio = dateFormat(newFase.fp_FechaInicio);
+    newFase.fp_FechaFin = dateFormat(newFase.fp_FechaFin);
+
     let query = 'INSERT INTO FASE_PROYECTO SET ?';
     await pool.query(query, [newFase]);
 
@@ -352,11 +462,54 @@ router.get('/editar-fase/:fp_id', isLoggedIn, async (req, res) => {
     //Obtener la fase
     const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
 
+    //Formatear las fechas
+    fase[0].fp_FechaInicio = formatDateInput(fase[0].fp_FechaInicio);
+    fase[0].fp_FechaFin = formatDateInput(fase[0].fp_FechaFin);
+
+    //console.log(fase);
+
+    //Formatear las fechas del proyecto
+    const proyecto_2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto[0].fp_Proyecto]);
+    proyecto_2[0].pr_FechaInicio = formatDateInput(proyecto_2[0].pr_FechaInicio);
+    proyecto_2[0].pr_FechaFin = formatDateInput(proyecto_2[0].pr_FechaFin);
+
+    //console.log(proyecto_2);
+
     res.render('proyectos/editar-fase', {
+        proyecto2: proyecto_2[0],
         proyecto: proyecto[0],
         fase: fase[0],
         layout: 'logged-layout'
     });
+});
+
+//Editar la fase
+router.post('/editar-fase/:fp_id', isLoggedIn, async (req, res) => {
+    const {
+        fp_id
+    } = req.params;
+
+    const {
+        fp_Nombre,
+        fp_FechaInicio,
+        fp_FechaFin
+    } = req.body;
+
+    //Revisar que las fechas esten en el rango del proyecto
+    const fase_proyecto = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [fase_proyecto[0].fp_Proyecto]);
+
+        const newFase = {
+            fp_Nombre,
+            fp_FechaInicio,
+            fp_FechaFin
+        }
+    
+        let query = 'UPDATE FASE_PROYECTO SET ? WHERE fp_ID = ?';
+        pool.query(query, [newFase, fp_id]);
+    
+        req.flash('success', "Se ha editado la fase");
+        res.redirect('/proyectos/ver-proyecto/' + fase_proyecto[0].fp_Proyecto);
 });
 
 //Eliminar una fase

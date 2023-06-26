@@ -1,0 +1,42 @@
+#catalogo-form-main {
+    width: 90%;
+    height: max-content;
+    margin: 0 auto;
+}
+
+.partida-form-data {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.partida-form-data h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.partida-form-data form {
+    width: 100%;
+    margin: 50px auto;
+}
+
+#btn-registrar-partida, #btn-editar-partida {
+    width: 160px;
+    height: 36px;
+    background-color: var(--lr-button-color);
+    border-radius: 50px;
+    border: 0;
+
+    font-family: var(--font-family);
+    font-size: var(--lr-button-font-size);
+    font-weight: var(--bold);
+    font-style: normal;
+    line-height: 23px;
+    padding: 7px;
+
+    transition:transform .3s ease-in-out, background-color .3s ease-in-out;; 
+}
+
+#btn-registrar-partida:hover, #btn-editar-partida:hover {
+    background-color: var(--lr-button-hover-color);
+    transform: scale(1.1);
+}

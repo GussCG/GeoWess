@@ -41,10 +41,10 @@
                     <tr class="row-form">
                         <form action="../editar-concepto/{{concepto.cp_ID}}" method="POST">
                             <td>{{concepto.cp_Clave}}</td>
-                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" value="{{concepto.cp_Nombre}}"></td>
-                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" value="{{concepto.cp_Unidad}}"></td>
+                            <td><input type="text" name="cp_Nombre" placeholder="Nombre" value="{{concepto.cp_Nombre}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required></td>
+                            <td><input type="text" name="cp_Unidad" placeholder="Unidad" value="{{concepto.cp_Unidad}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-^]{2,48}$" required></td>
                             <td><input type="number" name="cp_Cantidad" placeholder="Cantidad" value="{{concepto.cp_Cantidad}}"></td>
-                            <td><input type="text" name="cp_PrecioUnitario" placeholder="Precio Unitario" value="{{concepto.cp_PrecioUnitario}}"></td>
+                            <td><input type="text" name="cp_PrecioUnitario" placeholder="Precio Unitario" value="{{concepto.cp_PrecioUnitario}}" required></td>
                             <td>$ {{concepto.cp_Importe}}</td>
                             <td colspan="2"><input type="submit" value="Editar" id="btnEditarConcepto"></td>
                         </form>

@@ -2,22 +2,25 @@
     <h1> Editar Usuario</h1>
     <form action="/usuario/editar-perfil/{{usuario.us_ID}}" method="POST">            
         <div class="reg-field">
-            <input type="text" id="registro-Nombre-Usuario" placeholder="Nombre" name="nombre_user" value="{{usuario.us_Nombre}}" ><label for="registro-Nombre-Usuario">Nombre</label>
+            <input type="text" id="registro-Nombre-Usuario" placeholder="Nombre" name="nombre_user" value="{{usuario.us_Nombre}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required ><label for="registro-Nombre-Usuario">Nombre</label>
         </div>
         <div class="reg-field">
-            <input type="text" id="registro-ApPat-Usuario" placeholder="Apellido Paterno" name="apPaterno_user" value="{{usuario.us_ApPaterno}}" ><label for="registro-ApPat-Usuario">Apellido Paterno</label>
+            <input type="text" id="registro-ApPat-Usuario" placeholder="Apellido Paterno" name="apPaterno_user" value="{{usuario.us_ApPaterno}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required ><label for="registro-ApPat-Usuario">Apellido Paterno</label>
         </div>
         <div class="reg-field">
-            <input type="text" id="registro-ApMat-Usuario" placeholder="Nombre" name="apMaterno_user" value="{{usuario.us_ApMaterno}}" ><label for="registro-ApMat-Usuario">Apellido Materno</label>
-        </div>        
+            <input type="text" id="registro-ApMat-Usuario" placeholder="Nombre" name="apMaterno_user" value="{{usuario.us_ApMaterno}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}" required><label for="registro-ApMat-Usuario">Apellido Materno</label>
+        </div>
         <div class="reg-field">
-            <input type="text" id="registro-Email-Proyecto" placeholder="Email" name="email_user" value="{{usuario.us_Email}}"><label for="registro-Email-Proyecto">Correo Electrónico</label>
+            <input type="date" id="registro-FechaNac" placeholder="Fecha de Nacimiento" value="{{usuario.us_FechaNac}}" name="fecnac_registro" required><label for="registro-FechaNac">Fecha de Nacimiento</label> 
+        </div>       
+        <div class="reg-field">
+            <input type="text" id="registro-Email-Proyecto" placeholder="Email" name="email_user" value="{{usuario.us_Email}}" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" required><label for="registro-Email-Proyecto">Correo Electrónico</label>
         </div> 
         <div class="reg-field">
-            <input type="text" id="registro-Telefono-Proyecto" placeholder="Teléfono" name="telefono_user" value="{{usuario.us_Telefono}}"><label for="registro-Telefono-Proyecto">Teléfono</label>
+            <input type="text" id="registro-Telefono-Proyecto" placeholder="Teléfono" name="telefono_user" pattern="^\d{10}$" required value="{{usuario.us_Telefono}}"><label for="registro-Telefono-Proyecto">Teléfono</label>
         </div>
         <div class="reg-field">
-            <input type="text" id="registro-RFC-Proyecto" placeholder="RFC" name="RFC_user" value="{{usuario.us_RFC}}"><label for="registro-RFC-Proyecto">RFC</label>
+            <input type="text" id="registro-RFC-Proyecto" placeholder="RFC" name="RFC_user" value="{{usuario.us_RFC}}" pattern="^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})" required><label for="registro-RFC-Proyecto">RFC</label>
         </div>
         <input type="submit" value="Guardar Cambios" id="btn-editar-usuario">  
     </form>

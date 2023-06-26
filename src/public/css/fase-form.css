@@ -69,7 +69,7 @@ input::placeholder {
     color: transparent;
 }
 
-#btn-registrar-fase {
+#btn-registrar-fase, #btn-editar-fase {
     width: 160px;
     height: 36px;
     background-color: var(--lr-button-color);
@@ -87,7 +87,7 @@ input::placeholder {
     grid-column: 2/3;
 }
 
-#btn-registrar-fase:hover {
+#btn-registrar-fase:hover, #btn-editar-fase:hover {
     background-color: var(--lr-button-hover-color);
     transform: scale(1.1);
 }

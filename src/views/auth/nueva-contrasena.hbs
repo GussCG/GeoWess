@@ -1,16 +1,16 @@
 <main id="recuperar-main">
         <a href="/" id="logo">
-            <img src="./images/GWlogo.png" alt="GeoWess"/>
+            <img src="/images/GWlogo.png" alt="GeoWess"/>
         </a>
 
         <div class="rec-container">
             <div class="rec-form">
                 <h1>Olvidaste tu Contraseña?</h1>
-                <form id="recuperar-form" action="/nueva-contrasena/{{id}}" method="POST">     
+                <form id="recuperar-form" action="/nueva-contrasena/{{token}}" method="POST">     
                     <p>Introduce la nueva contraseña</p>
 
                     <div class="rec-field">
-                        <input type="text" id="nueva-Pass" placeholder="Contraseña" name="nueva_Contrasena"><label for="nueva-Pass">Contraseña</label>
+                        <input type="text" id="nueva-Pass" placeholder="Contraseña" name="nueva_Contrasena" required><label for="nueva-Pass">Contraseña</label>
                     </div>
 
                     <input type="submit" value="Cambiar" id="btn-recuperar">

@@ -1,0 +1,17 @@
+<main id="catalogo-form-main">    
+
+    <div class="titulo-back">
+            <a href="../catalogo-conceptos/{{proyecto.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1> Catálogo de Conceptos</h1>          
+    </div>
+
+    <div class="partida-form-data"> 
+        <h2>Editar Partida</h2>
+        <form id="partida-form" action=".././editar-partida/{{partida.pt_ID}}" method="post">
+            <div class="reg-field">
+                <input type="text" id="registro-Nombre-Partida" placeholder="Nombre de la partida" name="pt_Nombre" value="{{partida.pt_Nombre}}" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-Nombre-Partida">Nombre de la partida</label>
+            </div>
+            <input type="submit" value="Editar" id="btn-editar-partida">
+        </form>
+    </div>
+</main>

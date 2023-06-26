@@ -8,7 +8,7 @@
                 <h1>Iniciar Sesión</h1>
                 <form id="login-form" action="/signin" method="post">     
                     <div class="login-field">
-                        <input type="text" id="login-email" placeholder="Correo electrónico" name="correo_login"><label for="login-email">Correo electrónico</label>
+                        <input type="text" id="login-email" placeholder="Correo electrónico" name="correo_login" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" required><label for="login-email">Correo electrónico</label>
                     </div>               
                     <div class="login-field">
                         <input type="password" id="login-password" placeholder="Contraseña" name="pass_login"><label for="login-password">Contraseña</label><img src="/images/close-eye.png" alt="Mostrar contraseña" id="eye">

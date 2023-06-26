@@ -5,13 +5,13 @@
             <form id="fase-form" action="../crear-fase/{{pr_id}}" method="post">
             <div class="fase-reg-cont">
                 <div class="reg-field">
-                    <input type="text" id="registro-Nombre-Proyecto" placeholder="Nombre de la fase" name="nombre_fase"><label for="registro-Nombre-Proyecto">Nombre de la Fase</label>
+                    <input type="text" id="registro-Nombre-Proyecto" placeholder="Nombre de la fase" name="nombre_fase" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-Nombre-Proyecto">Nombre de la Fase</label>
                 </div>
                 <div class="reg-field">
-                    <input type="date" id="registro-FechaIni-Proyecto" placeholder="Fecha de Inicio" name="fechaInicio_fase"><label for="registro-FechaIni-Proyecto">Fecha de Inicio</label>
+                    <input type="date" id="registro-FechaIni-Proyecto" placeholder="Fecha de Inicio" min="{{proyecto.pr_FechaInicio}}" max="{{proyecto.pr_FechaFin}}" name="fechaInicio_fase"><label for="registro-FechaIni-Proyecto">Fecha de Inicio</label>
                 </div>
                 <div class="reg-field">
-                    <input type="date" id="registro-FechaFin-Proyecto" placeholder="Fecha de Fin" name="fechaFin_fase"><label for="registro-FechaFin-Proyecto">Fecha de Fin</label>
+                    <input type="date" id="registro-FechaFin-Proyecto" placeholder="Fecha de Fin" min="{{proyecto.pr_FechaInicio}}" max="{{proyecto.pr_FechaFin}}" name="fechaFin_fase"><label for="registro-FechaFin-Proyecto">Fecha de Fin</label>
                 </div>    
             </div>  
             <input type="submit" value="Registrar Fase" id="btn-registrar-fase">          
