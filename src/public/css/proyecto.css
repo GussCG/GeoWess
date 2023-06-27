@@ -1,6 +1,7 @@
 #proyecto-main {
-    margin: 27px 32px;
-    height: 90%;
+    margin: 0 auto;
+    width: 95%;
+    height: 750px;
     min-height: 700px;
     background-color: #fff;
     border-radius: 20px;
@@ -10,11 +11,33 @@
     -moz-box-shadow: 1px 1px 57px -8px rgba(0,0,0,0.58); */
 }
 
-#proyecto-main  h1 {
+.titulo-pr {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.titulo-pr  h1 {
+    width: 70%;
     font-size: var(--dashboard-h1-font-size);
     font-weight: var(--bold);
     color: var(--lr-title-color);
     margin: 27px 0 0 34px;
+}
+
+.titulo-pr a {
+    width: fit-content;
+    position: relative;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+    text-align: center;
+    margin: 45px auto auto 34px;
 }
 
 #proyecto-main .proyecto-detalles {
@@ -25,7 +48,8 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
+    text-align: center;
 }
 
 #proyecto-main .proyecto-detalles-info {
@@ -40,17 +64,18 @@
 
 #proyecto-main .proyecto-detalles-info a {
     position: relative;
-    color: var(--a-logged-color);
+    color: #000;
     text-decoration: none;
+    font-weight: bold;
     transition: all .3s ease-in-out;
 }
 
-#proyecto-main .proyecto-detalles-info a::before{
+#proyecto-main .proyecto-detalles-info a::before, .titulo-pr a::before{
     content: '';
     position: absolute;
     width: 100%;
     height: 3px;
-    bottom: -5px;
+    bottom: -7px;
     left: 0;
     background-color: var(--a-logged-color);
     visibility: hidden;
@@ -58,13 +83,9 @@
     transition: all 0.3s ease-in-out 0s;
 }
 
-#proyecto-main .proyecto-detalles-info a:hover:before {
+#proyecto-main .proyecto-detalles-info a:hover:before, .titulo-pr a:hover:before {
 	visibility: visible;
     transform: scaleX(1);
-}
-
-#proyecto-main .proyecto-detalles-info a:hover {
-    opacity: 0.8;
 }
 
 #proyecto-main .proyecto-detalles-ubicacion {
@@ -75,7 +96,6 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
 }
 
 #proyecto-main .proyecto-detalles-ubicacion img {
@@ -273,14 +293,13 @@
 
     #proyecto-main {
         width: 90%;
-        margin: 27px 32px;
-        height: 90%;
+        margin: 0 auto;
         background-color: #fff;
         border-radius: 20px;
     }
 
     #proyecto-main .proyecto-detalles-info{
-        margin: auto 1%;
+        margin-top: 10px 10px;
     }
 
     #proyecto-main .proyecto-fases h2, #proyecto-main .grafica-cont h2 {
@@ -293,7 +312,7 @@
 
     #proyecto-main .proyecto-fases {
         width: 100%;
-        height: 450px;
+        height: 420px;
     }
 
     #proyecto-main .proyecto-fases tbody tr {

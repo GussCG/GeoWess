@@ -229,6 +229,13 @@ router.post('/anadir-usuario/:id', isLoggedIn, async (req, res) => {
             html: 'Hola, <strong>'+email_supervisor[0].us_Nombre+' '+email_supervisor[0].us_ApPaterno+' '+email_supervisor[0].us_ApMaterno+'</strong>.<br><br>La supervisora <strong>'+nombre_supervisora[0].us_Nombre+' '+nombre_supervisora[0].us_ApPaterno+' '+nombre_supervisora[0].us_ApMaterno+'</strong>  te ha asignado a su proyecto.<br><br>Saludos,<br>Geowess.',
         };
 
+        const newUHP = {
+            up_ID: getID(),
+            up_Usuario: supervisor,
+            up_Proyecto: email_supervisor[0].us_Proyecto
+        };
+
+
         //Meter a User_has_Projects
         const r = pool.query('INSERT INTO USER_HAS_PROJECTS (up_Usuario, up_Proyecto) VALUES (?, ?)', [id, email_supervisor[0].us_Proyecto]);
 

@@ -1,7 +1,7 @@
 #documents-index-main{
     margin: 20px auto 0 auto;
     width: 90%;
-    height: 90%;
+    height: 700px;
     background-color: rgba(255, 255, 255, .6);
     border: 8px solid #fff;
     border-radius: 50px;
@@ -17,17 +17,21 @@
 .documents {
     width: 90%;
     height: 90%;
-    margin: 0 auto;
+    margin: 0 auto 100px auto;
     display: grid;
     grid-template-columns: repeat(
         auto-fit,
-        minmax(200px, 1fr)
+        minmax(300px, 1fr)
     );
     grid-gap: 20px;
+    overflow: scroll;
+    scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
+    scrollbar-gutter: initial;
 }
 
 .documents-user {
-    width: 100%;
+    width: 90%;
     height: fit-content;
     margin: 40px auto;
     display: flex;
@@ -38,7 +42,8 @@
 }
 
 .documents-user label {
-    font-size: 14px;
+    width: 100%;
+    font-size: 12px;
     font-weight: var(--semibold);
     text-align: center;
 }
@@ -54,11 +59,27 @@
 }
 
 /*Responsive*/
-@media screen and (max-width: 550px){
+@media screen and (max-width: 1238px){
     .documents {
+        padding-bottom: 100px;
         overflow-y: scroll;
         scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0);
         scrollbar-width: thin;
         scrollbar-gutter: initial;
+    }
+
+    .documents-user {
+        width: 100%;
+        height: fit-content;
+        margin: 40px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .documents-user img{
+        width: 60px;
     }
 }

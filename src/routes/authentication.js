@@ -127,6 +127,7 @@ router.get('/logout', isLoggedIn, (req, res) => {
         if (err) {
             console.log(err);
         }
+        req.flash('success', 'Sesión cerrada');
         res.redirect('/');
     })
 });

@@ -33,63 +33,63 @@
                     font-style: normal;
                     text-align: center;
                     margin-bottom: 5px;">
-            {{proyecto.pr_Nombre}}
+            {{project.pr_Nombre}}
         </h1>
         <h2 style=" font-size: 16px; 
                     font-weight: 200;
                     text-align: center;
                     margin-bottom: 30px;
         ">
-            Catálogo de Conceptos de {{fases}}
+            Catálogo de Conceptos General
         </h2>
     </div>
 
 
     <!-- Es una tabla donde se  -->
     <div class="tabla-conceptos" style="    
-    width: 100%;
-    height: 100%;
-    background-color: #fff;">
-<table>
-    <thead>
-        <tr>
-            <th>Fase</th>
-            <th>Partida</th>
-            <th>Clave</th>
-            <th>Concepto</th>
-            <th>Unidad</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Importe</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td colspan="8" class="fase">{{fases}}</td>
-        </tr>
-            {{#each catalogo.partidas}}
-            <tr>
-                <td colspan="8" class="partida">{{pt_Nombre}}</td>
-            </tr>
-                {{#each this.conceptos}}
+            width: 100%;
+            height: 100%;
+            background-color: #fff;">
+        <table>
+            <thead>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td class="concepto">{{cp_Clave}}</td>
-                    <td class="concepto">{{cp_Nombre}}</td>
-                    <td class="concepto">{{cp_Unidad}}</td>
-                    <td class="concepto">{{cp_Cantidad}}</td>
-                    <td class="concepto">$ {{cp_PrecioUnitario}}</td>
-                    <td class="concepto">$ {{cp_Importe}}</td>
+                    <th>Fase</th>
+                    <th>Partida</th>
+                    <th>Clave</th>
+                    <th>Concepto</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Importe</th>
                 </tr>
+            </thead>
+            <tbody>
+                {{#each catalogo.fases}}
+                <tr>
+                    <td colspan="8" class="fase">{{fp_Nombre}}</td>
+                </tr>
+                    {{#each this.partidas}}
+                    <tr>
+                        <td colspan="8" class="partida">{{pt_Nombre}}</td>
+                    </tr>
+                        {{#each this.conceptos}}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="concepto">{{cp_Clave}}</td>
+                            <td class="concepto">{{cp_Nombre}}</td>
+                            <td class="concepto">{{cp_Unidad}}</td>
+                            <td class="concepto">{{cp_Cantidad}}</td>
+                            <td class="concepto">$ {{cp_PrecioUnitario}}</td>
+                            <td class="concepto">$ {{cp_Importe}}</td>
+                        </tr>
+                        {{/each}}
+                    {{/each}}
                 {{/each}}
-            {{/each}}
-    </tbody>
+            </tbody>
 
-</table>
-</div>
-
-
+        </table>
+    </div>
 
 </body>
 

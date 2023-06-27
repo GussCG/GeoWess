@@ -32,160 +32,61 @@
                     font-style: normal;
                     text-align: center;
                     margin-bottom: 5px;">
-            {{catalogo.proyecto.pr_Nombre}}
+            {{catalogo.fp_Nombre}}
         </h1>
-        <h2 style=" font-size: 20px;
-                    font-weight: medium;
-                    text-align: center;
-                    margin-bottom: 15px;">
-            {{catalogo.catalogo.fp_Nombre}}
-        </h2>
-        <h3 style=" font-size: 16px; 
+        <h2 style=" font-size: 16px; 
                     font-weight: 200;
                     text-align: center;
                     margin-bottom: 30px;
         ">
             Catálogo de Conceptos
-        </h3>
+        </h2>
     </div>
 
 
-    <!-- Por cada   -->
+    <!-- Es una tabla donde se  -->
     <div class="tabla-conceptos" style="    
             width: 100%;
             height: 100%;
             background-color: #fff;">
-        <table style="
-                    width: 90%;
-                    height: fit-content;
-                    margin: 0 auto;
-                    border-collapse: collapse;">
-            <thead style="
-                        width: 100%;
-                        background-color: #000;
-                        color: #fff;
-                        border: 1px solid #000;">
-                <tr style="
-                        width: 100%;
-                        height: 50px;">
-                    <th style="
-                            width: fit-content;
-                            text-align: center;
-                            font-size: 14px;
-                            font-weight: bold;
-                            text-align: center;">
-                        Partida
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Clave
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Nombre
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Unidad
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Cantidad
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Precio Unitario
-                    </th>
-                    <th style="
-                        width: fit-content;
-                        text-align: center;
-                        font-size: 14px;
-                        font-weight: bold;
-                        text-align: center;">
-                        Importe
-                    </th>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fase</th>
+                    <th>Partida</th>
+                    <th>Clave</th>
+                    <th>Concepto</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Importe</th>
                 </tr>
             </thead>
-            <tbody style="
-                width: 100%;
-                height: fit-content;">
-                {{#each catalogo.conceptos}}
-                <tr style="
-                        width: 100%;
-                        height: 50px;">
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 600;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            {{this.cp_Partida}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            font-style: italic;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            {{this.cp_Clave}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            {{this.cp_Nombre}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            {{this.cp_Unidad}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            {{this.cp_Cantidad}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            $ {{this.cp_PrecioUnitario}}</td>
-                    <td style="
-                            width: fit-content;
-                            font-size: 14px;
-                            font-weight: 200;
-                            text-align: center;
-                            border: 1px solid #000;">
-                            $ {{this.cp_Importe}}</td>
+            <tbody>
+                {{#each catalogo.fases}}
+                <tr>
+                    <td colspan="8" class="fase">{{fp_Nombre}}</td>
                 </tr>
+                    {{#each this.partidas}}
+                    <tr>
+                        <td colspan="8" class="partida">{{pt_Nombre}}</td>
+                    </tr>
+                        {{#each this.conceptos}}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="concepto">{{cp_Clave}}</td>
+                            <td class="concepto">{{cp_Nombre}}</td>
+                            <td class="concepto">{{cp_Unidad}}</td>
+                            <td class="concepto">{{cp_Cantidad}}</td>
+                            <td class="concepto">$ {{cp_PrecioUnitario}}</td>
+                            <td class="concepto">$ {{cp_Importe}}</td>
+                        </tr>
+                        {{/each}}
+                    {{/each}}
                 {{/each}}
             </tbody>
+
         </table>
     </div>
 

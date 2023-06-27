@@ -208,6 +208,8 @@ const crearApiRest = async (proyecto) => {
 
 }
 
+//Suma todos los netos a recibir de las estimaciones de un proyecto
+
 //?RUTAS
 //!Proyectos index
 router.get('/', async (req, res) => {
@@ -999,34 +1001,47 @@ router.get('/generar-catalogo/:fp_id', isLoggedIn, async (req, res) => {
 
     const template = fs.readFileSync(path.join(__dirname, '../views/layouts/template-catalogo.html'), 'utf8');
 
-    //Obtener el catalogo de conceptos de la fase
-    const catalogo = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+    //Obtener el id del proyecto
+    const proyecto_id = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
 
     //Obtener el proyecto
-    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [catalogo[0].fp_Proyecto]);
+    const project = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto_id[0].fp_Proyecto]);
 
-    //Obtener las partidas del catalogo de conceptos
-    const partidas = await pool.query('SELECT * FROM PARTIDA WHERE pt_CatalogoConceptos = ?', [catalogo[0].fp_CatalogoConceptos]);
+    //Obtener el proyecto del json
+    const url = 'http://localhost:3000/json/proyecto'+project[0].pr_ID+'.json';
 
-    //Obtener todos los conceptos de las partidas
-    const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida IN (SELECT pt_ID FROM PARTIDA WHERE pt_CatalogoConceptos = ?)', [catalogo[0].fp_CatalogoConceptos]);
+    //Obtener del json el catalogo de conceptos de la fase de la partida
+    let fases = [];
+    await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            fases = json;
+        });
 
-    console.log(conceptos);
+    let partidas = [];
+    let nombre_fase = '';
+    fases.forEach(fase => {
+        if (fase.fp_ID == fp_id) {
+            partidas = fase.partidas;
+            nombre_fase = fase.fp_Nombre;
+        }
+    });
 
+
+    //Mandar el proyecto a la vista
     const obj = {
-        proyecto: proyecto[0],
-        catalogo: catalogo[0],
-        partidas,
-        conceptos
+        partidas
     }
 
     //Ejemplo de nombre: id_proyecto_id_fase_catalogo.pdf y quitar el espacio del nombre del proyecto
-    const nombrePr = proyecto[0].pr_Nombre.replace(/\s/g, '');
-    const filename = nombrePr + '_' + catalogo[0].fp_Nombre + '_catalogo.pdf';
+    const nombrePr = project[0].pr_Nombre.replace(/\s/g, '');
+    const filename = nombrePr + '_' + proyecto_id[0].fp_Nombre + '_catalogo.pdf';
     //Renderizar el template y subirlo a documentos del usuario y documentos del proyecto
     const doc = {
         html: template,
         data: {
+            proyecto: project[0],
+            fase: nombre_fase,
             catalogo: obj
         },
         path: './src/public/user-docs/' + us_ID + '/' + filename
@@ -1035,9 +1050,11 @@ router.get('/generar-catalogo/:fp_id', isLoggedIn, async (req, res) => {
     const doc2 = {
         html: template,
         data: {
+            proyecto: project[0],
+            fases: nombre_fase,
             catalogo: obj
         },
-        path: './src/public/project-docs/' + proyecto[0].pr_ID + '/' + filename
+        path: './src/public/project-docs/' + project[0].pr_ID + '/' + filename
     }
 
     pdf.create(doc, options)
@@ -1055,16 +1072,123 @@ router.get('/generar-catalogo/:fp_id', isLoggedIn, async (req, res) => {
         .catch(error => {
             console.error(error);
         });
-    res.redirect('/docs/project/' + catalogo[0].fp_Proyecto);
+    
+    req.flash('success', "Debes actualizar la página para ver el documento");
+    res.redirect('/docs/project/' + proyecto_id[0].fp_Proyecto);
 });
 
-//Generar reporte de avance de una fase en PDF
-router.get('/generar-avance/:fp_id', isLoggedIn, async (req, res) => {
+//Generar catalogo de conceptos general del proyecto en PDF
+router.get('/generar-catalogo-general/:pr_id', isLoggedIn, async (req, res) => {
     const {
-        fp_id
+        pr_id
     } = req.params;
 
     const us_ID = req.user.us_ID;
+
+    //Obtener el .json del proyecto
+    const url = 'http://localhost:3000/json/proyecto'+pr_id+'.json';
+
+    const template = fs.readFileSync(path.join(__dirname, '../views/layouts/template-catalogo-gral.html'), 'utf8');
+
+    //Obtener el proyecto de la base de datos
+    const project = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
+    //console.log(project);
+
+    //Obtener el proyecto
+    let fases = [];
+    await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            fases = json;
+        });
+
+    //Mandar el proyecto a la vista
+    const obj = {
+        fases
+    }
+
+    //console.log(obj);
+
+    //Renderizar el template y subirlo a documentos del usuario y documentos del proyecto
+    const doc = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/user-docs/' + us_ID + '/' + project[0].pr_Nombre + '_catalogo_general.pdf'
+    }
+
+    const doc2 = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/project-docs/' + project[0].pr_ID + '/' + project[0].pr_Nombre + '_catalogo_general.pdf'
+    }
+
+    pdf.create(doc, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+
+    pdf.create(doc2, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+    
+    req.flash('success', "Debes actualizar la página para ver el documento");
+    res.redirect('/docs/project/' + project[0].pr_ID);
+});
+
+//Generar reporte de avance de una fase en PDF
+router.get('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    //Obtener el .json del proyecto
+    const url = 'http://localhost:3000/json/proyecto'+pr_id+'.json';
+
+    //Obtener el proyecto
+    let fases = [];
+    await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            fases = json;
+        });
+
+    const obj = {
+        fases
+    }
+
+    console.log(obj);
+
+    res.render('proyectos/generar-avance', {
+        pr_id,
+        catalogo: obj,
+        layout: 'logged-layout'
+    });
+});
+
+router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    const conceptos = req.body;
 
 });
 

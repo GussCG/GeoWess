@@ -1,0 +1,57 @@
+<main id="avance-main">
+
+        <div class="titulo-back">
+            <a href="../ver-proyecto/{{proyecto.pr_ID}}"><img src="/images/previous.png" alt="Volver"></a> 
+            <h1>Generar Estimación</h1>            
+        </div>
+        
+
+        <div class="avance-conceptos-container">
+            <form action="../generar-avance/{{pr_id}}" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fase</th>
+                        <th>Partida</th>
+                        <th>Clave</th>
+                        <th>Concepto</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {{#each catalogo.fases}}
+                    <tr>
+                        <td colspan="8" class="fase">{{fp_Nombre}}</td>
+                    </tr>
+                        {{#each this.partidas}}
+                        <tr>
+                            <td colspan="8" class="partida">{{pt_Nombre}}</td>
+                        </tr>
+                        
+                            {{#each this.conceptos}}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" name="cp_Clave{{cp_ID}}" placeholder="Cantidad" value="{{cp_ID}}" readonly></td>
+                                <td>{{cp_Nombre}}</td>
+                                <td>{{cp_Unidad}}</td>
+                                <td><input type="number" name="cp_Cantidad{{cp_ID}}" placeholder="Cantidad" value="{{cp_Cantidad}}"></td>
+                                <td>$ {{cp_PrecioUnitario}}</td>
+                                <td>$ {{cp_Importe}}</td>
+
+                            {{/each}}
+                        {{/each}}
+                    {{/each}}                                    
+                </tbody>
+            </table>
+            <input type="submit" value="Generar" id="btnGenerarAvance">
+        </form>
+
+
+    </div>
+
+</main>
