@@ -8,15 +8,6 @@ const {
 const {
     render
 } = require('timeago.js');
-const {
-    CanvasRenderService
-} = require('chartjs-node-canvas');
-
-
-const jsdom = require("jsdom");
-const {
-    JSDOM
-} = jsdom;
 
 const fs = require('fs');
 const path = require('path');

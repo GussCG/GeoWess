@@ -17,6 +17,7 @@
   "homepage": "https://github.com/GussCG/GeoWess#readme",
   "description": "",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.3.0",
     "chartjs-node-canvas": "^4.1.6",
@@ -32,6 +33,7 @@
     "nodemailer": "^6.9.3",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "pdf-creator-node": "^2.3.5",
     "pdfmake": "^0.2.7",
     "req-flash": "^0.0.3",
     "timeago.js": "^4.0.2"
