@@ -4,7 +4,7 @@
     <div class="titulo-pr">
         <h1> Proyecto - {{proyecto.pr_Nombre}}</h1>
         <script>
-            if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 2) {
+            if ({{user.us_Tipo}} == 0 || {{user.us_Tipo}} == 5) {
                 document.write('<a href="../generar-avance/{{proyecto.pr_ID}}">Generar estimación</a>');
             }
         </script>        

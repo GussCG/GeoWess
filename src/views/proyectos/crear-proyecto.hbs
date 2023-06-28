@@ -1,7 +1,8 @@
 <main id="proyect-form-main">
     <h1> Nuevo Proyecto </h1>
     <form action="./crear-proyecto" method="POST">
-        <div class="proyecto-form-data">             
+        <div class="proyecto-form-data">  
+            <div class="proyecto-fields">           
                 <div class="reg-field">
                     <input type="text" id="registro-Nombre-Proyecto" placeholder="Nombre del Proyecto" name="nombre_proyecto" pattern="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}$" required><label for="registro-Nombre-Proyecto">Nombre del Proyecto</label>
                 </div>
@@ -10,7 +11,16 @@
                 </div>
                 <div class="reg-field">
                     <input type="date" id="registro-FechaFin-Proyecto" placeholder="Fecha de Fin" name="fechafin_proyecto"><label for="registro-FechaFin-Proyecto">Fecha de Fin</label>
-                </div>          
+                </div>     
+            </div>
+            <div class="select-supervisora">
+                <select name="supervisora_proyecto" id="registro-Tipo-Proyecto">
+                    <option value="0">Supervisora</option>
+                    {{#each supervisoras}}
+                    <option value="{{us_ID}}">{{us_Nombre}} {{us_ApPaterno}} {{us_ApMaterno}}</option>
+                    {{/each}}
+                </select>
+            </div>     
         </div>
 
         <div class="proyecto-form-ubicacion">

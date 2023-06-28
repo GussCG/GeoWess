@@ -1,0 +1,93 @@
+table {
+    border-collapse: collapse;
+    width: 90%;
+    height: fit-content;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+thead {
+    background-color: #000;
+    color: #fff;
+    height: 50px;
+    border: 1px solid #000;
+}
+
+thead tr {
+    width: 100%;
+    height: 100%;
+}
+
+thead tr th {
+    width: fit-content;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+    border-right: 1px solid #fff;
+}
+
+thead tr th:last-child {
+    border-right: none;
+}
+
+tbody {
+    width: 100%;
+    height: fit-content;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+tbody tr {
+    width: 100%;
+}
+
+tbody tr td {
+    width: fit-content;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.fase {
+    background-color: #444343;
+    color: #fff;
+    height: 40px;
+    padding-left: 15px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.partida {
+    background-color: #d9d9d9;
+    text-align: left;
+    height: 30px;
+    padding-left: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+.concepto {
+    height: 20px;
+    font-weight: 400;
+    border: 1px solid #000;
+}
+
+.totals {
+    background-color: #c3c3c3;
+    text-align: left;
+    height: 30px;
+    padding-left: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #000;
+}
+
+.tit {
+    text-align: right;
+    padding-right: 10px;
+}

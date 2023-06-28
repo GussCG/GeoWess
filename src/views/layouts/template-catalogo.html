@@ -53,8 +53,6 @@
 <table>
     <thead>
         <tr>
-            <th>Fase</th>
-            <th>Partida</th>
             <th>Clave</th>
             <th>Concepto</th>
             <th>Unidad</th>
@@ -65,16 +63,14 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="8" class="fase">{{fases}}</td>
+            <td colspan="6" class="fase">{{fases}}</td>
         </tr>
             {{#each catalogo.partidas}}
             <tr>
-                <td colspan="8" class="partida">{{pt_Nombre}}</td>
+                <td colspan="6" class="partida">{{pt_Nombre}}</td>
             </tr>
                 {{#each this.conceptos}}
                 <tr>
-                    <td></td>
-                    <td></td>
                     <td class="concepto">{{cp_Clave}}</td>
                     <td class="concepto">{{cp_Nombre}}</td>
                     <td class="concepto">{{cp_Unidad}}</td>

@@ -15,6 +15,7 @@ const pdf = require('pdf-creator-node');
 const options = require('../lib/options');
 
 const sgMail = require('@sendgrid/mail');
+const e = require('connect-flash');
 sgMail.setApiKey("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");
 
 //?FUNCIONES
@@ -201,6 +202,36 @@ const crearApiRest = async (proyecto) => {
 
 //Suma todos los netos a recibir de las estimaciones de un proyecto
 
+//Obtener el mes en formato string
+const getMes = (mes) => {
+    switch (mes) {
+        case 0:
+            return "Enero";
+        case 1:
+            return "Febrero";
+        case 2:
+            return "Marzo";
+        case 3:
+            return "Abril";
+        case 4:
+            return "Mayo";
+        case 5:
+            return "Junio";
+        case 6:
+            return "Julio";
+        case 7:
+            return "Agosto";
+        case 8:
+            return "Septiembre";
+        case 9:
+            return "Octubre";
+        case 10:
+            return "Noviembre";
+        default:
+            return "Diciembre";
+    }
+}
+
 //?RUTAS
 //!Proyectos index
 router.get('/', async (req, res) => {
@@ -337,7 +368,12 @@ router.get('/salir-proyecto/:pr_id', isLoggedIn, async (req, res) => {
 //!Crear-Proyecto
 //Renderizar la vista
 router.get('/crear-proyecto', isLoggedIn, async (req, res) => {
+
+    //Obtener a las supervisoras
+    const supervisoras = await pool.query('SELECT * FROM USUARIO WHERE us_Tipo = 7');
+
     res.render('proyectos/crear-proyecto', {
+        supervisoras,
         layout: 'logged-layout'
     });
 });
@@ -352,7 +388,8 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) => {
         ciudad_proyecto,
         estado_proyecto,
         pais_proyecto,
-        cp_proyecto
+        cp_proyecto,
+        supervisora_proyecto,
     } = req.body;
     let pr_Ubicacion = direccion_proyecto + ', ' + ciudad_proyecto + ', ' + estado_proyecto + ', ' + pais_proyecto + ', ' + cp_proyecto;
 
@@ -365,6 +402,7 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) => {
         pr_CostoTotal: 0.0,
         pr_Ubicacion,
         pr_Usuario: req.user.us_ID,
+        pr_Supervisora: supervisora_proyecto
     }
 
     let query = 'INSERT INTO PROYECTO SET ?';
@@ -413,8 +451,6 @@ router.get('/editar-proyecto/:pr_id', isLoggedIn, async (req, res) => {
         pais,
         cp
     }
-
-    console.log(ubicacion);
 
     res.render('proyectos/editar-proyecto', {
         proyecto: proyecto[0],
@@ -954,7 +990,10 @@ router.post('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
         cp_Cantidad,
         cp_PrecioUnitario,
         cp_Importe: cp_Cantidad * parseFloat(cp_PrecioUnitario),
+        cp_CantidadMax: 0,
     }
+
+    newConcepto.cp_CantidadMax = newConcepto.cp_Cantidad;
 
     //Actualizar el concepto
     let query = 'UPDATE CONCEPTO SET ? WHERE cp_ID = ?';
@@ -1150,6 +1189,9 @@ router.get('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
         pr_id
     } = req.params;
 
+    //Obtener el proyecto de la base
+    const project = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
     //Obtener el .json del proyecto
     const url = 'http://localhost:3000/json/proyecto'+pr_id+'.json';
 
@@ -1166,10 +1208,13 @@ router.get('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
         fases
     }
 
-    console.log(obj);
+    //Formatear las fechas para input
+    project[0].pr_FechaInicio = formatDateInput(project[0].pr_FechaInicio);
+    project[0].pr_FechaFin = formatDateInput(project[0].pr_FechaFin);
 
     res.render('proyectos/generar-avance', { // Se renderiza la vista
         pr_id,
+        project: project[0],
         catalogo: obj,
         layout: 'logged-layout'
     });
@@ -1180,39 +1225,207 @@ router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
         pr_id
     } = req.params;
 
-    const conceptos = req.body; // Se obtienen los conceptos del formulario
+    const {claves, cantidades} = req.body; // Se obtienen los conceptos del formulario
 
-	for(const element of conceptos){ // Se recorren los conceptos
-		let query = 'UPDATE CONCEPTO SET ? = ? - ? WHERE cp_ID = ?'; // Se actualizan los conceptos en la base de datos
-		await pool.query(query, [element.cp_CantidadMax, element.cp_CantidadMax, element.cp_Cantidad, element.cp_ID]);
-	}
+    //Sacar el proyecto de la base de datos
+    const project = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
 
-	//!Generar el ID de la estimacion
-	const es_ID = genID();
-	await pool.query('INSERT INTO ESTIMACION SET ?', [es_ID, 0, 0, dateFormat(new Date()), dateFormat(new Date()), "Contratante", "Superintendente", "Supervisor", "Estado", "Residente", "Proyecto"]);
-	//!
+    //Obtener el residente del proyecto
+    const cte_Residente = await pool.query('SELECT cte_Residente FROM CONTRATANTE WHERE cte_Usuario = ?', [project[0].pr_Usuario]);
+
+    //Obtener el dia de la estimacion del form
+    const dia = req.body.fechaEstimacion;
+    const primerDia = new Date(dia);
+    const ultimoDia = new Date(dia);
+
+    //Primer dia del mes
+    primerDia.setDate(1);
+    //Ultimo dia del mes
+    ultimoDia.setMonth(ultimoDia.getMonth() + 1);
+    ultimoDia.setDate(0);
+
+    //Obtener el mes
+    const mes = primerDia.getMonth() + 1;
+
+    //Revisar si ya existe una estimacion en el mes
+    const estimaciones = await pool.query('SELECT * FROM ESTIMACION WHERE es_Proyecto = ?', [pr_id]);
+    let existe = false;
+    estimaciones.forEach(estimacion => {
+        let fecha = new Date(estimacion.es_FechaInicio);
+        if (fecha.getMonth() + 1 == mes) {
+            existe = true;
+        }
+    });
+
+    if (existe) {
+        console.log("Ya existe una estimacion en el mes");
+        req.flash('message', "Ya existe una estimacion en el mes");
+        res.redirect('/proyectos/generar-avance/' + pr_id);
+        return;
+    }
+    
+    //Obtener el .json del proyecto
+    const url = 'http://localhost:3000/json/proyecto'+pr_id+'.json';
+
+    //Obtener el proyecto
+    let fases = [];
+    await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            fases = json;
+        });
+    
+    //console.log(fases);
+
+    //Obtener las partidas del proyecto
+    let partidas = [];
+    fases.forEach(fase => {
+        fase.partidas.forEach(partida => {
+            partidas.push(partida);
+        });
+    });
+
+    //Obtener los conceptos del proyecto
+    let conceptos2 = [];
+    partidas.forEach(partida => {
+        partida.conceptos.forEach(concepto => {
+            conceptos2.push(concepto);
+        });
+    });
+
+    let esMayor = false;
+    for (let i = 0; i < claves.length; i++) {
+        if (cantidades[i] > conceptos2[i].cp_CantidadMax){
+            esMayor = true;
+        }
+    }
+
+    if (esMayor) {
+        req.flash('message', "La cantidad de algun concepto es mayor a la cantidad maxima");
+        res.redirect('/proyectos/generar-avance/' + pr_id);
+        return;
+    }
+
+	//insertar la estimacion
+    const newEstimacion = {
+        es_ID: genID(),
+        es_ImporteContrato: 0,
+        es_NetoARecibir: 0,
+        es_FechaInicio: primerDia,
+        es_FechaFin: ultimoDia,
+        es_Contratante: project[0].pr_Usuario,
+        es_Superintendente: req.user.us_ID,
+        es_Supervisor: project[0].pr_Supervisora,
+        es_EstadoSupervisor: false,
+        es_Residente: cte_Residente[0].cte_Residente,
+        es_Proyecto: project[0].pr_ID
+    }
+
+	await pool.query('INSERT INTO ESTIMACION SET ?', [newEstimacion]);
 
 	//Calcular el neto a recibir 
-	let neto = 0;
-	for(const element of conceptos){
-		neto += element.cp_Importe;
-	}
+	let suma = 0;
 
+    //Por cada clave se calcula el nuevo importe
+    let i = 0;
+    claves.forEach(clave => {
+        conceptos2.forEach(concepto => {
+            if (concepto.cp_ID == clave) {
+                concepto.cp_CantidadMax = concepto.cp_CantidadMax - cantidades[i];
+                suma += concepto.cp_PrecioUnitario * cantidades[i];
+                i++;
+            }
+        });
+    });
+
+    //Actualizar los conceptos en la base
+    conceptos2.forEach(concepto => {
+        let query = 'UPDATE CONCEPTO SET ? WHERE cp_ID = ?';
+        pool.query(query, [{
+            cp_CantidadMax: concepto.cp_CantidadMax
+        }, concepto.cp_ID]);
+    });
+
+    console.log("Total: "+suma);
 	//Calcular el iva
-	let iva = neto * 0.16;
+	let iva = suma * 0.16;
 
 	//Calcular el total
-	let total = neto + iva;
+	let neto = suma + iva - (suma * 0.05);
 
 	//Actualizar los datos en la base de datos
-	query = 'UPDATE ESTIMACION SET es_NetoARecibir = ? WHERE es_ID = ?';
-	await pool.query(query, [total, es_ID]);
+	const updEstimacion = {
+        es_ImporteContrato: suma,
+        es_NetoARecibir: neto
+    }
+
+    const upd = await pool.query('UPDATE ESTIMACION SET ? WHERE es_ID = ?', [updEstimacion, newEstimacion.es_ID]);
+
+    //Obtener la estimacion
+    const estimacion = await pool.query('SELECT * FROM ESTIMACION WHERE es_ID = ?', [newEstimacion.es_ID]);
+
+    console.log(estimacion);
 
 	//todo Generar el pdf
+    const template = fs.readFileSync(path.join(__dirname, '../views/layouts/template-estimacion.html'), 'utf8');
 
+    let g = 0;
+    conceptos2.forEach(concepto => {
+        concepto.cp_Importe = concepto.cp_PrecioUnitario * cantidades[g];
+        concepto.cp_Cantidad = cantidades[g];
+        g++;
+    });
 
-	req.flash('success', "Se ha generado el reporte de avance");
-	// res.redirect('/docs/project/' + project[0].pr_ID);
+    const obj = {
+        estimacion: estimacion[0],
+        fases,
+        mes: getMes(primerDia.getMonth()),
+        year: primerDia.getFullYear()
+    }
+
+    const filename = project[0].pr_Nombre + '_' + getMes(primerDia.getMonth()) + '_estimacion.pdf'; 
+
+    //Renderizar el template y subirlo a documentos del usuario y documentos del proyecto
+    const doc = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/user-docs/' + req.user.us_ID + '/' + filename
+    }
+
+    const doc2 = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/project-docs/' + project[0].pr_ID + '/' + filename
+    }
+
+    pdf.create(doc, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+
+    pdf.create(doc2, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+
+	req.flash('success', "Se ha generado el reporte de avance, Actualiza la página para ver el documento");
+	return res.redirect('/docs/project/' + project[0].pr_ID);
 
 });
 

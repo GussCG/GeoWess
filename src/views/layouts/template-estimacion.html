@@ -8,7 +8,7 @@
     <!-- 
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/template-catalogo.css">
     <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/main.css"> -->
-
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/template-estimacion.css">
 </head>
 
 <body style="
@@ -32,14 +32,14 @@
                     font-style: normal;
                     text-align: center;
                     margin-bottom: 5px;">
-            {{catalogo.fp_Nombre}}
+            Estimación de {{catalogo.mes}} de {{catalogo.year}}
         </h1>
         <h2 style=" font-size: 16px; 
                     font-weight: 200;
                     text-align: center;
                     margin-bottom: 30px;
         ">
-            Catálogo de Conceptos
+            Proyecto: {{project.pr_Nombre}}
         </h2>
     </div>
 
@@ -52,41 +52,52 @@
         <table>
             <thead>
                 <tr>
-                    <th>Fase</th>
-                    <th>Partida</th>
                     <th>Clave</th>
                     <th>Concepto</th>
                     <th>Unidad</th>
-                    <th>Cantidad</th>
+                    <th>Cantidad<br>(Ese mes)</th>
                     <th>Precio Unitario</th>
                     <th>Importe</th>
                 </tr>
             </thead>
             <tbody>
+
                 {{#each catalogo.fases}}
-                <tr>
-                    <td colspan="8" class="fase">{{fp_Nombre}}</td>
-                </tr>
+                    <tr>
+                        <td colspan="6" class="fase">{{fp_Nombre}}</td>
+                    </tr>
                     {{#each this.partidas}}
                     <tr>
-                        <td colspan="8" class="partida">{{pt_Nombre}}</td>
+                        <td colspan="6" class="partida">{{pt_Nombre}}</td>
                     </tr>
-                        {{#each this.conceptos}}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="concepto">{{cp_Clave}}</td>
-                            <td class="concepto">{{cp_Nombre}}</td>
-                            <td class="concepto">{{cp_Unidad}}</td>
-                            <td class="concepto">{{cp_Cantidad}}</td>
-                            <td class="concepto">$ {{cp_PrecioUnitario}}</td>
-                            <td class="concepto">$ {{cp_Importe}}</td>
-                        </tr>
-                        {{/each}}
+
+                    {{#each this.conceptos}}
+                    <tr>
+                        <td class="concepto">{{cp_Clave}}</td>
+                        <td class="concepto">{{cp_Nombre}}</td>
+                        <td class="concepto">{{cp_Unidad}}</td>
+                        <td class="concepto">{{cp_Cantidad}}</td>
+                        <td class="concepto">$ {{cp_PrecioUnitario}}</td>
+                        <td class="concepto">$ {{cp_Importe}}</td>
+                    </tr>
+                    {{/each}}
+
                     {{/each}}
                 {{/each}}
             </tbody>
 
+            <tfoot>
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="totals tit">Importe de Contrato</td>
+                    <td class="totals">$ {{catalogo.estimacion.es_ImporteContrato}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="totals tit">Neto A Recibir</td>
+                    <td class="totals">$ {{catalogo.estimacion.es_NetoARecibir}}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 
