@@ -237,7 +237,7 @@ router.post('/anadir-usuario/:id', isLoggedIn, async (req, res) => {
 
 
         //Meter a User_has_Projects
-        const r = pool.query('INSERT INTO USER_HAS_PROJECTS (up_Usuario, up_Proyecto) VALUES (?, ?)', [id, email_supervisor[0].us_Proyecto]);
+        const r = pool.query('INSERT INTO USUARIO_HAS_PROJECTS (up_Usuario, up_Proyecto) VALUES (?, ?)', [id, email_supervisor[0].us_Proyecto]);
 
         sgMail.send(msg_supervisor);
         const r4 = pool.query('UPDATE SUPERVISORA SET spa_Supervisor = ?, spa_RepresentanteLegal = ? WHERE spa_Usuario = ?', [supervisor, rep_legal, id]);

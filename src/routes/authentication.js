@@ -9,6 +9,8 @@ const {
     isNotLoggedIn
 } = require('../lib/auth');
 
+const sgMail = require('@sendgrid/mail');
+
 // Formatear fechas
 let dateFormat = (date) => {
     let fecha = new Date(date);
@@ -31,6 +33,7 @@ let genID = () => {
 const calcPorcentajeProyecto = async (proyecto) => {
     //Obtener el total de fases del proyecto
     let totalFases = 0;
+
     const fases = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_Proyecto = ?', [proyecto.pr_ID]);
     for await (const fase of fases) {
         totalFases += 1;
@@ -91,25 +94,80 @@ router.get('/profile', isLoggedIn, async (req, res) => {
     //Obtener los proyectos del usuario
     const q1 = await pool.query('SELECT * FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ?', [req.user.us_ID]);
 
+    //Si son los primeros 5 dias del mes, mandar correo al superintendente para que genere el reporte mensual
+    let fecha = new Date();
+    let dia = fecha.getDate();
+    if (dia <= 10) {
+        //Obtener el correo del superintendente
+        //Obtengo el proyecto
+        const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [q1[0].up_Proyecto]);
+        //Obtengo la estimacion
+        const q3 = await pool.query('SELECT * FROM ESTIMACION WHERE es_Proyecto = ?', [q2[0].pr_ID]);
+        //Obtengo el superintendente
+        const q4 = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [q3[0].es_Superintendente]);
+
+        //Enviar el correo
+        const msg_supervisante = {
+            to: q4[0].us_Email,
+            from: 'geowess.contact@gmail.com',
+            subject: 'Reporte Mensual',
+            text: 'Hola, '+q4[0].us_Nombre+' '+q4[0].us_ApPaterno+' '+q4[0].us_ApMaterno+'.\n\nEl proyecto '+q2[0].pr_Nombre+' ha terminado su mes de trabajo.\n\nSaludos,\nGeowess.',
+            html: '<strong>Hola, '+q4[0].us_Nombre+' '+q4[0].us_ApPaterno+' '+q4[0].us_ApMaterno+'.<br><br>El proyecto '+q2[0].pr_Nombre+' ha terminado su mes de trabajo.\n Realice el reporte mensual.<br><br>Saludos,<br>Geowess.</strong>',
+        };
+        sgMail.send(msg_supervisante);
+    }
+
+    //Despues de que se genere el avance mensual, se debe de mandar un correo a la supervisora para que lo valide
+    if (dia <= 10) {
+        //Obtener el correo de la supervisora
+        //Obtengo el proyecto
+        const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [q1[0].up_Proyecto]);
+        //Obtengo la estimacion
+        const q3 = await pool.query('SELECT * FROM ESTIMACION WHERE es_Proyecto = ?', [q2[0].pr_ID]);
+        //Obtengo la supervisora
+        const q4 = await pool.query('SELECT * FROM USUARIO WHERE us_ID = ?', [q3[0].es_Supervisora]);
+
+        //Enviar el correo
+        const msg_supervisora = {
+            to: q4[0].us_Email,
+            from: 'geowess.contact@gmail.com',
+            subject: 'Validar Reporte Mensual',
+            text: 'Hola, '+q4[0].us_Nombre+' '+q4[0].us_ApPaterno+' '+q4[0].us_ApMaterno+'.\n\nEl proyecto '+q2[0].pr_Nombre+' ha terminado su mes de trabajo.\n\nSaludos,\nGeowess.',
+            html: '<strong>Hola, '+q4[0].us_Nombre+' '+q4[0].us_ApPaterno+' '+q4[0].us_ApMaterno+'.<br><br>El proyecto '+q2[0].pr_Nombre+' ha terminado su mes de trabajo.\n Valide el reporte mensual.<br><br>Saludos,<br>Geowess.</strong>',
+        };
+
+        sgMail.send(msg_supervisora);
+    }
+
     console.log(q1);
     if (q1.length == 0) {
-        proyectos = [];
+        let proyectos = [];
         res.render('dashboard', {
             proyectos,
             layout: 'logged-layout'
         });
     } else {
-
         let proyectos = [];
         for await (const proyecto of q1) {
             const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto.up_Proyecto]);
             proyectos.push(q2[0]);
         }
+
+        //Obtener el porcentaje de avance de cada proyecto con foreach
+        proyectos.forEach(async (proyecto) => {
+            proyecto.pr_Porcentaje = await calcPorcentajeProyecto(proyecto);
+            console.log("PA: "+proyecto.pr_Porcentaje);
+
+            //Update a la base de datos
+            await pool.query('UPDATE PROYECTO SET pr_PorcentajeAvance = ? WHERE pr_ID = ?', [proyecto.pr_Porcentaje, proyecto.pr_ID]);
+        });
         
-        proyectos.forEach(proyecto => {
+
+        //Formatear las fechas
+        for await (const proyecto of proyectos) {
             proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
             proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
-        });
+        }
 
         //console.log(proyectos);
 

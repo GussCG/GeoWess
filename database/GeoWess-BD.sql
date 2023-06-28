@@ -304,13 +304,4 @@ INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Ti
 INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (7,"Gustavo", "Cerda", "Garcia", "2002-09-30",7, "5527167255", "CEGG020930UX7", "supervisora@mail.com", "1");
 INSERT INTO USUARIO (us_ID,us_Nombre,us_ApPaterno,us_ApMaterno,us_FechaNac,us_Tipo,us_Telefono,us_RFC,us_Email,us_Password) VALUES (8,"Gustavo", "Cerda", "Garcia", "2002-09-30",8, "5527167255", "CEGG020930UX7", "supervisante@mail.com", "1");
 
-INSERT INTO SUPERVISOR VALUES (1,1);
-INSERT INTO SUPERINTENDENTE VALUES (1,2);
-INSERT INTO RESIDENTE VALUES (1,3);
-INSERT INTO CONTRATISTA VALUES (1,NULL,NULL,4);
-INSERT INTO CONTRATANTE VALUES (1,5,NULL);
-INSERT INTO REPRESENTATE_LEGAL VALUES (1,6);
-INSERT INTO SUPERVISORA VALUES (1,NULL,NULL,7);
-INSERT INTO SUPERVISANTE VALUES (1,8);
-
 DELETE FROM ESTIMACION;

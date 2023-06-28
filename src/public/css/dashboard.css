@@ -91,7 +91,7 @@
     height: 100%;
 }
 
-.proyectos-vista {
+.proyectos-vista , .estimaciones-vista {
     margin: 20px 31px 10px 34px;
     height: 65%;
     border-radius: 10px;
@@ -101,14 +101,14 @@
     background-color: transparent;
 }
 
-.proyectos-vista h2 {
+.proyectos-vista h2, .estimaciones-vista h2 {
     margin: 15px 0 19px 45px;
     font-size: var(--dashboard-h2-font-size);
     font-weight: var(--bold);
     grid-area: h2;
 }
 
-.proyectos-vista table {
+.proyectos-vista table, .estimaciones-vista table {
     width: 90%;
     height: 90%;
     margin: 0 auto;
@@ -116,22 +116,22 @@
     grid-area: tabla;
 }
 
-.proyectos-vista thead tr{
+.proyectos-vista thead tr, .estimaciones-vista thead tr{
     height: 10px;
 }
 
-.proyectos-vista thead th {
+.proyectos-vista thead th , .estimaciones-vista thead th{
     border-bottom: 1px solid rgba(0, 0, 0, .5);
     font-size: var(--proyecto-th-font-size);
     font-weight: var(--semibold);
     text-align: center;
 }
 
-.proyectos-vista tbody tr {
+.proyectos-vista tbody tr , .estimaciones-vista tbody tr {
     height: 10px;
 }
 
-.proyectos-vista td{
+.proyectos-vista td, .estimaciones-vista td{
     font-size: var(--proyecto-td-font-size);
     font-weight: var(--semibold);
     text-align: center;
@@ -185,5 +185,38 @@
 }
 
 
+#validarbtn {
+    position: relative;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+#validarbtn::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -7px;
+    left: 0;
+    background-color: var(--a-logged-color);
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out 0s;
+}
+
+#validarbtn:hover:before {
+	visibility: visible;
+    transform: scaleX(1);
+}
+
+.status-true {
+    color: #609f6a;
+}
+
+.status-false {
+    color: #b57676;
+}
 
 

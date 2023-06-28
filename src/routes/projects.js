@@ -16,7 +16,7 @@ const options = require('../lib/options');
 
 const sgMail = require('@sendgrid/mail');
 const e = require('connect-flash');
-sgMail.setApiKey("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");
+sgMail.setApiKey("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");
 
 //?FUNCIONES
 //Generar ID random de 6 numeros
@@ -241,6 +241,7 @@ router.get('/', async (req, res) => {
         req.flash('message', 'Completa tu registro para poder acceder a la plataforma');
         res.redirect('usuario/anadir-usuario/' + req.user.us_ID);
     }
+
     //Obtener los proyectos del usuario
     const q1 = await pool.query('SELECT * FROM USUARIO_HAS_PROJECTS WHERE up_Usuario = ?', [req.user.us_ID]);
 
@@ -258,7 +259,27 @@ router.get('/', async (req, res) => {
             const q2 = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [proyecto.up_Proyecto]);
             proyectos.push(q2[0]);
         }
-        
+
+        //Cambiar el total por el neto a recibir
+        for await (const proyecto of proyectos) {
+            //Obtener las estimaciones del proyecto
+            const estimaciones = await pool.query('SELECT * FROM ESTIMACION WHERE es_Proyecto = ?', [proyecto.pr_ID]);
+            let neto = 0;
+            for(const estimacion of estimaciones) {
+                console.log(estimacion.es_NetoARecibir);
+                neto += estimacion.es_NetoARecibir;
+            }
+            proyecto.pr_CostoTotal = neto;
+
+            //Dos decimales
+            neto = neto.toFixed(2);
+
+            //Update en la base de datos
+            let query = 'UPDATE PROYECTO SET pr_CostoTotal = ? WHERE pr_ID = ?';
+            await pool.query(query, [neto, proyecto.pr_ID]);
+        }
+
+        //Dar formato a las fechas
         proyectos.forEach(proyecto => {
             proyecto.pr_FechaInicio = dateFormat(proyecto.pr_FechaInicio);
             proyecto.pr_FechaFin = dateFormat(proyecto.pr_FechaFin);
@@ -365,6 +386,53 @@ router.get('/salir-proyecto/:pr_id', isLoggedIn, async (req, res) => {
     res.redirect('/profile');
 });
 
+//Validar Estimacion mensual
+router.get('/validar-estimacion/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id,
+    } = req.params;
+
+    //Obtener la estimaciones
+    const estimaciones = await pool.query('SELECT * FROM ESTIMACION WHERE es_Proyecto = ?', [pr_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
+    //Cambiar el formato de las fechas a solo mes y año
+    estimaciones.forEach(estimacion => {
+        let fecha = new Date(estimacion.es_FechaInicio);
+        let mes = fecha.getMonth();
+        let anio = fecha.getFullYear();
+        estimacion.es_FechaInicio = getMes(mes) + ' ' + anio;
+    });
+
+    res.render('proyectos/validar-estimaciones', {
+        proyecto: proyecto[0],
+        estimaciones,
+        layout: 'logged-layout'
+    });
+});
+
+//Validar Estimacion mensual (POST)
+router.get('/validar-avance/:es_id', isLoggedIn, async (req, res) => {
+    const {
+        es_id
+    } = req.params;
+
+    //Obtener la estimacion
+    const estimacion = await pool.query('SELECT * FROM ESTIMACION WHERE es_ID = ?', [es_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [estimacion[0].es_Proyecto]);
+
+    //Cambiar el status de la estimacion
+    let query = pool.query('UPDATE ESTIMACION SET es_EstadoSupervisor = 1 WHERE es_ID = ?', [es_id]);
+
+    //Regresar a la pagina de validar estimaciones
+    req.flash('success', "Se ha validado la estimación");
+    res.redirect('../validar-estimacion/' + proyecto[0].pr_ID);
+});
+
 //!Crear-Proyecto
 //Renderizar la vista
 router.get('/crear-proyecto', isLoggedIn, async (req, res) => {
@@ -410,13 +478,25 @@ router.post('/crear-proyecto', isLoggedIn, async (req, res) => {
 
     let newUHP = {
         up_ID: genID(),
+        up_Usuario: newProyect.pr_Supervisora,
+        up_Proyecto: newProyect.pr_ID
+    }
+
+    let newUHP2 = {
+        up_ID: genID(),
         up_Usuario: req.user.us_ID,
         up_Proyecto: newProyect.pr_ID
     }
 
     //Crear en la tabla USUARIO_HAS_PROJECT
     let query2 = 'INSERT INTO USUARIO_HAS_PROJECTS SET ?';
-    await pool.query(query2, [newUHP]);
+    await pool.query(query2, [newUHP2]);
+
+    console.log(newUHP);
+
+    //Crear en la tabla USUARIO_HAS_PROJECT
+    let query3 = 'INSERT INTO USUARIO_HAS_PROJECTS SET ?';
+    await pool.query(query3, [newUHP]);
 
     req.flash('success', "Se ha creado el proyecto");
     res.redirect('ver-proyecto/' + newProyect.pr_ID);
@@ -527,7 +607,20 @@ router.get('/eliminar-proyecto/:pr_id', isLoggedIn, async (req, res) => {
 
     //Eliminar el proyecto
     let query = 'DELETE FROM PROYECTO WHERE pr_ID = ?';
-    pool.query(query, [pr_id]);
+    await pool.query(query, [pr_id]);
+
+    //Eliminar en la tabla USUARIO_HAS_PROJECTS
+    let query2 = await pool.query('DELETE FROM USUARIO_HAS_PROJECTS WHERE up_Proyecto = ?', [pr_id]);
+
+    //Eliminar el archivo json si existe
+    if (fs.existsSync(path.join(__dirname, '../public/json/proyecto' + pr_id + '.json'))){
+        fs.unlinkSync(path.join(__dirname, '../public/json/proyecto' + pr_id + '.json'));
+    }
+
+    //Eliminar la carpeta de documentos si existe
+    if (fs.existsSync(path.join(__dirname, '../public/project-docs/proyecto' + pr_id))){
+        fs.rmdirSync(path.join(__dirname, '../public/project-docs/proyecto' + pr_id));
+    }
 
     req.flash('success', "Se ha eliminado el proyecto");
     res.redirect('/proyectos');
@@ -607,7 +700,10 @@ router.post('/crear-partida/:fp_id', isLoggedIn, async (req, res) => {
     } = req.body;
 
     //Obtener el catalogo de conceptos de la fase
-    const catalogo = await pool.query('SELECT fp_CatalogoConceptos FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+    const catalogo = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_ID = ?', [fp_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [catalogo[0].fp_Proyecto]);
 
     const newPartida = {
         pt_ID: genID(),
@@ -617,6 +713,9 @@ router.post('/crear-partida/:fp_id', isLoggedIn, async (req, res) => {
 
     let query = 'INSERT INTO PARTIDA SET ?';
     await pool.query(query, [newPartida]);
+
+    //Actualizar el json
+    await crearApiRest(proyecto[0].pr_ID);
 
     req.flash('success', "Se ha creado la partida");
     res.redirect('../catalogo-conceptos/' + fp_id);
@@ -666,7 +765,13 @@ router.post('/editar-partida/:pt_id', isLoggedIn, async (req, res) => {
     const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
     //Obtener el id de la fase
-    const fase = await pool.query('SELECT fp_ID FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+    const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [fase[0].fp_Proyecto]);
+
+    //Actualizar el json
+    await crearApiRest(proyecto[0].pr_ID);
 
     req.flash('success', "Se ha editado la partida");
     res.redirect('../catalogo-conceptos/' + fase[0].fp_ID);
@@ -682,7 +787,7 @@ router.get('/eliminar-partida/:pt_id', isLoggedIn, async (req, res) => {
     const catalogo = await pool.query('SELECT pt_CatalogoConceptos FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
     //Obtener el id de la fase del proyecto
-    const fase = await pool.query('SELECT fp_ID FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
+    const fase = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [catalogo[0].pt_CatalogoConceptos]);
 
     //Obtener los conceptos de la partida
     const conceptos = await pool.query('SELECT * FROM CONCEPTO WHERE cp_Partida = ?', [pt_id]);
@@ -696,6 +801,12 @@ router.get('/eliminar-partida/:pt_id', isLoggedIn, async (req, res) => {
     //Eliminar la partida
     let query = 'DELETE FROM PARTIDA WHERE pt_ID = ?';
     pool.query(query, [pt_id]);
+
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [fase[0].fp_Proyecto]);
+
+    //Actualizar el json
+    await crearApiRest(proyecto[0].pr_ID);
 
     req.flash('success', "Se ha eliminado la partida");
     res.redirect('../catalogo-conceptos/' + fase[0].fp_ID);
@@ -794,6 +905,9 @@ router.post('/crear-fase/:pr_id', isLoggedIn, async (req, res) => {
         cc_ID: newFase.fp_CatalogoConceptos
         }]);
 
+    //Actualizar el json
+    await crearApiRest(pr_id);
+
     req.flash('success', "Se ha creado la fase");
     res.redirect('/proyectos/ver-proyecto/' + pr_id);
 });
@@ -856,6 +970,9 @@ router.post('/editar-fase/:fp_id', isLoggedIn, async (req, res) => {
     
         let query = 'UPDATE FASE_PROYECTO SET ? WHERE fp_ID = ?';
         pool.query(query, [newFase, fp_id]);
+
+        //Actualizar el json
+        await crearApiRest(proyecto[0].pr_ID);
     
         req.flash('success', "Se ha editado la fase");
         res.redirect('/proyectos/ver-proyecto/' + fase_proyecto[0].fp_Proyecto);
@@ -891,6 +1008,12 @@ router.get('/eliminar-fase/:fp_id', isLoggedIn, async (req, res) => {
         await pool.query(query4, [partida.pt_ID]);
     });
 
+    //Obtener el proyecto
+    const proyecto = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [fase[0].fp_Proyecto]);
+
+    //Actualizar el json
+    await crearApiRest(proyecto[0].pr_ID);
+
     req.flash('success', "Se ha eliminado la fase");
     res.redirect('/proyectos/ver-proyecto/' + fase[0].fp_Proyecto);
 });
@@ -925,13 +1048,18 @@ router.post('/crear-concepto/:pt_id', isLoggedIn, async (req, res) => {
     newConcepto.cp_CantidadMax = newConcepto.cp_Cantidad;
 
     //Obtener el nombre de la partida
-    const partida = await pool.query('SELECT pt_Nombre FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
+    const partida = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [pt_id]);
 
     //Generar la clave del concepto
     newConcepto.cp_Clave = genClave(partida[0].pt_Nombre, newConcepto.cp_ID);
 
     let query = 'INSERT INTO CONCEPTO SET ?';
     await pool.query(query, [newConcepto]);
+
+    //Actualizar el json
+    //Obtener el id del proyecto
+    const proyecto_id = await pool.query('SELECT fp_Proyecto FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+    await crearApiRest(proyecto_id[0].fp_Proyecto);
 
     req.flash('success', "Se ha creado el concepto");
     res.redirect('/proyectos/ver-conceptos/' + pt_id);
@@ -957,6 +1085,11 @@ router.get('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
 
     //Con el id del concepto, escribir la informacion del concepto en el formulario de la misma pagina
     const concepto = await pool.query('SELECT * FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+
+    //Actualizar el json
+    //Obtener el id del proyecto
+    const proyecto_id = await pool.query('SELECT fp_Proyecto FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [partida[0].pt_CatalogoConceptos]);
+    await crearApiRest(proyecto_id[0].fp_Proyecto);
 
     res.render('proyectos/editar-concepto', {
         catalogo: catalogo[0],
@@ -999,6 +1132,13 @@ router.post('/editar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     let query = 'UPDATE CONCEPTO SET ? WHERE cp_ID = ?';
     pool.query(query, [newConcepto, cp_id]);
 
+    //Actualizar el json
+    //Obtener el id del proyecto
+    const partida_ = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [partida_id[0].cp_Partida]);
+    const proyecto_id = await pool.query('SELECT fp_Proyecto FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [partida_[0].pt_CatalogoConceptos]);
+
+    await crearApiRest(proyecto_id[0].fp_Proyecto);
+
     req.flash('success', "Se ha editado el concepto");
     res.redirect('/proyectos/ver-conceptos/' + partida_id[0].cp_Partida);
 });
@@ -1010,14 +1150,26 @@ router.get('/eliminar-concepto/:cp_id', isLoggedIn, async (req, res) => {
     } = req.params;
 
     //Obtener el id de la partida
-    const partida = await pool.query('SELECT cp_Partida FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+    const partida = await pool.query('SELECT * FROM CONCEPTO WHERE cp_ID = ?', [cp_id]);
+    
+    //Obtener el id del proyecto
+    const partida_ = await pool.query('SELECT * FROM PARTIDA WHERE pt_ID = ?', [partida[0].cp_Partida]);
+    const proyecto_id = await pool.query('SELECT * FROM FASE_PROYECTO WHERE fp_CatalogoConceptos = ?', [partida_[0].pt_CatalogoConceptos]);
+    console.log(proyecto_id[0]);
 
     //Eliminar el concepto
     let query = 'DELETE FROM CONCEPTO WHERE cp_ID = ?';
     pool.query(query, [cp_id]);
 
+    //Eliminar del json
+    await crearApiRest(proyecto_id[0].fp_Proyecto);
+
     req.flash('success', "Se ha eliminado el concepto");
     res.redirect('/proyectos/ver-conceptos/' + partida[0].cp_Partida);
+});
+
+//Validar Estimacion
+router.post('/validar-estimacion/:fp_id', isLoggedIn, async (req, res) => {
 });
 
 //! REPORTES
@@ -1350,8 +1502,11 @@ router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
 	//Calcular el iva
 	let iva = suma * 0.16;
 
+    //Retencion
+    let retencion = suma * 0.05;
+
 	//Calcular el total
-	let neto = suma + iva - (suma * 0.05);
+	let neto = suma + iva - retencion;
 
 	//Actualizar los datos en la base de datos
 	const updEstimacion = {
@@ -1380,7 +1535,9 @@ router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
         estimacion: estimacion[0],
         fases,
         mes: getMes(primerDia.getMonth()),
-        year: primerDia.getFullYear()
+        year: primerDia.getFullYear(),
+        iva,
+        retencion,
     }
 
     const filename = project[0].pr_Nombre + '_' + getMes(primerDia.getMonth()) + '_estimacion.pdf'; 
@@ -1427,6 +1584,115 @@ router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
 	req.flash('success', "Se ha generado el reporte de avance, Actualiza la página para ver el documento");
 	return res.redirect('/docs/project/' + project[0].pr_ID);
 
+});
+
+router.get('/generar-general/:pr_id', isLoggedIn, async (req, res) => {
+    const {
+        pr_id
+    } = req.params;
+
+    //Obtener el proyecto de la base
+    const project = await pool.query('SELECT * FROM PROYECTO WHERE pr_ID = ?', [pr_id]);
+
+    //Obtener el .json del proyecto
+    const url = 'http://localhost:3000/json/proyecto'+pr_id+'.json';
+
+    //Obtener el proyecto
+    let fases = [];
+    await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            fases = json;
+        });
+
+    //Obtener las partidas del proyecto
+    let partidas = [];
+    fases.forEach(fase => {
+        fase.partidas.forEach(partida => {
+            partidas.push(partida);
+        });
+    });
+
+    //Obtener los conceptos del proyecto
+    let conceptos2 = [];
+    partidas.forEach(partida => {
+        partida.conceptos.forEach(concepto => {
+            conceptos2.push(concepto);
+        });
+    });
+
+    //Calcular el neto a recibir
+    let suma = 0;
+
+    //Por cada clave se calcula el nuevo importe
+    conceptos2.forEach(concepto => {
+        suma += concepto.cp_PrecioUnitario * concepto.cp_CantidadMax;
+    });
+
+    //Calcular el iva
+    let iva = suma * 0.16;
+
+    //Retencion
+    let retencion = suma * 0.05;
+
+    //Calcular el total
+    let neto = suma + iva - retencion;
+
+    //todo Generar el pdf
+    const obj = { // Se crea el objeto que se mandara a la vista
+        fases,
+        neto,
+        iva,
+        retencion,
+        suma
+    }
+
+    //Template del pdf
+    const template = fs.readFileSync(path.join(__dirname, '../views/layouts/template-avance-general.html'), 'utf8');
+
+    const filename = project[0].pr_Nombre + '_General_estimacion.pdf'; 
+
+    //Renderizar el template y subirlo a documentos del usuario y documentos del proyecto
+    const doc = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/user-docs/' + req.user.us_ID + '/' + filename
+    }
+
+    const doc2 = {
+        html: template,
+        data: {
+            project: project[0],
+            catalogo: obj
+        },
+        path: './src/public/project-docs/' + project[0].pr_ID + '/' + filename
+    }
+
+    pdf.create(doc, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+
+    pdf.create(doc2, options)
+        .then(res => {
+            console.log(res);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            }
+        );
+
+	req.flash('success', "Se ha generado el reporte de avance, Actualiza la página para ver el documento");
+	return res.redirect('/docs/project/' + project[0].pr_ID);
 });
 
 module.exports = router;

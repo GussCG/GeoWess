@@ -8,7 +8,10 @@
 }
 
 #avance-main h1 {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
 }
 
 .avance-conceptos-container {
@@ -151,4 +154,32 @@
 
 .avance-conceptos-container input::placeholder {
     color: transparent;
+}
+
+#general {
+    width: fit-content;
+    position: relative;
+    color: #000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+#general::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -7px;
+    left: 0;
+    background-color: var(--a-logged-color);
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out 0s;
+}
+
+#general:hover:before {
+	visibility: visible;
+    transform: scaleX(1);
 }

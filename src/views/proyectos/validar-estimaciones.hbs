@@ -1,0 +1,42 @@
+<main id="dashboard-main">
+    <div class="Proyectos">
+        <h1>Validar Reportes</h1>
+        <div class="estimaciones-vista">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Proyecto</th>
+                        <th>Mes</th>
+                        <th>Status</th>
+                        <th>Validar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each estimaciones}}
+                    <tr>
+                        <td class="estimacion-td">{{es_ID}}</td>
+                        <td class="estimacion-td">{{es_Proyecto}}</td>
+                        <td class="estimacion-td">{{es_FechaInicio}}</td>
+                        <td class="estimacion-td">
+                            {{#if es_EstadoSupervisor}}
+                            <span class="status-true">Validado</span>
+                            {{else}}
+                            <span class="status-false">Pendiente</span>
+                            {{/if}}
+                        </td>
+                        <td class="estimacion-td">
+                            {{#if es_EstadoSupervisor}}
+                            <span style="text-decoration:line-through;">Validado</span>
+                            {{else}}
+                            <a href="../validar-avance/{{es_ID}}" id="validarbtn">Validar</a>
+                            {{/if}}
+                        </td>
+                    {{/each}}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</main>
