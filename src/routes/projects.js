@@ -1161,13 +1161,14 @@ router.get('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
             fases = json;
         });
 
-    const obj = {
+	
+    const obj = { // Se crea el objeto que se mandara a la vista
         fases
     }
 
     console.log(obj);
 
-    res.render('proyectos/generar-avance', {
+    res.render('proyectos/generar-avance', { // Se renderiza la vista
         pr_id,
         catalogo: obj,
         layout: 'logged-layout'
@@ -1175,11 +1176,43 @@ router.get('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
 });
 
 router.post('/generar-avance/:pr_id', isLoggedIn, async (req, res) => {
-    const {
+    const { // Se obtienen los datos del formulario
         pr_id
     } = req.params;
 
-    const conceptos = req.body;
+    const conceptos = req.body; // Se obtienen los conceptos del formulario
+
+	for(const element of conceptos){ // Se recorren los conceptos
+		let query = 'UPDATE CONCEPTO SET ? = ? - ? WHERE cp_ID = ?'; // Se actualizan los conceptos en la base de datos
+		await pool.query(query, [element.cp_CantidadMax, element.cp_CantidadMax, element.cp_Cantidad, element.cp_ID]);
+	}
+
+	//!Generar el ID de la estimacion
+	const es_ID = genID();
+	await pool.query('INSERT INTO ESTIMACION SET ?', [es_ID, 0, 0, dateFormat(new Date()), dateFormat(new Date()), "Contratante", "Superintendente", "Supervisor", "Estado", "Residente", "Proyecto"]);
+	//!
+
+	//Calcular el neto a recibir 
+	let neto = 0;
+	for(const element of conceptos){
+		neto += element.cp_Importe;
+	}
+
+	//Calcular el iva
+	let iva = neto * 0.16;
+
+	//Calcular el total
+	let total = neto + iva;
+
+	//Actualizar los datos en la base de datos
+	query = 'UPDATE ESTIMACION SET es_NetoARecibir = ? WHERE es_ID = ?';
+	await pool.query(query, [total, es_ID]);
+
+	//todo Generar el pdf
+
+
+	req.flash('success', "Se ha generado el reporte de avance");
+	// res.redirect('/docs/project/' + project[0].pr_ID);
 
 });
 
